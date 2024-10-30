@@ -169,3 +169,7 @@ xcuserdata/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter,xcode,android,macos
+storage.rules
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+firestore.rules
