@@ -1,5 +1,16 @@
 # Created by https://www.toptal.com/developers/gitignore/api/flutter,xcode,android,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=flutter,xcode,android,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=flutter,xcode,android,macos,firebase
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
+
+# End of https://www.toptal.com/developers/gitignore/api/firebase
 
 ### Android ###
 # Gradle files
