@@ -89,3 +89,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/pretendard/Pretendard-Black.ttf
+        - asset: assets/fonts/pretendard/Pretendard-Bold.ttf
+        - asset: assets/fonts/pretendard/Pretendard-ExtraBold.ttf
+        - asset: assets/fonts/pretendard/Pretendard-ExtraLight.ttf
+        - asset: assets/fonts/pretendard/Pretendard-Light.ttf
+        - asset: assets/fonts/pretendard/Pretendard-Medium.ttf
+        - asset: assets/fonts/pretendard/Pretendard-Regular.ttf
+        - asset: assets/fonts/pretendard/Pretendard-SemiBold.ttf
+        - asset: assets/fonts/pretendard/Pretendard-Thin.ttf
