@@ -5,6 +5,8 @@
 .idea
 **/node_modules/*
 **/.firebaserc
+google-services.json       # Android Firebase 설정 파일
+GoogleService-Info.plist   # iOS Firebase 설정 파일
 
 ### Firebase Patch ###
 .runtimeconfig.json
