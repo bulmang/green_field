@@ -3,29 +3,6 @@ import 'package:wheel_picker/wheel_picker.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Example',
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColorsTheme().gfWhiteColor,
-      ),
-      home: const Scaffold(
-        body: Stack(
-          children: [
-            GreenFieldCampusPicker(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class GreenFieldCampusPicker extends StatefulWidget {
   const GreenFieldCampusPicker({super.key});
 
