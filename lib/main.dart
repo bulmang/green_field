@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
+import 'package:green_field/src/components/greenfield_list.dart';
 import 'package:green_field/src/components/greenfield_user_info_widget.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 
@@ -63,53 +64,22 @@ class SamplePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GreenfieldUserInfoWidget(
-              type: 'notice', // 타입 설정 (notice 또는 post)
-              campus: '관악캠퍼스',
-              createTimeText: '10/14 19:50',
-            ),
-            const SizedBox(height: 20), // 버튼 간의 간격
-            GreenfieldUserInfoWidget(
-              type: 'post', // 타입 설정 (notice 또는 post)
-              campus: '관악캠퍼스',
-              createTimeText: '10/14 19:50',
-            ),
-            const SizedBox(height: 20), // 버튼 간의 간격
-            GreenFieldConfirmButton(
-              text: "시작하기",
-              isAble: false,
-              textColor: AppColorsTheme().gfWhiteColor,
-              backGroundColor: AppColorsTheme().gfMainColor,
-              onPressed: () {
-                print("시작하기 버튼 클릭됨.");
-              },
-            ),
-            const SizedBox(height: 20), // 버튼 간의 간격
-            GreenFieldConfirmButton(
-              text: "시작하기",
-              isAble: true,
-              textColor: AppColorsTheme().gfWhiteColor,
-              backGroundColor: AppColorsTheme().gfMainColor,
-              onPressed: () {
-                print("시작하기 버튼 클릭됨.");
-              },
-            ),
-            const SizedBox(height: 20), // 버튼 간의 간격
-            GreenFieldConfirmButton(
-              text: "채팅으로 이야기 해보기",
-              isAble: true,
-              textColor: AppColorsTheme().gfMainColor,
-              backGroundColor: AppColorsTheme().gfMainBackGroundColor,
-              onPressed: () {
-                print("채팅으로 이야기 해보기 버튼 클릭됨.");
-              },
-            ),
-          ],
-        ),
+      body: ListView(
+        children: List.generate(10, (index) {
+          return GreenFieldList(
+            title: '공지사항 1 $index',
+            content: '새로운 식당 어부사시가 추가되었습니다. 진짜 정말 많은 많은 많은 이용 부탁...',
+            date: '10/14',
+            campus: '관악캠퍼스',
+            imageUrl: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190827_233%2F1566877550770bS2af_JPEG%2Fyye_95qZkmqAYBf6_CK96hVs.jpeg.jpg',
+            likes: 15,
+            commentCount: 0,
+            onTap: () {
+              // 클릭 시 실행할 액션
+              print('Item $index clicked');
+            },
+          );
+        }),
       ),
     );
   }
