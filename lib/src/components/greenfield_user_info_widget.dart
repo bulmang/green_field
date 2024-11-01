@@ -4,9 +4,9 @@ import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 
 class GreenfieldUserInfoWidget extends StatelessWidget {
-  final String type; // 타입 (home, post, notice)
-  final String campus; // 첫 번째 텍스트
-  final String createTimeText; // 두 번째 텍스트
+  final String type; // 타입 (notice, post)
+  final String campus;
+  final String createTimeText;
 
   const GreenfieldUserInfoWidget({
     super.key,
@@ -27,7 +27,7 @@ class GreenfieldUserInfoWidget extends StatelessWidget {
         height: 40,
         // Row 위젯
         child: Row(
-          mainAxisSize: MainAxisSize.min, // Row의 크기를 내용에 맞게 조정
+          mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               type == 'notice' ? AppIcons.sesac : AppIcons.profile,
