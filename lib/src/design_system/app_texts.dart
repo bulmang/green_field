@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
-  static const _baseFamily = "Base";
+  static const _baseFamily = "Pretendard";
 
   final TextStyle gfHeading1;
   final TextStyle gfHeading2;
