@@ -24,9 +24,9 @@ class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: backgGroundColor,
         elevation: 0,
         centerTitle: true,
-        shape: const Border(
+        shape: Border(
           bottom: BorderSide(
-            color: Color(0XFFF4F4F4),
+            color: backgGroundColor,
           ),
         ),
         leading: leading,

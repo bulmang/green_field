@@ -58,9 +58,9 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
     ),
     gfHeading3: TextStyle(
       fontFamily: _baseFamily,
-      fontWeight: FontWeight.w500,
-      fontSize: 14.4,
-      height: 15 / 14.4,
+      fontWeight: FontWeight.w600,
+      fontSize: 15,
+      height: 22 / 15,
     ),
     gfTitle1: TextStyle(
       fontFamily: _baseFamily,
@@ -132,7 +132,7 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
       fontFamily: _baseFamily,
       fontWeight: FontWeight.w400,
       fontSize: 12.6,
-      height: 15 / 12.6,
+      height: 17.5 / 12.6,
     ),
     gfCaption3: TextStyle(
       fontFamily: _baseFamily,
