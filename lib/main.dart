@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
+import 'package:green_field/src/components/greenfield_user_info_widget.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 
 void main() => runApp(const MyApp());
@@ -55,6 +56,18 @@ class SamplePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            GreenfieldUserInfoWidget(
+              type: 'notice', // 타입 설정 (notice 또는 post)
+              campus: '관악캠퍼스',
+              createTimeText: '10/14 19:50',
+            ),
+            const SizedBox(height: 20), // 버튼 간의 간격
+            GreenfieldUserInfoWidget(
+              type: 'post', // 타입 설정 (notice 또는 post)
+              campus: '관악캠퍼스',
+              createTimeText: '10/14 19:50',
+            ),
+            const SizedBox(height: 20), // 버튼 간의 간격
             GreenFieldConfirmButton(
               text: "시작하기",
               isAble: false,
