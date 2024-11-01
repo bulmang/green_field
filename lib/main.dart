@@ -1,11 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_user_info_widget.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  // Flutter 프레임워크가 초기화되기 전에 Firebase 초기화
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // 구성 파일에서 내보낸 DefaultFirebaseOptions 객체 사용
+  );
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
