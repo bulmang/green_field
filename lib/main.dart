@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:green_field/src/components/greenfield_content_widget.dart';
+import 'package:green_field/src/components/greenfield_text_field.dart';
 import 'firebase_options.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
@@ -69,27 +70,33 @@ class SamplePage extends StatelessWidget {
           title: "제목 예시",
           bodyText:
           '''
-안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다.
-최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!!
-안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 
-(저도 몰랐네용) 홍보차 메세지 남깁니다!! 안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 
-최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!!안녕하세요 
-서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용)
-(저도 몰랐네용) 홍보차 메세지 남깁니다!! 안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 
-최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!!안녕하세요 
-서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 
-홍보차 메세지 남깁니다!!안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서
-(저도 몰랐네용) 홍보차 메세지 남깁니다!!
-(저도 몰랐네용) 홍보차 메세지 남깁니다!!
-(저도 몰랐네용) 홍보차 메세지 남깁니다!!
-(저도 몰랐네용) 홍보차 메세지 남깁니다!!'''
+      안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다.
+      최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!!
+      안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 
+      (저도 몰랐네용) 홍보차 메세지 남깁니다!! 안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 
+      최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!!안녕하세요 
+      서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용)
+      (저도 몰랐네용) 홍보차 메세지 남깁니다!! 안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 
+      최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!!안녕하세요 
+      서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 
+      홍보차 메세지 남깁니다!!안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다. 최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서
+      (저도 몰랐네용) 홍보차 메세지 남깁니다!!
+      (저도 몰랐네용) 홍보차 메세지 남깁니다!!
+      (저도 몰랐네용) 홍보차 메세지 남깁니다!!
+      (저도 몰랐네용) 홍보차 메세지 남깁니다!!'''
           ,
           imageAssets: [
             "https://images.dog.ceo/breeds/spitz-japanese/beet-001.jpg"
           ],
         likes: 14,
         commentCount: 0,
-      )
+      ),
+      bottomNavigationBar: GreenFieldTextField(
+        type: TextFieldType.post,
+        onAction: (text) {
+          print('전송된 텍스트: $text');
+        },
+      ),
     );
   }
 }
