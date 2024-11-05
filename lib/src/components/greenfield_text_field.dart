@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
+import 'package:green_field/src/enums/feature_type.dart';
 import '../design_system/app_texts.dart';
 
-enum TextFieldType { post, recruit }
-
 class GreenFieldTextField extends StatefulWidget {
-  final TextFieldType type;
+  final FeatureType type;
   final Function(String) onAction;
 
   GreenFieldTextField({super.key, required this.type, required this.onAction});
@@ -42,7 +41,7 @@ class GreenFieldTextFieldState extends State<GreenFieldTextField> {
                 });
               },
               decoration: InputDecoration(
-                hintText: widget.type == TextFieldType.post ? '댓글을 입력하세요.' : null,
+                hintText: widget.type == FeatureType.post ? '댓글을 입력하세요.' : null,
                 hintStyle: TextStyle(color: Colors.grey),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
