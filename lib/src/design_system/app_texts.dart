@@ -130,7 +130,7 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
     ),
     gfCaption2: TextStyle(
       fontFamily: _baseFamily,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.bold,
       fontSize: 12.6,
       height: 17.5 / 12.6,
     ),
