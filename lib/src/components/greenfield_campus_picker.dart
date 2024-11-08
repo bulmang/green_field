@@ -83,21 +83,18 @@ class _GreenFieldCampusPickerState extends State<GreenFieldCampusPicker> {
 
     return Center(
       child: SizedBox(
-        width: screenWidth - 32,
+        width: screenWidth,
         height: 200.0,
-        child: Container(
-          color: AppColorsTheme().gfBackGroundColor,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              _centerBar(context),
-              Row(
-                children: [
-                  stringWheels,
-                ],
-              ),
-            ],
-          ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _centerBar(context),
+            Row(
+              children: [
+                stringWheels,
+              ],
+            ),
+          ],
         ),
       ),
     );

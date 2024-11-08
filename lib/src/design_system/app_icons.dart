@@ -28,6 +28,8 @@ class AppIcons {
   static const String user = 'assets/images/icons/user_icon.png';
   static const String users = 'assets/images/icons/users_icon.png';
   static const String x = 'assets/images/icons/x_icon.png';
+  static const String xCircle = 'assets/images/icons/x_circle.png';
+  static const String tagIcon = 'assets/images/icons/tag_icon.png';
 
   // images
   static const String loginSesac = 'assets/images/login_sesac.png';
