@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../design_system/app_colors.dart';
-import '../../design_system/app_icons.dart';
-import '../../design_system/app_texts.dart';
+import '../../../design_system/app_colors.dart';
+import '../../../design_system/app_icons.dart';
+import '../../../design_system/app_texts.dart';
 
 class ExternalLinkSection extends StatelessWidget {
 
-  const ExternalLinkSection({Key? key}) : super(key: key);
+  const ExternalLinkSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 18),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

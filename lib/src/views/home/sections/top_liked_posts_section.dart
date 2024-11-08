@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:green_field/src/design_system/app_icons.dart';
-import '../../design_system/app_colors.dart';
-import '../../design_system/app_texts.dart';
-import '../../model/post.dart';
+import '../../../design_system/app_colors.dart';
+import '../../../design_system/app_texts.dart';
+import '../../../model/post.dart';
 
 class TopLikedPostsSection extends StatelessWidget {
   final List<Post> posts;
 
-  const TopLikedPostsSection({Key? key, required this.posts}) : super(key: key);
+  const TopLikedPostsSection({super.key, required this.posts});
 
   @override
   Widget build(BuildContext context) {
+    bool isIPhoneSE = MediaQuery.of(context).size.width <= 375;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...posts.take(3).toList().asMap().entries.map((entry) {
+        ...posts.take(isIPhoneSE ? 2 : 3).toList().asMap().entries.map((entry) {
           int index = entry.key;
           Post post = entry.value;
           String formattedDate = DateFormat('MM/dd').format(post.createdAt);
@@ -59,6 +61,7 @@ class TopLikedPostsSection extends StatelessWidget {
                                     color: AppColorsTheme().gfMainColor,
                                   ),
                                 ),
+                                Spacer(),
                                 SizedBox(width: 5),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -107,7 +110,7 @@ class TopLikedPostsSection extends StatelessWidget {
               if (index == 1) Container(height: 1, color: AppColorsTheme().gfGray300Color),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }

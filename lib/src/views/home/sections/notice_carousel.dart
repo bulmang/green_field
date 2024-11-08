@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../design_system/app_colors.dart';
-import '../../design_system/app_texts.dart';
-import '../../model/notice.dart';
+import '../../../design_system/app_colors.dart';
+import '../../../design_system/app_texts.dart';
+import '../../../model/notice.dart';
 
 class NoticeCarousel extends StatefulWidget {
   final List<Notice> notices;
@@ -11,10 +11,10 @@ class NoticeCarousel extends StatefulWidget {
   NoticeCarousel({super.key, required this.notices});
 
   @override
-  _NoticeCarouselState createState() => _NoticeCarouselState();
+  NoticeCarouselState createState() => NoticeCarouselState();
 }
 
-class _NoticeCarouselState extends State<NoticeCarousel> {
+class NoticeCarouselState extends State<NoticeCarousel> {
   int _currentIndex = 0;
 
   @override

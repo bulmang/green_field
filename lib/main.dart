@@ -10,7 +10,7 @@ import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/model/notice.dart';
 import 'package:green_field/src/model/recruit.dart';
 import 'package:green_field/src/model/user.dart';
-import 'package:green_field/src/views/home_view.dart';
+import 'package:green_field/src/views/home/home_view.dart';
 import 'package:green_field/src/views/onboarding_view.dart';
 import 'firebase_options.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
