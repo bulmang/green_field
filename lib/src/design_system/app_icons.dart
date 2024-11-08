@@ -21,7 +21,7 @@ class AppIcons {
   static const String pencil = 'assets/images/icons/pencil_icon.png';
   static const String phone = 'assets/images/icons/phone_icon.png';
   static const String profile = 'assets/images/icons/profile_icon.png';
-  static const String restaurant = 'assets/images/icons/restaurant_icon.png';
+  static const String restaurant = 'assets/images/icons/restarurant_icon.png';
   static const String sesac = 'assets/images/icons/sesac_icon.png';
   static const String thumbnailUp = 'assets/images/icons/thumbnail_up_icon.png';
   static const String userGreen = 'assets/images/icons/user_green_icon.png';
