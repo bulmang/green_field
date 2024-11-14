@@ -27,13 +27,6 @@ class _NoticeDetailViewState extends State<NoticeDetailView> {
       appBar: GreenFieldAppBar(
         backgGroundColor: AppColorsTheme().gfWhiteColor,
         title: "공지사항",
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.back, color: Colors.grey), // Cupertino 아이콘 사용
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -177,13 +177,7 @@ class _NoticeViewState extends State<NoticeView> {
       appBar: GreenFieldAppBar(
         backgGroundColor: AppColorsTheme().gfWhiteColor,
         title: "공지사항",
-        leading: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.back, color: Colors.grey), // Cupertino 아이콘 사용
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leadingIcon: SizedBox(),
       ),
       body: ListView.builder(
         itemCount: notices.length,
