@@ -48,7 +48,6 @@ class GreenfieldUserInfoWidget extends StatelessWidget {
                       color: type == 'notice' ? AppColorsTheme().gfMainColor : AppColorsTheme().gfGray800Color,
                     ),
                   ),
-                  SizedBox(height: 3),
                   Text(
                     createTimeText,
                     style: AppTextsTheme.main().gfBody5.copyWith(

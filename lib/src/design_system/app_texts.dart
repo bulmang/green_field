@@ -18,6 +18,7 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
   final TextStyle gfBody5;
   final TextStyle gfCaption1;
   final TextStyle gfCaption2;
+  final TextStyle gfCaption2Light;
   final TextStyle gfCaption3;
   final TextStyle gfCaption4;
   final TextStyle gfCaption5;
@@ -38,6 +39,7 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
     required this.gfBody5,
     required this.gfCaption1,
     required this.gfCaption2,
+    required this.gfCaption2Light,
     required this.gfCaption3,
     required this.gfCaption4,
     required this.gfCaption5,
@@ -134,6 +136,12 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
       fontSize: 12.6,
       height: 17.5 / 12.6,
     ),
+    gfCaption2Light: TextStyle(
+      fontFamily: _baseFamily,
+      fontWeight: FontWeight.w400,
+      fontSize: 12.6,
+      height: 17.5 / 12.6,
+    ),
     gfCaption3: TextStyle(
       fontFamily: _baseFamily,
       fontWeight: FontWeight.w500,
@@ -172,6 +180,7 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
       gfBody5: gfBody5,
       gfCaption1: gfCaption1,
       gfCaption2: gfCaption2,
+      gfCaption2Light: gfCaption2Light,
       gfCaption3: gfCaption3,
       gfCaption4: gfCaption4,
       gfCaption5: gfCaption5,

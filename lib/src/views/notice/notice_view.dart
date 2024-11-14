@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_list.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 
 import '../../model/notice.dart';
+import 'notice_deatil_view.dart';
 
 class NoticeView extends StatefulWidget {
   final List<Notice> notice;
@@ -20,10 +22,10 @@ class _NoticeViewState extends State<NoticeView> {
       id: '1',
       creatorId: 'user_001',
       userCampus: '캠퍼스 A',
-      title: '공지사항 1',
-      body: '공지사항 1의 내용입니다.',
+      title: '중식당 추가 안내',
+      body: '안녕하세요 서울 경제 진흥원 관악캠퍼스 매니저입니다.최근 식당 늘어난 걸 모르시는 분들이 많은 것 같다고 하셔서 (저도 몰랐네용) 홍보차 메세지 남깁니다!![어부사시가] https://naver.me/GFYaoQhg[프랭크버거] https://naver.me/xgG2WAbh  아! 그리고 러닝메이트 식사는, 제로페이 가맹점 이용 건에 대해서 협의중이라 당분간은 (아마도 한 달.. 정도?) 장부 이용해야 할 것 같다고 첨언 주셨습니다!  다음 주 한 주도 건강하고 즐겁게 보내세요',
       like: ['user_002', 'user_003'],
-      images: ['https://images.dog.ceo/breeds/boxer/n02108089_2831.jpg'],
+      images: ['https://images.dog.ceo/breeds/boxer/n02108089_2831.jpg','https://images.dog.ceo/breeds/boxer/n02108089_2831.jpg','https://images.dog.ceo/breeds/boxer/n02108089_2831.jpg'],
       createdAt: DateTime.now().subtract(Duration(days: 1)),
     ),
     Notice(
@@ -175,8 +177,9 @@ class _NoticeViewState extends State<NoticeView> {
       appBar: GreenFieldAppBar(
         backgGroundColor: AppColorsTheme().gfWhiteColor,
         title: "공지사항",
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.grey),
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(CupertinoIcons.back, color: Colors.grey), // Cupertino 아이콘 사용
           onPressed: () {
             Navigator.pop(context);
           },
@@ -189,12 +192,18 @@ class _NoticeViewState extends State<NoticeView> {
           return GreenFieldList(
             title: notice.title,
             content: notice.body,
-            date: notice.createdAt.toString(),
+            date: '${notice.createdAt.year}-${notice.createdAt.month}-${notice.createdAt.day}',
             campus: notice.userCampus,
             imageUrl: notice.images != null && notice.images!.isNotEmpty ? notice.images![0] : "",
             likes: notice.like.length,
             commentCount: 0,
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NoticeDetailView(notice: notice),
+                ),
+              );
             },
           );
         },
