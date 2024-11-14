@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
+import 'package:green_field/src/enums/feature_type.dart';
 
 class GreenfieldUserInfoWidget extends StatelessWidget {
-  final String type; // 타입 (notice, post)
+  final FeatureType featureType;
   final String campus;
   final String createTimeText;
 
   const GreenfieldUserInfoWidget({
     super.key,
-    required this.type,
+    required this.featureType,
     required this.campus,
     required this.createTimeText,
   });
@@ -30,7 +31,7 @@ class GreenfieldUserInfoWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              type == 'notice' ? AppIcons.sesac : AppIcons.profile,
+              featureType == FeatureType.notice ? AppIcons.sesac : AppIcons.profile,
               width: 40,
               height: 40,
               fit: BoxFit.cover,
@@ -43,9 +44,9 @@ class GreenfieldUserInfoWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    type == 'notice' ? campus :'익명($campus)',
+                    featureType  == FeatureType.notice ? campus :'익명($campus)',
                     style: AppTextsTheme.main().gfHeading3.copyWith(
-                      color: type == 'notice' ? AppColorsTheme().gfMainColor : AppColorsTheme().gfGray800Color,
+                      color: featureType  == FeatureType.notice ? AppColorsTheme().gfMainColor : AppColorsTheme().gfGray800Color,
                     ),
                   ),
                   Text(
