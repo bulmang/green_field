@@ -58,7 +58,7 @@ class GreenFieldList extends StatelessWidget {
                             content,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: AppTextsTheme.main().gfCaption2.copyWith(
+                            style: AppTextsTheme.main().gfCaption2Light.copyWith(
                               color: AppColorsTheme().gfBlackColor,
                             ),
                           ),

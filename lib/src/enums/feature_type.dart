@@ -1,2 +1,2 @@
 
-enum FeatureType { post, recruit }
+enum FeatureType { post, recruit, notice }

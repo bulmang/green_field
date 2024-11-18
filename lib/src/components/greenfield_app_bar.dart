@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../design_system/app_colors.dart';
 import '../design_system/app_texts.dart';
@@ -5,19 +6,40 @@ import '../design_system/app_texts.dart';
 class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgGroundColor;
   final String title;
-  final Widget? leading;
+  final Widget? leadingIcon;
+  final Function()? leadingAction;
+  final bool? noLeadingIcon;
   final List<Widget>? actions;
 
   const GreenFieldAppBar({
     super.key,
     required this.backgGroundColor,
     required this.title,
-    this.leading,
     this.actions,
+    this.leadingIcon,
+    this.leadingAction,
+    this.noLeadingIcon,
   });
 
   @override
   Widget build(BuildContext context) {
+    Widget? leading;
+    if (leadingAction != null || leadingIcon != null) {
+      leading = CupertinoButton(child: leadingIcon ?? Icon(Icons.arrow_left),
+          onPressed: leadingAction);
+    } else {
+      leading = CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(
+            size: 24,
+            CupertinoIcons.back,
+            color: Colors.grey,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        );
+    }
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: AppBar(

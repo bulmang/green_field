@@ -31,42 +31,59 @@ class GreenFieldContentWidget extends StatelessWidget {
             Text(
               title,
               style: AppTextsTheme.main().gfHeading1.copyWith(
-                color: AppColorsTheme().gfBlackColor
-              )
+                color: AppColorsTheme().gfBlackColor,
+              ),
             ),
             SizedBox(height: 17),
             Text(
               bodyText,
-                style: AppTextsTheme.main().gfCaption2.copyWith(
-                    color: AppColorsTheme().gfBlackColor
-                )
-            ),
-            SizedBox(height: 17),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: imageAssets.map((imageUrl) {
-                  if (imageUrl != null) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          imageUrl,
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }).toList(),
+              style: AppTextsTheme.main().gfCaption2Light.copyWith(
+                color: AppColorsTheme().gfBlackColor,
               ),
             ),
-            if (imageAssets.isNotEmpty)
-              SizedBox(height: 17),
+            SizedBox(height: 17),
+            // 이미지 표시 부분 수정
+            if (imageAssets.length == 1 && imageAssets[0] != null)
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    imageAssets[0]!,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
+            else
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: imageAssets.map((imageUrl) {
+                    if (imageUrl != null) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            width: 120, // 정사각형 너비
+                            height: 120, // 정사각형 높이
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }).toList(),
+                ),
+              ),
+            if (imageAssets.isNotEmpty) SizedBox(height: 17),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
