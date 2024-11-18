@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:green_field/src/views/board/board_view.dart';
+import 'package:green_field/src/views/main_view.dart';
 import 'package:green_field/src/views/notice/notice_view.dart';
 import 'firebase_options.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColorsTheme().gfMainColor,
         scaffoldBackgroundColor: AppColorsTheme().gfBackGroundColor,
       ),
-      home: NoticeView(notice: [])
+      home: MainView()
     );
   }
 }
