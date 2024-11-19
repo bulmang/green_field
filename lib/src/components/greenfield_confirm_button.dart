@@ -21,14 +21,15 @@ class GreenFieldConfirmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      onPressed: isAble ? onPressed : null, // 버튼 클릭 시 동작
-      color: isAble ? backGroundColor : AppColorsTheme().gfGray300Color, // 배경 색상
-      borderRadius: BorderRadius.circular(8.0), // 모서리 둥글게
-      padding: EdgeInsets.zero, // 패딩을 0으로 설정하여 크기 조정
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width - 32, // 화면 너비에 맞춤
-        height: 56.0, // 높이를 56으로 설정
-        child: Center( // 텍스트를 중앙에 정렬
+      onPressed: isAble ? onPressed : null,
+      padding: EdgeInsets.zero,
+      child: Container(
+        decoration: BoxDecoration(
+          color: backGroundColor,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        height: 56.0,
+        child: Center(
           child: Text(
             text,
             style: AppTextsTheme.main().gfTitle1.copyWith(
