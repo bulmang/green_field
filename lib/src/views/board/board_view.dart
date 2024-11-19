@@ -32,7 +32,7 @@ class _BoardViewState extends State<BoardView> {
       creatorId: 'user_001',
       creatorCampus: '캠퍼스 A',
       createdAt: DateTime.now().subtract(Duration(days: 1)),
-      title: '첫 번째 게시물',
+      title: '첫 번째 게시물첫 번째 게시물첫 번째 게시물첫 번째 게시물',
       body: '이것은 첫 번째 게시물의 내용입니다.',
       like: ['user_002', 'user_003'],
       images: [
