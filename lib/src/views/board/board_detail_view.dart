@@ -31,53 +31,56 @@ class _BoardDetailViewState extends State<BoardDetailView> {
         actions: [
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: GreenfieldUserInfoWidget(
-                      featureType: FeatureType.post,
-                      campus: post.creatorCampus,
-                      createTimeText:
-                          '${post.createdAt.year}-${post.createdAt.month}-${post.createdAt.day}',
+      body: GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: GreenfieldUserInfoWidget(
+                        featureType: FeatureType.post,
+                        campus: post.creatorCampus,
+                        createTimeText:
+                            '${post.createdAt.year}-${post.createdAt.month}-${post.createdAt.day}',
+                      ),
                     ),
-                  ),
-                  GreenFieldContentWidget(
-                    title: post.title,
-                    bodyText: post.body,
-                    imageAssets: post.images != null && post.images!.isNotEmpty
-                        ? post.images!
-                        : [],
-                    likes: post.like.length,
-                    commentCount: post.comment?.length ??
-                        0, // Assuming you have comments in your model
-                  ),
-                  ...post.comment!.map((comment) {
-                    // Assuming each comment has properties like campus, dateTime, and content
-                    return GreenFieldCommentWidget(
-                      campus: comment
-                          .creatorCampus, // Assuming comment has a campus property
-                      dateTime: comment
-                          .createdAt, // Assuming comment has a dateTime property
-                      comment: comment
-                          .body, // Assuming comment has a content property
-                    );
-                  }).toList(),
-                ],
+                    GreenFieldContentWidget(
+                      title: post.title,
+                      bodyText: post.body,
+                      imageAssets: post.images != null && post.images!.isNotEmpty
+                          ? post.images!
+                          : [],
+                      likes: post.like.length,
+                      commentCount: post.comment?.length ??
+                          0, // Assuming you have comments in your model
+                    ),
+                    ...post.comment!.map((comment) {
+                      // Assuming each comment has properties like campus, dateTime, and content
+                      return GreenFieldCommentWidget(
+                        campus: comment
+                            .creatorCampus, // Assuming comment has a campus property
+                        dateTime: comment
+                            .createdAt, // Assuming comment has a dateTime property
+                        comment: comment
+                            .body, // Assuming comment has a content property
+                      );
+                    }).toList(),
+                  ],
+                ),
               ),
             ),
-          ),
-          GreenFieldTextField(
-            type: FeatureType.post,
-            onAction: (String text) {
-              // TODO: Implement onAction
-            },
-          ),
-        ],
+            GreenFieldTextField(
+              type: FeatureType.post,
+              onAction: (String text) {
+                // TODO: Implement onAction
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
