@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_comment_widget.dart';
@@ -68,7 +67,7 @@ class _BoardDetailViewState extends State<BoardDetailView> {
                         comment: comment
                             .body, // Assuming comment has a content property
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
@@ -88,7 +87,7 @@ class _BoardDetailViewState extends State<BoardDetailView> {
   /// AppBar에 들어갈 제목의 글자 수를 제한하는 함수
   String _getLimitedTitle(String title, int maxLength) {
     if (title.length > maxLength) {
-      return title.substring(0, maxLength) + '...';
+      return '${title.substring(0, maxLength)}...';
     }
     return title;
   }
