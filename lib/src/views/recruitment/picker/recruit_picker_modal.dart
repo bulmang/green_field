@@ -16,32 +16,18 @@ class RecruitPickerModal extends StatefulWidget {
 class _RecruitPickerModalState extends State<RecruitPickerModal> {
   String timeString = "30";
   int currentSelectedCount = 1;
-  int maxSeletedCOunt = 2;
+  int maxSelectedCount = 2;
 
   final List<String> time = List.generate(10, (index) => ((index + 3) * 10).toString());
   final List<int> currentPeopleCount = List.generate(3, (index) => index + 1);
-  final List<int> maxPeopleCount = List.generate(4, (index) => index + 1);
+  final List<int> maxPeopleCount = List.generate(3, (index) => index + 2);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 280,
-            child:
-                _buildPicker(), // Call the method to build the appropriate picker
-          ),
-          Text(
-            widget.type == RecruitSettingType.autoDeleteTime
-                ? '$timeString 분'
-                : '$currentSelectedCount 명', // 선택된 값 표시
-            style: AppTextsTheme.main().gfCaption2.copyWith(
-                  color: AppColorsTheme().gfBlackColor,
-                ),
-          ),
-        ],
+      body: SizedBox(
+        height: 280,
+        child: _buildPicker(),
       ),
     );
   }
@@ -54,7 +40,7 @@ class _RecruitPickerModalState extends State<RecruitPickerModal> {
           childCount: time.length,
           onSelectedItemChanged: (i) {
             setState(() {
-              timeString = time[i];
+              timeString = time[i]; // Update selected time
             });
           },
           itemBuilder: (context, index) {
@@ -75,6 +61,7 @@ class _RecruitPickerModalState extends State<RecruitPickerModal> {
           onSelectedItemChanged: (i) {
             setState(() {
               currentSelectedCount = currentPeopleCount[i];
+              maxSelectedCount = currentSelectedCount + 1;
             });
           },
           itemBuilder: (context, index) {
@@ -94,7 +81,7 @@ class _RecruitPickerModalState extends State<RecruitPickerModal> {
           childCount: maxPeopleCount.length,
           onSelectedItemChanged: (i) {
             setState(() {
-              maxSeletedCOunt = maxPeopleCount[i];
+              maxSelectedCount = maxPeopleCount[i];
             });
           },
           itemBuilder: (context, index) {
