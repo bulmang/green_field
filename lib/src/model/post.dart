@@ -1,3 +1,5 @@
+import 'comment.dart';
+
 class Post {
   String id;
   String creatorId;
@@ -7,6 +9,7 @@ class Post {
   String body;
   List<String> like;
   List<String>? images;
+  List<Comment>? comment;
 
   Post({
     required this.id,
@@ -17,6 +20,7 @@ class Post {
     required this.body,
     required this.like,
     this.images,
+    this.comment,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +33,7 @@ class Post {
       'body': body,
       'like': like,
       'images': images ?? [],
+      'comment': comment ?? [],
     };
   }
 
@@ -42,6 +47,7 @@ class Post {
       body: map['body'],
       like: List<String>.from(map['like'] ?? []),
       images: map['images'] != null ? List<String>.from(map['images']) : null,
+      comment: map['comment'] != null ? List<Comment>.from(map['comnent']) : null,
     );
   }
 }

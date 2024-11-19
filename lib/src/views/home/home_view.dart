@@ -15,10 +15,7 @@ import 'sections/notice_carousel.dart';
 import 'sections/top_liked_posts_section.dart';
 
 class HomeView extends StatefulWidget {
-  final User user;
-  final Post post;
-
-  const HomeView({super.key, required this.user, required this.post});
+  const HomeView({super.key});
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -35,7 +32,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('MM/dd').format(widget.post.createdAt);
+    User user = User(id: "1", simpleLoginId: "kakao", campus: "관악", course: "course", name: "name");
+
     List<Post> posts = [
       Post(
         id: 'post_001',
@@ -143,14 +141,14 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '익명(${widget.user.campus})',
+                              '익명(${user.campus})',
                               style: AppTextsTheme.main().gfTitle1.copyWith(
                                     color: AppColorsTheme().gfBlackColor,
                                   ),
                             ),
                             SizedBox(height: 3),
                             Text(
-                              widget.user.course,
+                              user.course,
                               style: AppTextsTheme.main().gfBody5.copyWith(
                                     color: AppColorsTheme().gfGray400Color,
                                   ),
@@ -166,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${widget.user.campus} 공지사항',
+                          '${user.campus} 공지사항',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
                                 color: AppColorsTheme().gfBlackColor,
                               ),
@@ -252,44 +250,6 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: CupertinoTabBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.home,
-              size: 24, // 아이콘 크기 설정
-              color: _selectedIndex == 0 ? AppColorsTheme().gfMainColor : Colors.grey,
-            ),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.person_2,
-              size: 24, // 아이콘 크기 설정
-              color: _selectedIndex == 1 ? AppColorsTheme().gfMainColor : Colors.grey,
-            ),
-            label: '모집',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.chat_bubble_text,
-              size: 24, // 아이콘 크기 설정
-              color: _selectedIndex == 2 ? AppColorsTheme().gfMainColor : Colors.grey,
-            ),
-            label: '게시판',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.info,
-              size: 24, // 아이콘 크기 설정
-              color: _selectedIndex == 3 ? AppColorsTheme().gfMainColor : Colors.grey,
-            ),
-            label: '캠퍼스',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }
