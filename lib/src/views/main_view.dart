@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
+import 'package:green_field/src/views/recruitment/recruitment_view.dart';
 import '../components/greenfield_tab_bar.dart';
 import 'board/board_view.dart';
 import 'home/home_view.dart';
@@ -12,8 +14,9 @@ class _MainViewState extends State<MainView> {
   int _selectedIndex = 0;
 
   final List<Widget> _views = [
-    HomeView(),   // First tab view
-    BoardView(),  // Second tab view
+    HomeView(),
+    RecruitView(),
+    BoardView(),
   ];
 
   void _onItemTapped(int index) {

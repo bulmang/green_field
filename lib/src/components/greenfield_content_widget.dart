@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:green_field/src/enums/feature_type.dart';
+import 'package:green_field/src/model/recruit.dart';
 
 import '../design_system/app_colors.dart';
 import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 
 class GreenFieldContentWidget extends StatelessWidget {
+  final FeatureType? featureType;
   final String title;
   final String bodyText;
   final List<String?> imageAssets;
-  final int likes;
-  final int commentCount;
+  final int? likes;
+  final int? commentCount;
+  final Recruit? recruit;
 
   GreenFieldContentWidget({
     super.key,
+    this.featureType,
     required this.title,
     required this.bodyText,
     required this.imageAssets,
-    required this.likes,
-    required this.commentCount,
+    this.likes,
+    this.commentCount,
+    this.recruit
   });
 
   @override
@@ -84,7 +90,8 @@ class GreenFieldContentWidget extends StatelessWidget {
                 ),
               ),
             if (imageAssets.isNotEmpty) SizedBox(height: 17),
-            Row(
+            featureType != FeatureType.recruit
+                ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
@@ -123,7 +130,109 @@ class GreenFieldContentWidget extends StatelessWidget {
                   ],
                 ),
               ],
-            ),
+            )
+                : Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColorsTheme().gfGray800Color, // 테두리 색상
+                      width: 1, // 테두리 두께
+                    ),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          AppIcons.tagIcon,
+                          width: 9,
+                          height: 9,
+                        ),
+                        SizedBox(width: 3),
+                        Text(
+                          recruit!.creatorCampus,
+                          style: AppTextsTheme.main()
+                              .gfCaption5
+                              .copyWith(
+                            color: AppColorsTheme().gfGray800Color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5),
+                if (recruit!.remainTime <= 30)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColorsTheme()
+                          .gfWarningYellowBackGroundColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            AppIcons.alertCircle,
+                            width: 9,
+                            height: 9,
+                          ),
+                          SizedBox(width: 3),
+                          Text(
+                            "곧 사라져요!",
+                            style: AppTextsTheme.main()
+                                .gfCaption5
+                                .copyWith(
+                              color: AppColorsTheme()
+                                  .gfWarningYellowColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      AppIcons.clockGreen,
+                      width: 12,
+                      height: 12,
+                    ),
+                    SizedBox(width: 3),
+                    Text(
+                      '${recruit!.remainTime.toString()} min',
+                      style: AppTextsTheme.main().gfCaption2Light.copyWith(
+                        color: AppColorsTheme().gfMainColor,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      AppIcons.userGreen,
+                      width: 12,
+                      height: 12,
+                    ),
+                    SizedBox(width: 1),
+                    Text(
+                      '${recruit!.currentParticipants.length.toString()} / ${recruit!.maxParticipants.toString()}',
+                      style: AppTextsTheme.main().gfCaption2Light.copyWith(
+                        color: AppColorsTheme().gfMainColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ) ,
           ],
         ),
       ),

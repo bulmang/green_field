@@ -6,14 +6,19 @@ import '../design_system/app_colors.dart';
 
 class GreenFieldRecruitList extends StatelessWidget {
   final Recruit recruits;
+  final VoidCallback onTap;
 
-  const GreenFieldRecruitList({super.key, required this.recruits});
+  const GreenFieldRecruitList({
+    super.key,
+    required this.recruits,
+    required this.onTap
+  });
 
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
       padding: EdgeInsets.zero,
-      onPressed: () {},
+      onPressed: onTap,
       child: Column(
         children: [
           SizedBox(height: 18),
@@ -46,16 +51,6 @@ class GreenFieldRecruitList extends StatelessWidget {
                             color: AppColorsTheme().gfBlackColor,
                           ),
                     ),
-                    SizedBox(height: 20),
-                    if (recruits.images != null &&
-                        recruits.images!.isNotEmpty) // null 체크 및 비어있지 않은지 확인
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          recruits.images![0], // 첫 번째 이미지만 사용
-                          fit: BoxFit.contain,
-                        ),
-                      ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -171,7 +166,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                             SizedBox(width: 3),
                             Text(
                               '${recruits.remainTime.toString()} min',
-                              style: AppTextsTheme.main().gfCaption2.copyWith(
+                              style: AppTextsTheme.main().gfCaption2Light.copyWith(
                                     color: AppColorsTheme().gfMainColor,
                                   ),
                             ),
@@ -189,7 +184,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                             SizedBox(width: 1),
                             Text(
                               '${recruits.currentParticipants.length.toString()} / ${recruits.maxParticipants.toString()}',
-                              style: AppTextsTheme.main().gfCaption2.copyWith(
+                              style: AppTextsTheme.main().gfCaption2Light.copyWith(
                                     color: AppColorsTheme().gfMainColor,
                                   ),
                             ),
