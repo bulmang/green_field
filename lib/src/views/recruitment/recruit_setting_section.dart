@@ -66,7 +66,11 @@ class RecruitSettingSectionState extends State<RecruitSettingSection> {
                 child: RecruitPickerModal(type: selectedType!),
               );
             },
-          );
+          ).whenComplete(() {
+            setState(() {
+              selectedType = null;
+            });
+          });
         },
         child: Container(
           decoration: BoxDecoration(
