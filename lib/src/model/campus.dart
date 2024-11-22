@@ -2,7 +2,7 @@ class Campus {
   String id;
   String name;
   List<String>? images;
-  String address;
+  Map<String, String> address;
   List<String>? operatingHours;
   String contactNumber;
   Map<String, dynamic>? floorDescription;
@@ -51,7 +51,12 @@ class CampusExample {
       id: "001",
       name: "관악캠퍼스",
       images: ['https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202024-11-21%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%204.47.19.png?alt=media&token=3bb33935-aceb-4cc8-b928-366762bef32d'],
-      address: "서울 관악구 관악로 140",
+      address: {
+        "CampusAddress" : "서울 관악구 관악로 140",
+        "NaverMapURLScheme" : "청년취업사관학교 관악캠퍼스",
+        "NaverWebURL":"https://naver.me/GtU10L2p",
+        "MapImageURL":"https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202024-11-21%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%204.47.19.png?alt=media&token=3bb33935-aceb-4cc8-b928-366762bef32d",
+      },
       operatingHours: ["월요일 08:00~23:00", "화요일 08:00~23:00", "수요일 08:00~23:00", "목요일 08:00~23:00", "금요일 08:00~23:00", "토요일 08:00~23:00", "일요일 정기휴무(매주 일요일)"],
       contactNumber: "0507-1478-7960",
     floorDescription: {

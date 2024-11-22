@@ -40,7 +40,7 @@ class CampusOperatingSection extends StatelessWidget {
               ),
               SizedBox(width: 8),
               Text(
-                CampusExample().gwanack.address,
+                CampusExample().gwanack.contactNumber,
                 style: AppTextsTheme.main().gfCaption2Light.copyWith(
                   color: AppColorsTheme().gfBlackColor,
                 ),
