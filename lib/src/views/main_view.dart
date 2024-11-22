@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:green_field/src/views/campus/campus_view.dart';
 import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
 import 'package:green_field/src/views/recruitment/recruitment_view.dart';
 import '../components/greenfield_tab_bar.dart';
@@ -17,6 +18,7 @@ class _MainViewState extends State<MainView> {
     HomeView(),
     RecruitView(),
     BoardView(),
+    CampusView(),
   ];
 
   void _onItemTapped(int index) {
