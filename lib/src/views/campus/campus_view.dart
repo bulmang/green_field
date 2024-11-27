@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:green_field/src/views/campus/camus_floor_section.dart';
 import 'package:green_field/src/views/campus/camus_map_section.dart';
 import 'package:green_field/src/views/campus/campus_operating_section.dart';
@@ -35,6 +39,11 @@ class _CampusViewState extends State<CampusView> {
     super.initState();
   }
 
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   /// Animate To Tab
   void animateToTab() {
     late RenderBox box;
@@ -58,7 +67,7 @@ class _CampusViewState extends State<CampusView> {
     final categories = campusCategories[index].currentContext!;
     await Scrollable.ensureVisible(
       categories,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 100),
     );
     scrollController.addListener(animateToTab);
   }
@@ -78,23 +87,19 @@ class _CampusViewState extends State<CampusView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
-
                     _buildCategoryTitle('위치 / 교통', 0),
                     CampusMapSection(),
                     SizedBox(height: 10),
-
                     _buildCategoryTitle('운영시간', 1),
                     CampusOperatingSection(),
                     SizedBox(height: 10),
-
                     _buildCategoryTitle('공간 소개', 2),
                     CampusFloorSection(),
                     SizedBox(height: 10),
-
-                    /// Empty Bottom space
+                    // Empty Bottom Space
                     const SizedBox(
                       height: 30,
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -152,18 +157,19 @@ class _CampusViewState extends State<CampusView> {
           Spacer()
         ],
       ),
-      bottom: TabBar(
+      bottom:  TabBar(
         indicatorColor: AppColorsTheme().gfMainColor,
         labelColor: AppColorsTheme().gfMainColor,
         splashFactory: NoSplash.splashFactory,
+        onTap: (int index) => scrollToIndex(index),
         tabs: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Text(
               '위치',
               style: AppTextsTheme.main().gfTitle1.copyWith(
-                    color: AppColorsTheme().gfMainColor,
-                  ),
+                color: AppColorsTheme().gfMainColor,
+              ),
             ),
           ),
           Padding(
@@ -171,8 +177,8 @@ class _CampusViewState extends State<CampusView> {
             child: Text(
               '운영시간',
               style: AppTextsTheme.main().gfTitle1.copyWith(
-                    color: AppColorsTheme().gfMainColor,
-                  ),
+                color: AppColorsTheme().gfMainColor,
+              ),
             ),
           ),
           Padding(
@@ -180,12 +186,11 @@ class _CampusViewState extends State<CampusView> {
             child: Text(
               '공간소개',
               style: AppTextsTheme.main().gfTitle1.copyWith(
-                    color: AppColorsTheme().gfMainColor,
-                  ),
+                color: AppColorsTheme().gfMainColor,
+              ),
             ),
           ),
         ],
-        onTap: (int index) => scrollToIndex(index),
       ),
       backgroundColor: AppColorsTheme().gfBackGroundColor,
     );
