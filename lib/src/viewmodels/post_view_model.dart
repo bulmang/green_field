@@ -1,3 +1,4 @@
+import '../model/comment.dart';
 import '../model/post.dart';
 
 class PostViewModel {
@@ -13,6 +14,78 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [
+        Comment(
+          id: 'comment_001',
+          creatorId: 'user_123',
+          creatorCampus: '관악캠퍼스',
+          body: '이 공지사항에 대해 정말 기대하고 있습니다!',
+          createdAt: DateTime.now().subtract(Duration(minutes: 5)), // 5분 전
+        ),
+        Comment(
+          id: 'comment_002',
+          creatorId: 'user_456',
+          creatorCampus: '관악캠퍼스',
+          body: '식당 오픈 소식이 반가워요!',
+          createdAt: DateTime.now().subtract(Duration(minutes: 10)), // 10분 전
+        ),
+        Comment(
+          id: 'comment_003',
+          creatorId: 'user_789',
+          creatorCampus: '관악캠퍼스',
+          body: '모임 일정이 궁금합니다.',
+          createdAt: DateTime.now().subtract(Duration(hours: 1)), // 1시간 전
+        ),
+        Comment(
+          id: 'comment_004',
+          creatorId: 'user_101',
+          creatorCampus: '관악캠퍼스',
+          body: '이번 학기 시작이 기대돼요!',
+          createdAt: DateTime.now().subtract(Duration(hours: 2)), // 2시간 전
+        ),
+        Comment(
+          id: 'comment_005',
+          creatorId: 'user_202',
+          creatorCampus: '관악캠퍼스',
+          body: '여름 방학 프로그램에 참여하고 싶어요.',
+          createdAt: DateTime.now().subtract(Duration(days: 1)), // 1일 전
+        ),
+        Comment(
+          id: 'comment_006',
+          creatorId: 'user_303',
+          creatorCampus: '관악캠퍼스',
+          body: '신입생 환영회에 참석할게요!',
+          createdAt: DateTime.now().subtract(Duration(days: 2)), // 2일 전
+        ),
+        Comment(
+          id: 'comment_007',
+          creatorId: 'user_404',
+          creatorCampus: '관악캠퍼스',
+          body: '모임 공지 잘 읽었습니다.',
+          createdAt: DateTime.now().subtract(Duration(days: 3)), // 3일 전
+        ),
+        Comment(
+          id: 'comment_008',
+          creatorId: 'user_505',
+          creatorCampus: '관악캠퍼스',
+          body: '새로운 동아리 활동이 기대됩니다!',
+          createdAt: DateTime.now().subtract(Duration(days: 4)), // 4일 전
+        ),
+        Comment(
+          id: 'comment_009',
+          creatorId: 'user_606',
+          creatorCampus: '관악캠퍼스',
+          body: '여름 캠프에 대한 정보가 필요해요.',
+          createdAt: DateTime.now().subtract(Duration(days: 5)), // 5일 전
+        ),
+        Comment(
+          id: 'comment_010',
+          creatorId: 'user_707',
+          creatorCampus: '관악캠퍼스',
+          body: '이번 학기 수업이 기대돼요!',
+          createdAt: DateTime.now().subtract(Duration(days: 6)), // 6일 전
+        ),
+      ],
     ),
     Post(
       id: 'post_002',
@@ -25,6 +98,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_003',
@@ -37,6 +111,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_004',
@@ -49,6 +124,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_005',
@@ -61,6 +137,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_006',
@@ -73,6 +150,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_007',
@@ -85,6 +163,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_008',
@@ -97,6 +176,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_009',
@@ -109,6 +189,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_010',
@@ -121,6 +202,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_011',
@@ -133,6 +215,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_012',
@@ -145,6 +228,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_013',
@@ -157,6 +241,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_014',
@@ -169,6 +254,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_015',
@@ -181,6 +267,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_016',
@@ -193,6 +280,7 @@ class PostViewModel {
       images: [
         'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
       ],
+      comment: [],
     ),
     Post(
       id: 'post_017',
@@ -202,9 +290,8 @@ class PostViewModel {
       title: '프로젝트 팀원 모집',
       body: '프로젝트 팀원을 모집합니다. 많은 지원 바랍니다.',
       like: ['user_123', 'user_456','user_123', 'user_456'],
-      images: [
-        'https://images.dog.ceo/breeds/danish-swedish-farmdog/ebba_001.jpg'
-      ],
+      images: [],
+      comment: [],
     ),
   ];
 
