@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_edit_section.dart'; // Assuming you have a GreenFieldEditSection
 import 'package:green_field/src/design_system/app_colors.dart';
@@ -28,7 +29,7 @@ class _RecruitEditViewState extends State<RecruitEditView> {
           color: AppColorsTheme().gfGray400Color,
         ),
         leadingAction: () {
-          Navigator.pop(context);
+          context.pop();
         },
         actions: [
           CupertinoButton(
