@@ -34,39 +34,6 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     User user = User(id: "1", simpleLoginId: "kakao", campus: "관악", course: "course", name: "name");
 
-    List<Post> posts = [
-      Post(
-        id: 'post_001',
-        creatorId: 'user_123',
-        creatorCampus: '관악캠퍼스',
-        createdAt: DateTime.now(),
-        title: '새로운 식당 오픈 안내',
-        body: '새로운 식당 어부사시가 오픈했습니다. 많은 이용 부탁드립니다!',
-        like: ['user_456', 'user_789'],
-        images: ['https://example.com/image1.jpg'],
-      ),
-      Post(
-        id: 'post_002',
-        creatorId: 'user_456',
-        creatorCampus: '관악캠퍼스',
-        createdAt: DateTime.now().subtract(Duration(days: 1)), // 하루 전
-        title: '학기 시작 안내',
-        body: '이번 학기는 3월 1일부터 시작됩니다.',
-        like: ['user_123'],
-        images: ['https://example.com/image2.jpg'],
-      ),
-      Post(
-        id: 'post_003',
-        creatorId: 'user_789',
-        creatorCampus: '관악캠퍼스',
-        createdAt: DateTime.now().subtract(Duration(days: 2)), // 이틀 전
-        title: '모임 공지',
-        body: '다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.',
-        like: ['user_123', 'user_456'],
-        images: [],
-      ),
-    ];
-
     List<Recruit> recruits = [
       Recruit(
         id: 'recruit_001',
@@ -192,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
                         SizedBox(height: 5),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: TopLikedPostsSection(posts: posts),
+                          child: TopLikedPostsSection(),
                         ),
                       ],
                     ),
