@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/views/campus/campus_view.dart';
-import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
+import 'package:green_field/src/views/post/post_view.dart';
 import 'package:green_field/src/views/recruitment/recruitment_view.dart';
 import '../components/greenfield_tab_bar.dart';
-import 'board/board_view.dart';
 import 'home/home_view.dart';
 
 class MainView extends StatefulWidget {
@@ -17,7 +16,7 @@ class _MainViewState extends State<MainView> {
   final List<Widget> _views = [
     HomeView(),
     RecruitView(),
-    BoardView(),
+    PostView(),
     CampusView(),
   ];
 
