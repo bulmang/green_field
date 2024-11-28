@@ -170,45 +170,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                         ),
                         SizedBox(height: 5),
-                        NoticeCarousel(
-                          notices: [
-                            Notice(
-                              id: '1',
-                              creatorId: 'user_123',
-                              userCampus: '관악캠퍼스',
-                              title: '새로운 식당 오픈 안내 새로운 식당 오픈 안내',
-                              body: '새로운 식당 어부사시가 오픈했습니다. 많은 이용 부탁드립니다!',
-                              like: ['user_456', 'user_789'],
-                              images: [
-                                'https://images.dog.ceo/breeds/australian-kelpie/Resized_20200303_233358_108952253645051.jpg'
-                              ],
-                              createdAt: DateTime.now(),
-                            ),
-                            Notice(
-                              id: '2',
-                              creatorId: 'user_456',
-                              userCampus: '관악캠퍼스',
-                              title: '학기 시작 안내',
-                              body: '이번 학기는 3월 1일부터 시작됩니다.',
-                              like: ['user_123'],
-                              images: [
-                                'https://images.dog.ceo/breeds/australian-kelpie/Resized_20200303_233358_108952253645051.jpg'
-                              ],
-                              createdAt: DateTime.now(),
-                            ),
-                            Notice(
-                              id: '3',
-                              creatorId: 'user_456',
-                              userCampus: '관악캠퍼스',
-                              title: '학기 시작 안내안내안내안내안내안내안내안내안내안내',
-                              body:
-                                  '이번 학기는 3월 1일부터 시작됩니다.이번 학기는 3월 1일부터 시작됩니다.이번 학기는 3월 1일부터 시작됩니다.',
-                              like: ['user_123'],
-                              images: [],
-                              createdAt: DateTime.now(),
-                            ),
-                          ],
-                        ),
+                        NoticeCarousel(),
                       ],
                     ),
                   ),
