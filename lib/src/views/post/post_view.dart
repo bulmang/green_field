@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_list.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
-import 'package:green_field/src/router/router.dart';
 import 'package:green_field/src/viewmodels/post_view_model.dart';
 import '../../design_system/app_texts.dart';
 
@@ -41,7 +40,7 @@ class _PostViewState extends State<PostView> {
                 color: AppColorsTheme().gfGray400Color,
               ),
               onPressed: () {
-                print("글쓰기 버튼 클릭");
+                context.go('/post/edit');
               })
         ],
       ),
@@ -62,7 +61,7 @@ class _PostViewState extends State<PostView> {
               likes: post.like.length,
               commentCount: post.comment.length,
               onTap: () {
-                context.go('/postdetail/${post.id}');
+                context.go('/post/detail/${post.id}');
               },
             );
           },
@@ -72,7 +71,7 @@ class _PostViewState extends State<PostView> {
           left: MediaQuery.of(context).size.width / 2 - 60,
           child: CupertinoButton(
             onPressed: () {
-              print("글쓰기 버튼 클릭");
+              context.go('/post/edit');
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
