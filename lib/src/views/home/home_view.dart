@@ -1,15 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
-import 'package:intl/intl.dart';
-
 import 'package:green_field/src/design_system/app_icons.dart';
 import '../../design_system/app_colors.dart';
 import '../../design_system/app_texts.dart';
-import '../../model/notice.dart';
-import '../../model/post.dart';
-import '../../model/recruit.dart';
-import '../../model/user.dart';
+import '../../viewmodels/user_view_model.dart';
 import 'sections/external_link_section.dart';
 import 'sections/notice_carousel.dart';
 import 'sections/top_liked_posts_section.dart';
@@ -22,64 +16,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final userVM = UserViewModel();
 
   @override
   Widget build(BuildContext context) {
-    User user = User(id: "1", simpleLoginId: "kakao", campus: "관악", course: "course", name: "name");
-
-    List<Recruit> recruits = [
-      Recruit(
-        id: 'recruit_001',
-        creatorId: 'user_123',
-        remainTime: 120, // 남은 시간 (초)
-        currentParticipants: ['user_456', 'user_789'],
-        maxParticipants: 10,
-        creatorCampus: '관악캠퍼스',
-        isEntryAvailable: true,
-        isTimeExpired: false,
-        title: '같이 쌀국수 먹으러 가실 분!',
-        body: '오늘 점심메뉴로 같이 쌀국수 먹으러 가실 분 구합니다.',
-        images: ['https://example.com/image1.jpg'],
-        createdAt: DateTime.now(),
-      ),
-      Recruit(
-        id: 'recruit_002',
-        creatorId: 'user_456',
-        remainTime: 60, // 남은 시간 (초)
-        currentParticipants: ['user_123'],
-        maxParticipants: 5,
-        creatorCampus: '관악캠퍼스',
-        isEntryAvailable: true,
-        isTimeExpired: false,
-        title: '모임 공지',
-        body: '다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.다음 주 금요일에 모임이 있습니다. 많은 참석 부탁드립니다.',
-        images: [],
-        createdAt: DateTime.now().subtract(Duration(days: 1)), // 하루 전
-      ),
-      Recruit(
-        id: 'recruit_003',
-        creatorId: 'user_789',
-        remainTime: 30, // 남은 시간 (초)
-        currentParticipants: [],
-        maxParticipants: 8,
-        creatorCampus: '관악캠퍼스',
-        isEntryAvailable: false,
-        isTimeExpired: true,
-        title: '스터디 모집',
-        body: '이번 주 토요일에 스터디를 모집합니다.',
-        images: ['https://example.com/image2.jpg'],
-        createdAt: DateTime.now().subtract(Duration(days: 2)), // 이틀 전
-      ),
-    ];
-
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -108,14 +48,14 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '익명(${user.campus})',
+                              '익명(${userVM.user.campus})',
                               style: AppTextsTheme.main().gfTitle1.copyWith(
                                     color: AppColorsTheme().gfBlackColor,
                                   ),
                             ),
                             SizedBox(height: 3),
                             Text(
-                              user.course,
+                              userVM.user.course,
                               style: AppTextsTheme.main().gfBody5.copyWith(
                                     color: AppColorsTheme().gfGray400Color,
                                   ),
@@ -131,7 +71,7 @@ class _HomeViewState extends State<HomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${user.campus} 공지사항',
+                          '${userVM.user.campus} 공지사항',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
                                 color: AppColorsTheme().gfBlackColor,
                               ),
@@ -175,7 +115,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-              ExpiringSoonRecruitSection(recruits: recruits)
+              ExpiringSoonRecruitSection()
             ],
           ),
         ),
