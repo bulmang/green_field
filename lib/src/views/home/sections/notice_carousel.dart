@@ -34,7 +34,7 @@ class NoticeCarouselState extends State<NoticeCarousel> {
                     child: CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        context.go('/notice/detail/${notice.id}');
+                        context.go('/home/notice/detail/${notice.id}');
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,

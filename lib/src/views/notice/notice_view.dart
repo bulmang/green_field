@@ -37,7 +37,7 @@ class _NoticeViewState extends State<NoticeView> {
             likes: notice.like.length,
             commentCount: 0,
             onTap: () {
-              context.go('/noticedetail/${notice.id}');
+              context.go('/home/notice/detail/${notice.id}');
             },
           );
         },
