@@ -16,7 +16,7 @@ class RecruitView extends StatefulWidget {
 }
 
 class _RecruitViewState extends State<RecruitView> {
-
+  final recruitVM = RecruitViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +34,19 @@ class _RecruitViewState extends State<RecruitView> {
                 color: AppColorsTheme().gfGray400Color,
               ),
               onPressed: () {
-                context.go('/recruitedit');
+                context.go('/recruit/edit');
               },
           ),
         ],
       ),
       body: ListView.builder(
-        itemCount: RecruitViewModel().recruits.length,
+        itemCount: recruitVM.recruits.length,
         itemBuilder: (context, index) {
-          final recruit = RecruitViewModel().recruits[index];
+          final recruit = recruitVM.recruits[index];
           return GreenFieldRecruitList(
             recruits: recruit,
             onTap: () {
-              context.go('/recruitdetail/${recruit.id}');
+              context.go('/recruit/detail/${recruit.id}');
             },
           );
         },

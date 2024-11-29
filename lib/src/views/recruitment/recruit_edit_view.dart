@@ -34,7 +34,7 @@ class _RecruitEditViewState extends State<RecruitEditView> {
         actions: [
           CupertinoButton(
             onPressed: () {
-              print("글쓰기 버튼 클릭");
+              context.pop();
             },
             child: Container(
               decoration: BoxDecoration(
