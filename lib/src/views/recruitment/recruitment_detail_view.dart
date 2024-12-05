@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_content_widget.dart';
@@ -33,7 +34,7 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
           color: AppColorsTheme().gfGray400Color,
         ),
         leadingAction: (){
-          Navigator.pop(context);
+          context.pop();
         },
       ),
       body: SafeArea(

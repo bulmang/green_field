@@ -2,21 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
-import 'package:green_field/src/components/greenfield_edit_section.dart'; // Assuming you have a GreenFieldEditSection
+import 'package:green_field/src/components/greenfield_edit_section.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/enums/feature_type.dart';
-import 'package:green_field/src/model/recruit.dart';
+import '../../design_system/app_texts.dart';
 
-import '../../design_system/app_texts.dart'; // Assuming you have a Recruit model
-
-class RecruitEditView extends StatefulWidget {
-  const RecruitEditView({super.key});
+class PostEditView extends StatefulWidget {
+  const PostEditView({super.key});
 
   @override
-  _RecruitEditViewState createState() => _RecruitEditViewState();
+  _PostEditViewState createState() => _PostEditViewState();
 }
 
-class _RecruitEditViewState extends State<RecruitEditView> {
+class _PostEditViewState extends State<PostEditView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,8 +58,7 @@ class _RecruitEditViewState extends State<RecruitEditView> {
         ],
       ),
       body: GreenFieldEditSection(
-        type:
-            FeatureType.recruit, // Pass the recruit object to the edit section
+        type: FeatureType.post,
       ),
     );
   }

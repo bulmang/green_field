@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
@@ -42,6 +43,7 @@ class LoginView extends StatelessWidget {
                   children: [
                     CupertinoButton(
                       onPressed: () {
+                        context.go('/home');
                       },
                       child: Text(
                         '로그인 없이 둘러보기',

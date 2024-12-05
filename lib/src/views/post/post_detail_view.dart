@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_comment_widget.dart';
 import 'package:green_field/src/components/greenfield_content_widget.dart';
@@ -7,17 +8,18 @@ import 'package:green_field/src/components/greenfield_user_info_widget.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/model/post.dart';
+import 'package:green_field/src/router/router.dart';
 
-class BoardDetailView extends StatefulWidget {
+class PostDetailView extends StatefulWidget {
   final Post post; // Assuming BoardPost is your model
 
-  const BoardDetailView({super.key, required this.post});
+  const PostDetailView({super.key, required this.post});
 
   @override
-  _BoardDetailViewState createState() => _BoardDetailViewState();
+  _PostDetailViewState createState() => _PostDetailViewState();
 }
 
-class _BoardDetailViewState extends State<BoardDetailView> {
+class _PostDetailViewState extends State<PostDetailView> {
   @override
   Widget build(BuildContext context) {
     final post = widget.post;
@@ -27,8 +29,6 @@ class _BoardDetailViewState extends State<BoardDetailView> {
       appBar: GreenFieldAppBar(
         backgGroundColor: AppColorsTheme().gfWhiteColor,
         title: _getLimitedTitle(post.title, 20),
-        actions: [
-        ],
       ),
       body: GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
