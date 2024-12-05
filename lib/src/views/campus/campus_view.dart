@@ -37,8 +37,8 @@ class _CampusViewState extends State<CampusView> {
 
   @override
   void dispose() {
-    super.dispose();
     scrollController.dispose();
+    super.dispose();
   }
 
   /// Animate To Tab
