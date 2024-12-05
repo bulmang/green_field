@@ -6,14 +6,14 @@ import '../../../design_system/app_colors.dart';
 import '../../../design_system/app_texts.dart';
 import '../../../viewmodels/notice_view_model.dart';
 
-class NoticeCarousel extends StatefulWidget {
-  NoticeCarousel({super.key});
+class NoticeCarouselSection extends StatefulWidget {
+  NoticeCarouselSection({super.key});
 
   @override
-  NoticeCarouselState createState() => NoticeCarouselState();
+  NoticeCarouselSectionState createState() => NoticeCarouselSectionState();
 }
 
-class NoticeCarouselState extends State<NoticeCarousel> {
+class NoticeCarouselSectionState extends State<NoticeCarouselSection> {
   int _currentIndex = 0;
   final noticeVM = NoticeViewModel();
 

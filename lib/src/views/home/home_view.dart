@@ -77,7 +77,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                         ),
                         SizedBox(height: 5),
-                        NoticeCarousel(),
+                        NoticeCarouselSection(),
                       ],
                     ),
                   ),
