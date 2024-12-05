@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
+import 'package:green_field/src/views/home/sections/notice_carousel_section.dart';
 import '../../design_system/app_colors.dart';
 import '../../design_system/app_texts.dart';
 import '../../viewmodels/user_view_model.dart';
 import 'sections/external_link_section.dart';
-import 'sections/notice_carousel.dart';
 import 'sections/top_liked_posts_section.dart';
 
 class HomeView extends StatefulWidget {
