@@ -1,9 +1,5 @@
-import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:green_field/src/views/campus/camus_floor_section.dart';
 import 'package:green_field/src/views/campus/camus_map_section.dart';
 import 'package:green_field/src/views/campus/campus_operating_section.dart';
@@ -12,7 +8,7 @@ import '../../design_system/app_colors.dart';
 import '../../design_system/app_texts.dart';
 
 class CampusView extends StatefulWidget {
-  const CampusView({Key? key}) : super(key: key);
+  const CampusView({super.key});
 
   @override
   _CampusViewState createState() => _CampusViewState();
@@ -34,29 +30,30 @@ class _CampusViewState extends State<CampusView> {
 
   @override
   void initState() {
+    super.initState();
     scrollController = ScrollController();
     scrollController.addListener(animateToTab);
-    super.initState();
   }
 
+  @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
+    scrollController.dispose();
   }
 
   /// Animate To Tab
   void animateToTab() {
-    late RenderBox box;
-
     for (var i = 0; i < campusCategories.length; i++) {
-      box = campusCategories[i].currentContext!.findRenderObject() as RenderBox;
-      Offset position = box.localToGlobal(Offset.zero);
-
-      if (scrollController.offset >= position.dy) {
-        DefaultTabController.of(tabContext!).animateTo(
-          i,
-          duration: const Duration(milliseconds: 100),
-        );
+      final context = campusCategories[i].currentContext;
+      if (context != null) {
+        RenderBox box = context.findRenderObject() as RenderBox;
+        Offset position = box.localToGlobal(Offset.zero);
+        if (scrollController.offset >= position.dy) {
+          DefaultTabController.of(tabContext!).animateTo(
+            i,
+            duration: const Duration(milliseconds: 100),
+          );
+        }
       }
     }
   }
@@ -64,11 +61,13 @@ class _CampusViewState extends State<CampusView> {
   /// Scroll to Index
   void scrollToIndex(int index) async {
     scrollController.removeListener(animateToTab);
-    final categories = campusCategories[index].currentContext!;
-    await Scrollable.ensureVisible(
-      categories,
-      duration: const Duration(milliseconds: 100),
-    );
+    final categoriesContext = campusCategories[index].currentContext;
+    if (categoriesContext != null) {
+      await Scrollable.ensureVisible(
+        categoriesContext,
+        duration: const Duration(milliseconds: 100),
+      );
+    }
     scrollController.addListener(animateToTab);
   }
 
@@ -112,13 +111,19 @@ class _CampusViewState extends State<CampusView> {
 
   /// AppBar
   AppBar _buildAppBar() {
+    List<String> titles = [
+      '위치',
+      '운영시간',
+      '공간소개',
+    ];
+
     return AppBar(
       title: Row(
         children: [
           Spacer(),
           CupertinoButton(
             onPressed: () {
-              print("글쓰기 버튼 클릭");
+
             },
             child: Container(
               decoration: BoxDecoration(
@@ -157,40 +162,22 @@ class _CampusViewState extends State<CampusView> {
           Spacer()
         ],
       ),
-      bottom:  TabBar(
+      bottom: TabBar(
         indicatorColor: AppColorsTheme().gfMainColor,
         labelColor: AppColorsTheme().gfMainColor,
         splashFactory: NoSplash.splashFactory,
         onTap: (int index) => scrollToIndex(index),
-        tabs: [
-          Padding(
+        tabs: List.generate(3, (int index) {
+          return Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Text(
-              '위치',
+              titles[index],
               style: AppTextsTheme.main().gfTitle1.copyWith(
-                color: AppColorsTheme().gfMainColor,
-              ),
+                    color: AppColorsTheme().gfMainColor,
+                  ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Text(
-              '운영시간',
-              style: AppTextsTheme.main().gfTitle1.copyWith(
-                color: AppColorsTheme().gfMainColor,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Text(
-              '공간소개',
-              style: AppTextsTheme.main().gfTitle1.copyWith(
-                color: AppColorsTheme().gfMainColor,
-              ),
-            ),
-          ),
-        ],
+          );
+        }),
       ),
       backgroundColor: AppColorsTheme().gfBackGroundColor,
     );
