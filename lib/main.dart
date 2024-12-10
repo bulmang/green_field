@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/router/router.dart';
 import 'firebase_options.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
@@ -22,10 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
-      theme: ThemeData(
-        primaryColor: AppColorsTheme().gfMainColor,
-        scaffoldBackgroundColor: AppColorsTheme().gfBackGroundColor,
-      ),
+      theme: Theme.of(context).copyWith(
+        extensions: [
+          AppColorsTheme(),
+          AppTextsTheme.main(),
+        ]
+      )
     );
   }
 }
