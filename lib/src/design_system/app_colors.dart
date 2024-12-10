@@ -34,13 +34,13 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
     required this.gfBlackColor,
   });
 
-  factory AppColorsTheme() {
-    return AppColorsTheme._internal(
+  factory AppColorsTheme.main() {
+    return const AppColorsTheme._internal(
       gfMainColor: const Color(0xFF02542D),
-      gfMainBackGroundColor: const Color(0xFF02542D).withOpacity(0.1),
-      gfWarningBackGroundColor: const Color(0xFFFF6A69).withOpacity(0.1),
+      gfMainBackGroundColor: const Color(0xFFE2EAE8),
+      gfWarningBackGroundColor: const Color(0xFFFBECEE),
       gfWarningYellowColor: const Color(0xFFFFC35A),
-      gfWarningYellowBackGroundColor: const Color(0xFFFFC35A).withOpacity(0.1),
+      gfWarningYellowBackGroundColor: const Color(0xFFFBF2E4),
       gfWarningColor: const Color(0xFFFF6A69),
       gfBlueColor: const Color(0xFF007AFF),
       gfWhiteColor: const Color(0xFFFBFBFD),
@@ -55,7 +55,7 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
 
   @override
   AppColorsTheme copyWith() {
-    return AppColorsTheme();
+    return AppColorsTheme.main();
   }
 
   @override

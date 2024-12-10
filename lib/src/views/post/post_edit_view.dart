@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_edit_section.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/enums/feature_type.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import '../../design_system/app_texts.dart';
 
 class PostEditView extends StatefulWidget {
@@ -18,13 +18,13 @@ class _PostEditViewState extends State<PostEditView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorsTheme().gfWhiteColor,
+      backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       appBar: GreenFieldAppBar(
-        backgGroundColor: AppColorsTheme().gfWhiteColor,
+        backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "모집글 쓰기",
         leadingIcon: Icon(
           CupertinoIcons.xmark,
-          color: AppColorsTheme().gfGray400Color,
+          color: Theme.of(context).appColors.gfGray400Color,
         ),
         leadingAction: () {
           context.pop();
@@ -49,7 +49,7 @@ class _PostEditViewState extends State<PostEditView> {
                 child: Text(
                   '완료',
                   style: AppTextsTheme.main().gfCaption2.copyWith(
-                    color: AppColorsTheme().gfWhiteColor,
+                    color: Theme.of(context).appColors.gfWhiteColor,
                   ),
                 ),
               ),

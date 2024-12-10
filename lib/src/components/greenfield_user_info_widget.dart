@@ -46,13 +46,13 @@ class GreenfieldUserInfoWidget extends StatelessWidget {
                   Text(
                     featureType  == FeatureType.notice ? campus :'익명($campus)',
                     style: AppTextsTheme.main().gfHeading3.copyWith(
-                      color: featureType  == FeatureType.notice ? AppColorsTheme().gfMainColor : AppColorsTheme().gfGray800Color,
+                      color: featureType  == FeatureType.notice ? AppColorsTheme.main().gfMainColor : AppColorsTheme.main().gfGray800Color,
                     ),
                   ),
                   Text(
                     createTimeText,
                     style: AppTextsTheme.main().gfBody5.copyWith(
-                      color: AppColorsTheme().gfGray400Color,
+                      color: AppColorsTheme.main().gfGray400Color,
                     ),
                   ),
                 ],

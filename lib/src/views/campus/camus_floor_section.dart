@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../design_system/app_colors.dart';
@@ -25,7 +27,7 @@ class CampusFloorSection extends StatelessWidget {
               Text(
                 floor,
                 style: AppTextsTheme.main().gfBody2.copyWith(
-                  color: AppColorsTheme().gfBlackColor,
+                  color: Theme.of(context).appColors.gfBlackColor,
                 ),
               ),
               SizedBox(height: 4), // 텍스트와 이미지 사이의 간격

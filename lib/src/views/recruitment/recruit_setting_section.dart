@@ -2,9 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
 
-import '../../design_system/app_colors.dart';
 import '../../design_system/app_texts.dart';
 import '../../enums/recruit_setting_type.dart';
 
@@ -74,7 +74,7 @@ class RecruitSettingSectionState extends State<RecruitSettingSection> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected ? AppColorsTheme().gfMainColor : AppColorsTheme().gfBackGroundColor,
+            color: isSelected ? Theme.of(context).appColors.gfMainColor : Theme.of(context).appColors.gfBackGroundColor,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               if (!isSelected)
@@ -92,12 +92,12 @@ class RecruitSettingSectionState extends State<RecruitSettingSection> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(icon, size: 32, color: isSelected ? AppColorsTheme().gfBackGroundColor : AppColorsTheme().gfMainColor),
+                Icon(icon, size: 32, color: isSelected ? Theme.of(context).appColors.gfBackGroundColor : Theme.of(context).appColors.gfMainColor),
                 SizedBox(height: 5),
                 Text(
                   text,
                   style: AppTextsTheme.main().gfBody5.copyWith(
-                      color: isSelected ? AppColorsTheme().gfBackGroundColor : AppColorsTheme().gfMainColor
+                      color: isSelected ? Theme.of(context).appColors.gfBackGroundColor : Theme.of(context).appColors.gfMainColor
                   ),
                 ),
               ],

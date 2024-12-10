@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/enums/recruit_setting_type.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import '../../../design_system/app_colors.dart';
 
 class RecruitPickerModal extends StatefulWidget {
@@ -48,7 +49,7 @@ class _RecruitPickerModalState extends State<RecruitPickerModal> {
               child: Text(
                 '${time[index]} 분',
                 style: AppTextsTheme.main().gfHeading1.copyWith(
-                      color: AppColorsTheme().gfBlackColor,
+                      color: Theme.of(context).appColors.gfBlackColor,
                     ),
               ),
             );
@@ -69,7 +70,7 @@ class _RecruitPickerModalState extends State<RecruitPickerModal> {
               child: Text(
                 '${currentPeopleCount[index]} 명',
                 style: AppTextsTheme.main().gfHeading1.copyWith(
-                      color: AppColorsTheme().gfBlackColor,
+                      color: Theme.of(context).appColors.gfBlackColor,
                     ),
               ),
             );
@@ -89,7 +90,7 @@ class _RecruitPickerModalState extends State<RecruitPickerModal> {
               child: Text(
                 '${maxPeopleCount[index]} 명',
                 style: AppTextsTheme.main().gfHeading1.copyWith(
-                      color: AppColorsTheme().gfBlackColor,
+                      color: Theme.of(context).appColors.gfBlackColor,
                     ),
               ),
             );

@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       routerConfig: router,
       theme: Theme.of(context).copyWith(
         extensions: [
-          AppColorsTheme(),
+          AppColorsTheme.main(),
           AppTextsTheme.main(),
         ]
       )
