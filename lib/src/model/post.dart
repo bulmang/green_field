@@ -8,8 +8,8 @@ class Post {
   String title;
   String body;
   List<String> like;
-  List<String>? images;
-  List<Comment>? comment;
+  List<String> images;
+  List<Comment> comment;
 
   Post({
     required this.id,
@@ -19,9 +19,9 @@ class Post {
     required this.title,
     required this.body,
     required this.like,
-    this.images,
-    this.comment,
-  });
+    images,
+    comment,
+  }): images = images ?? [], comment = comment ?? [];
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,8 +32,8 @@ class Post {
       'title': title,
       'body': body,
       'like': like,
-      'images': images ?? [],
-      'comment': comment ?? [],
+      'images': images,
+      'comment': comment,
     };
   }
 
@@ -46,8 +46,8 @@ class Post {
       title: map['title'],
       body: map['body'],
       like: List<String>.from(map['like'] ?? []),
-      images: map['images'] != null ? List<String>.from(map['images']) : null,
-      comment: map['comment'] != null ? List<Comment>.from(map['comnent']) : null,
+      images: List<String>.from(map['images']),
+      comment: List<Comment>.from(map['comment']),
     );
   }
 }
