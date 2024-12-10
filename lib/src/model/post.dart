@@ -19,9 +19,9 @@ class Post {
     required this.title,
     required this.body,
     required this.like,
-    required this.images,
-    required this.comment,
-  });
+    images,
+    comment,
+  }): images = images ?? [], comment = comment ?? [];
 
   Map<String, dynamic> toMap() {
     return {
