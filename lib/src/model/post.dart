@@ -21,7 +21,7 @@ class Post {
     required this.like,
     images,
     comment,
-  }): images = images ?? [], comment = comment ?? [];
+  }): images = List.from(images ?? []), comment = List.from(comment ?? []);
 
   Map<String, dynamic> toMap() {
     return {

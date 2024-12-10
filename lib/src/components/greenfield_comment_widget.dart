@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 import '../design_system/app_texts.dart';
 
@@ -23,7 +24,7 @@ class GreenFieldCommentWidget extends StatelessWidget {
       children: [
         Divider(
           height: 1,
-          color: AppColorsTheme().gfGray300Color,
+          color: Theme.of(context).appColors.gfGray300Color,
         ),
         SizedBox(height: 8),
         Container(
@@ -42,14 +43,14 @@ class GreenFieldCommentWidget extends StatelessWidget {
                         Text(
                           campus,
                           style: AppTextsTheme.main().gfBody5.copyWith(
-                            color: AppColorsTheme().gfBlackColor,
+                            color: Theme.of(context).appColors.gfBlackColor,
                           ),
                         ),
                         SizedBox(height: 2),
                         Text(
                           '${dateTime.month}/${dateTime.day} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}',
                           style: AppTextsTheme.main().gfCaption5.copyWith(
-                            color: AppColorsTheme().gfGray400Color,
+                            color: Theme.of(context).appColors.gfGray400Color,
                           ),
                         ),
                       ],
@@ -61,7 +62,7 @@ class GreenFieldCommentWidget extends StatelessWidget {
               Text(
                   comment.length > 300 ? '${comment.substring(0, 300)}...' : comment,
                   style: AppTextsTheme.main().gfBody5.copyWith(
-                    color: AppColorsTheme().gfBlackColor,
+                    color: Theme.of(context).appColors.gfBlackColor,
                   )
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
@@ -71,7 +72,7 @@ class _GreenFieldCampusPickerState extends State<GreenFieldCampusPicker> {
         style: wheelStyle.copyWith(
           itemExtent: 23.0,
         ),
-        selectedIndexColor: AppColorsTheme().gfMainColor,
+        selectedIndexColor: Theme.of(context).appColors.gfMainColor,
         onIndexChanged: (index) {
           setState(() {
             selectedCampus = campuses[index];
@@ -117,11 +118,11 @@ class _GreenFieldCampusPickerState extends State<GreenFieldCampusPicker> {
               color: Colors.transparent,
               border: Border(
                 top: BorderSide(
-                  color: AppColorsTheme().gfGray400Color,
+                  color: Theme.of(context).appColors.gfGray400Color,
                   width: 1.0,
                 ),
                 bottom: BorderSide(
-                  color: AppColorsTheme().gfGray400Color,
+                  color: Theme.of(context).appColors.gfGray400Color,
                   width: 1.0,
                 ),
               ),
@@ -131,7 +132,7 @@ class _GreenFieldCampusPickerState extends State<GreenFieldCampusPicker> {
             padding: EdgeInsets.only(right: screenWidth * 0.25),
             child: Text(
               '캠퍼스',
-              style: AppTextsTheme.main().gfHeading3.copyWith(color: AppColorsTheme().gfMainColor),
+              style: AppTextsTheme.main().gfHeading3.copyWith(color: Theme.of(context).appColors.gfMainColor),
             ),
           ),
         ],

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_content_widget.dart';
 import 'package:green_field/src/components/greenfield_user_info_widget.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/enums/feature_type.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 import '../../model/notice.dart';
 
@@ -23,9 +23,9 @@ class _NoticeDetailViewState extends State<NoticeDetailView> {
     final notice = widget.notice;
 
     return Scaffold(
-      backgroundColor: AppColorsTheme().gfWhiteColor,
+      backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       appBar: GreenFieldAppBar(
-        backgGroundColor: AppColorsTheme().gfWhiteColor,
+        backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
       ),
       body: SingleChildScrollView(

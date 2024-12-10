@@ -1,8 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
-import '../../../design_system/app_colors.dart';
 import '../../../design_system/app_texts.dart';
 import '../../../viewmodels/notice_view_model.dart';
 
@@ -30,7 +31,7 @@ class NoticeCarouselSectionState extends State<NoticeCarouselSection> {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
-                    color: AppColorsTheme().gfWhiteColor,
+                    color: Theme.of(context).appColors.gfWhiteColor,
                     child: CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -50,7 +51,7 @@ class NoticeCarouselSectionState extends State<NoticeCarouselSection> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppTextsTheme.main().gfTitle1.copyWith(
-                                      color: AppColorsTheme().gfBlackColor,
+                                      color: Theme.of(context).appColors.gfBlackColor,
                                     ),
                                   ),
                                   Text(
@@ -58,7 +59,7 @@ class NoticeCarouselSectionState extends State<NoticeCarouselSection> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppTextsTheme.main().gfBody4.copyWith(
-                                      color: AppColorsTheme().gfBlackColor,
+                                      color: Theme.of(context).appColors.gfBlackColor,
                                     ),
                                   ),
                                 ],
@@ -110,8 +111,8 @@ class NoticeCarouselSectionState extends State<NoticeCarouselSection> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentIndex == index
-                    ? AppColorsTheme().gfMainColor // Active color
-                    : AppColorsTheme().gfGray300Color, // Inactive color
+                    ? Theme.of(context).appColors.gfMainColor // Active color
+                    : Theme.of(context).appColors.gfGray300Color, // Inactive color
               ),
             );
           }).toList(),

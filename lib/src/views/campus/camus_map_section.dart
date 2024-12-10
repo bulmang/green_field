@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../design_system/app_colors.dart';
 import '../../design_system/app_icons.dart';
 import '../../design_system/app_texts.dart';
 import '../../model/campus.dart';
@@ -51,14 +52,14 @@ class CampusMapSection extends StatelessWidget {
               Text(
                 CampusExample().gwanack.address['CampusAddress']!,
                 style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                  color: AppColorsTheme().gfBlackColor,
+                  color: Theme.of(context).appColors.gfBlackColor,
                 ),
               ),
               SizedBox(width: 8),
               Text(
                 "검색하기",
                 style: AppTextsTheme.main().gfCaption2.copyWith(
-                  color: AppColorsTheme().gfMainColor,
+                  color: Theme.of(context).appColors.gfMainColor,
                 ),
               ),
             ],

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/recruit_view_model.dart';
-import '../../../design_system/app_colors.dart';
 import '../../../design_system/app_texts.dart';
-import '../../../model/recruit.dart';
 
 class ExpiringSoonRecruitSection extends StatelessWidget {
 
@@ -28,7 +28,7 @@ class ExpiringSoonRecruitSection extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 width: MediaQuery.of(context).size.width / 1.3,
                 decoration: BoxDecoration(
-                  color: AppColorsTheme().gfMainColor.withOpacity(0.6 - (index * 0.1)),
+                  color: Theme.of(context).appColors.gfMainColor.withOpacity(0.6 - (index * 0.1)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: CupertinoButton(
@@ -46,7 +46,7 @@ class ExpiringSoonRecruitSection extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                            color: AppColorsTheme().gfWhiteColor,
+                            color: Theme.of(context).appColors.gfWhiteColor,
                           ),
                         ),
                         SizedBox(height: 5),
@@ -56,7 +56,7 @@ class ExpiringSoonRecruitSection extends StatelessWidget {
                             child: Text(
                               recruit.body,
                               style: AppTextsTheme.main().gfCaption2.copyWith(
-                                color: AppColorsTheme().gfWhiteColor,
+                                color: Theme.of(context).appColors.gfWhiteColor,
                               ),
                             ),
                           ),
@@ -70,14 +70,14 @@ class ExpiringSoonRecruitSection extends StatelessWidget {
                                 Text(
                                   '참여하기',
                                   style: AppTextsTheme.main().gfCaption2.copyWith(
-                                    color: AppColorsTheme().gfWhiteColor,
+                                    color: Theme.of(context).appColors.gfWhiteColor,
                                   ),
                                 ),
                                 SizedBox(width: 3),
                                 Icon(
                                   CupertinoIcons.chevron_right,
                                   size:12,
-                                  color: AppColorsTheme().gfWhiteColor,
+                                  color: Theme.of(context).appColors.gfWhiteColor,
                                 ),
                               ],
                             ),
@@ -94,7 +94,7 @@ class ExpiringSoonRecruitSection extends StatelessWidget {
                                 Text(
                                   '${recruit.remainTime.toString()} min',
                                   style: AppTextsTheme.main().gfCaption2.copyWith(
-                                    color: AppColorsTheme().gfWhiteColor,
+                                    color: Theme.of(context).appColors.gfWhiteColor,
                                   ),
                                 ),
                               ],
@@ -112,7 +112,7 @@ class ExpiringSoonRecruitSection extends StatelessWidget {
                                 Text(
                                   '${recruit.currentParticipants.length.toString()} / ${recruit.maxParticipants.toString()}',
                                   style: AppTextsTheme.main().gfCaption2.copyWith(
-                                    color: AppColorsTheme().gfWhiteColor,
+                                    color: Theme.of(context).appColors.gfWhiteColor,
                                   ),
                                 ),
                               ],

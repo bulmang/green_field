@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -60,16 +61,16 @@ class GreenFieldEditSectionState extends State<GreenFieldEditSection> {
                       maxLength: 50,
                       maxLines: 1,
                       style: AppTextsTheme.main().gfHeading1.copyWith(
-                        color: AppColorsTheme().gfBlackColor,
+                        color: Theme.of(context).appColors.gfBlackColor,
                       ),
                       decoration: InputDecoration(
                         hintText: '제목',
-                        hintStyle: TextStyle(color: AppColorsTheme().gfGray400Color),
+                        hintStyle: TextStyle(color: Theme.of(context).appColors.gfGray400Color),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColorsTheme().gfMainColor, width: 2),
+                          borderSide: BorderSide(color: Theme.of(context).appColors.gfMainColor, width: 2),
                         ),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColorsTheme().gfGray400Color, width: 1),
+                          borderSide: BorderSide(color: Theme.of(context).appColors.gfGray400Color, width: 1),
                         ),
                       ),
                     ),
@@ -79,16 +80,16 @@ class GreenFieldEditSectionState extends State<GreenFieldEditSection> {
                       minLines: 8,
                       maxLines: null,
                       style: AppTextsTheme.main().gfBody1.copyWith(
-                        color: AppColorsTheme().gfBlackColor,
+                        color: Theme.of(context).appColors.gfBlackColor,
                       ),
                       decoration: InputDecoration(
                         hintText: '내용을 입력하세요.',
-                        hintStyle: TextStyle(color: AppColorsTheme().gfGray400Color),
+                        hintStyle: TextStyle(color: Theme.of(context).appColors.gfGray400Color),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColorsTheme().gfMainColor, width: 2),
+                          borderSide: BorderSide(color: Theme.of(context).appColors.gfMainColor, width: 2),
                         ),
                         enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColorsTheme().gfGray400Color, width: 1),
+                          borderSide: BorderSide(color: Theme.of(context).appColors.gfGray400Color, width: 1),
                         ),
                       ),
                     ),
@@ -125,7 +126,7 @@ class GreenFieldEditSectionState extends State<GreenFieldEditSection> {
                                       width: 30,
                                       height: 30,
                                       decoration: BoxDecoration(
-                                        color: AppColorsTheme().gfWarningColor,
+                                        color: Theme.of(context).appColors.gfWarningColor,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Icon(
@@ -164,7 +165,7 @@ class GreenFieldEditSectionState extends State<GreenFieldEditSection> {
                         '- 음란물 및 성적 수치심 유발 행위 금지\n'
                         '- 스포일러, 공포, 속임수, 놀라게 하는 행위 금지',
                         style: AppTextsTheme.main().gfCaption4.copyWith(
-                          color: AppColorsTheme().gfGray400Color,
+                          color: Theme.of(context).appColors.gfGray400Color,
                         ),
                       ),
                   ],

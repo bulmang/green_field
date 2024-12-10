@@ -3,6 +3,7 @@ import 'package:green_field/src/components/greenfield_campus_picker.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 class OnboardingView extends StatelessWidget {
   const OnboardingView({super.key});
@@ -23,7 +24,7 @@ class OnboardingView extends StatelessWidget {
                     Text(
                       '안녕하세요\n캠퍼스와 강의를 알려주세요.',
                       style: AppTextsTheme.main().gfHeading1.copyWith(
-                        color: AppColorsTheme().gfMainColor,
+                        color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),
                     SizedBox(height: 40),
@@ -33,7 +34,7 @@ class OnboardingView extends StatelessWidget {
                         Text(
                           "캠퍼스위치",
                           style: AppTextsTheme.main().gfTitle3.copyWith(
-                            color: AppColorsTheme().gfGray800Color,
+                            color: Theme.of(context).appColors.gfGray800Color,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -42,7 +43,7 @@ class OnboardingView extends StatelessWidget {
                         Text(
                           "학습 및 학습 완료 강좌",
                           style: AppTextsTheme.main().gfTitle3.copyWith(
-                            color: AppColorsTheme().gfGray800Color,
+                            color: Theme.of(context).appColors.gfGray800Color,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -58,8 +59,8 @@ class OnboardingView extends StatelessWidget {
               child: GreenFieldConfirmButton(
                 text: "시작하기",
                 isAble: true,
-                textColor: AppColorsTheme().gfWhiteColor,
-                backGroundColor: AppColorsTheme().gfMainColor,
+                textColor: Theme.of(context).appColors.gfWhiteColor,
+                backGroundColor: Theme.of(context).appColors.gfMainColor,
                 onPressed: () {
                   print("시작하기 버튼 클릭됨.");
                 },
@@ -80,7 +81,7 @@ Widget customTextField({
 
   return Container(
     decoration: BoxDecoration(
-      color: AppColorsTheme().gfGray100Color,
+      color: AppColorsTheme.main().gfGray100Color,
       borderRadius: BorderRadius.circular(8),
     ),
     child: TextField(
@@ -88,12 +89,12 @@ Widget customTextField({
       onChanged: onAction,
       decoration: InputDecoration(
         hintText: hintText ?? '학습중이거나 학습완료 강좌 입력.',
-        hintStyle: TextStyle(color: AppColorsTheme().gfGray400Color),
+        hintStyle: TextStyle(color: AppColorsTheme.main().gfGray400Color),
         border: InputBorder.none,
         contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       ),
       style: AppTextsTheme.main().gfTitle2.copyWith(
-        color: AppColorsTheme().gfBlackColor,
+        color: AppColorsTheme.main().gfBlackColor,
       ),
     ),
   );

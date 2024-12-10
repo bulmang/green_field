@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_recruit_list.dart'; // Import your GreenFieldRecruitList
-import 'package:green_field/src/design_system/app_colors.dart';
-import 'package:green_field/src/views/recruitment/recruit_edit_view.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 import '../../viewmodels/recruit_view_model.dart';
 
@@ -21,9 +20,9 @@ class _RecruitViewState extends State<RecruitView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorsTheme().gfBackGroundColor,
+      backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
       appBar: GreenFieldAppBar(
-        backgGroundColor: AppColorsTheme().gfBackGroundColor,
+        backgGroundColor: Theme.of(context).appColors.gfBackGroundColor,
         title: "모집",
         leadingIcon: SizedBox(),
         actions: [
@@ -31,7 +30,7 @@ class _RecruitViewState extends State<RecruitView> {
               child: Icon(
                 CupertinoIcons.square_pencil,
                 size: 24,
-                color: AppColorsTheme().gfGray400Color,
+                color: Theme.of(context).appColors.gfGray400Color,
               ),
               onPressed: () {
                 context.go('/recruit/edit');

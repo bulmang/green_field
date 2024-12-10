@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/model/recruit.dart';
 import '../design_system/app_colors.dart';
 
@@ -26,7 +28,7 @@ class GreenFieldRecruitList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColorsTheme().gfWhiteColor,
+                color: Theme.of(context).appColors.gfWhiteColor,
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Padding(
@@ -39,7 +41,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextsTheme.main().gfTitle1.copyWith(
-                            color: AppColorsTheme().gfBlackColor,
+                            color: Theme.of(context).appColors.gfBlackColor,
                           ),
                     ),
                     SizedBox(height: 5),
@@ -48,7 +50,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextsTheme.main().gfBody2.copyWith(
-                            color: AppColorsTheme().gfBlackColor,
+                            color: Theme.of(context).appColors.gfBlackColor,
                           ),
                     ),
                     SizedBox(height: 20),
@@ -58,7 +60,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: AppColorsTheme().gfGray800Color, // 테두리 색상
+                              color: Theme.of(context).appColors.gfGray800Color, // 테두리 색상
                               width: 1, // 테두리 두께
                             ),
                             borderRadius: BorderRadius.circular(3),
@@ -78,7 +80,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                                   style: AppTextsTheme.main()
                                       .gfCaption5
                                       .copyWith(
-                                        color: AppColorsTheme().gfGray800Color,
+                                        color: Theme.of(context).appColors.gfGray800Color,
                                       ),
                                 ),
                               ],
@@ -89,8 +91,8 @@ class GreenFieldRecruitList extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             color: recruits.isEntryAvailable
-                                ? AppColorsTheme().gfMainBackGroundColor
-                                : AppColorsTheme().gfWarningBackGroundColor,
+                                ? Theme.of(context).appColors.gfMainBackGroundColor
+                                : Theme.of(context).appColors.gfWarningBackGroundColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Padding(
@@ -114,8 +116,8 @@ class GreenFieldRecruitList extends StatelessWidget {
                                       .gfCaption5
                                       .copyWith(
                                         color: recruits.isEntryAvailable
-                                            ? AppColorsTheme().gfMainColor
-                                            : AppColorsTheme().gfWarningColor,
+                                            ? Theme.of(context).appColors.gfMainColor
+                                            : Theme.of(context).appColors.gfWarningColor,
                                       ),
                                 ),
                               ],
@@ -126,7 +128,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                         if (recruits.isTimeExpired)
                           Container(
                             decoration: BoxDecoration(
-                              color: AppColorsTheme()
+                              color: Theme.of(context).appColors
                                   .gfWarningYellowBackGroundColor,
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -146,7 +148,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                                     style: AppTextsTheme.main()
                                         .gfCaption5
                                         .copyWith(
-                                          color: AppColorsTheme()
+                                          color: Theme.of(context).appColors
                                               .gfWarningYellowColor,
                                         ),
                                   ),
@@ -167,7 +169,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                             Text(
                               '${recruits.remainTime.toString()} min',
                               style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                                    color: AppColorsTheme().gfMainColor,
+                                    color: Theme.of(context).appColors.gfMainColor,
                                   ),
                             ),
                           ],
@@ -185,7 +187,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                             Text(
                               '${recruits.currentParticipants.length.toString()} / ${recruits.maxParticipants.toString()}',
                               style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                                    color: AppColorsTheme().gfMainColor,
+                                    color: Theme.of(context).appColors.gfMainColor,
                                   ),
                             ),
                           ],

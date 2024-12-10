@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_list.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 import '../../viewmodels/notice_view_model.dart';
 
@@ -19,9 +19,9 @@ class _NoticeViewState extends State<NoticeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorsTheme().gfWhiteColor,
+      backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       appBar: GreenFieldAppBar(
-        backgGroundColor: AppColorsTheme().gfWhiteColor,
+        backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
       ),
       body: ListView.builder(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/views/home/sections/notice_carousel_section.dart';
-import '../../design_system/app_colors.dart';
 import '../../design_system/app_texts.dart';
 import '../../viewmodels/user_view_model.dart';
 import 'sections/external_link_section.dart';
@@ -50,14 +50,14 @@ class _HomeViewState extends State<HomeView> {
                             Text(
                               '익명(${userVM.user.campus})',
                               style: AppTextsTheme.main().gfTitle1.copyWith(
-                                    color: AppColorsTheme().gfBlackColor,
+                                    color: Theme.of(context).appColors.gfBlackColor,
                                   ),
                             ),
                             SizedBox(height: 3),
                             Text(
                               userVM.user.course,
                               style: AppTextsTheme.main().gfBody5.copyWith(
-                                    color: AppColorsTheme().gfGray400Color,
+                                    color: Theme.of(context).appColors.gfGray400Color,
                                   ),
                             ),
                           ],
@@ -73,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
                         Text(
                           '${userVM.user.campus} 공지사항',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                                color: AppColorsTheme().gfBlackColor,
+                                color: Theme.of(context).appColors.gfBlackColor,
                               ),
                         ),
                         SizedBox(height: 5),
@@ -93,7 +93,7 @@ class _HomeViewState extends State<HomeView> {
                         Text(
                           'HOT 게시판',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                            color: AppColorsTheme().gfBlackColor,
+                            color: Theme.of(context).appColors.gfBlackColor,
                           ),
                         ),
                         SizedBox(height: 5),
@@ -111,7 +111,7 @@ class _HomeViewState extends State<HomeView> {
                 child: Text(
                   '곧 사라지는 실시간 모집글',
                   style: AppTextsTheme.main().gfTitle2.copyWith(
-                    color: AppColorsTheme().gfBlackColor,
+                    color: Theme.of(context).appColors.gfBlackColor,
                   ),
                 ),
               ),
