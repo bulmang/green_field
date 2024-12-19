@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,9 +6,12 @@ import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/enums/login_type.dart';
+import 'package:green_field/src/viewmodels/firebase_auth_service.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  LoginView({super.key});
+  final _auth = FirebaseAuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,14 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 signInButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        await _auth.signInWithKakao();
+                        context.go('/home');
+                      } catch (e) {
+                        print('Error during Kakao sign-in: $e');
+                      }
+                    },
                     loginType: LoginType.kakao
                 ),
 

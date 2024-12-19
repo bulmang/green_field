@@ -42,5 +42,10 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    # Kakao URL Scheme 설정
+    target.build_configurations.each do |config|
+      config.build_settings['KAKAO_URL_SCHEME'] = ENV['kakaoURLScheme'] || 'default_scheme'
+    end
   end
 end

@@ -173,3 +173,5 @@ storage.rules
 ios/Runner/GoogleService-Info.plist
 lib/firebase_options.dart
 firestore.rules
+assets/config/env
+android/app/src/main/AndroidManifest.xml
