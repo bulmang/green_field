@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_list.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/post_view_model.dart';
 import '../../design_system/app_texts.dart';
 
@@ -27,9 +27,9 @@ class _PostViewState extends State<PostView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorsTheme().gfBackGroundColor,
+      backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
       appBar: GreenFieldAppBar(
-        backgGroundColor: AppColorsTheme().gfBackGroundColor,
+        backgGroundColor: Theme.of(context).appColors.gfBackGroundColor,
         title: "게시판",
         leadingIcon: SizedBox(),
         actions: [
@@ -37,7 +37,7 @@ class _PostViewState extends State<PostView> {
               child: Icon(
                 CupertinoIcons.square_pencil,
                 size: 24,
-                color: AppColorsTheme().gfGray400Color,
+                color: Theme.of(context).appColors.gfGray400Color,
               ),
               onPressed: () {
                 context.go('/post/edit');
@@ -95,7 +95,7 @@ class _PostViewState extends State<PostView> {
                     child: Text(
                       '글 쓰기',
                       style: AppTextsTheme.main().gfCaption2.copyWith(
-                            color: AppColorsTheme().gfWhiteColor,
+                            color: Theme.of(context).appColors.gfWhiteColor,
                           ),
                     ),
                   ),

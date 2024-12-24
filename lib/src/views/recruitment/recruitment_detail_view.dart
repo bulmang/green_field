@@ -5,8 +5,8 @@ import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_content_widget.dart';
 import 'package:green_field/src/components/greenfield_user_info_widget.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/enums/feature_type.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 import '../../model/recruit.dart'; // Assuming you have a Recruit model
 
@@ -25,13 +25,13 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
     final recruit = widget.recruit;
 
     return Scaffold(
-      backgroundColor: AppColorsTheme().gfWhiteColor,
+      backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       appBar: GreenFieldAppBar(
-        backgGroundColor: AppColorsTheme().gfWhiteColor,
+        backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "모집",
         leadingIcon: Icon(
           CupertinoIcons.xmark,
-          color: AppColorsTheme().gfGray400Color,
+          color: Theme.of(context).appColors.gfGray400Color,
         ),
         leadingAction: (){
           context.pop();
@@ -70,8 +70,8 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
               child: GreenFieldConfirmButton(
                 text: recruit.isEntryAvailable ? "채팅으로 이야기 해보기" : "채팅방 입장 불가",
                 isAble: recruit.isEntryAvailable,
-                textColor: recruit.isEntryAvailable ? AppColorsTheme().gfMainColor : AppColorsTheme().gfWarningColor,
-                backGroundColor: recruit.isEntryAvailable ? AppColorsTheme().gfMainBackGroundColor : AppColorsTheme().gfWarningBackGroundColor,
+                textColor: recruit.isEntryAvailable ? Theme.of(context).appColors.gfMainColor : Theme.of(context).appColors.gfWarningColor,
+                backGroundColor: recruit.isEntryAvailable ? Theme.of(context).appColors.gfMainBackGroundColor : Theme.of(context).appColors.gfWarningBackGroundColor,
                 onPressed: () {
                   print("눌림");
                 },

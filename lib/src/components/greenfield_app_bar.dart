@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../design_system/app_colors.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import '../design_system/app_texts.dart';
 
 class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -55,7 +55,7 @@ class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(
           title,
           style: AppTextsTheme.main().gfHeading2.copyWith(
-              color: AppColorsTheme().gfBlackColor
+              color: Theme.of(context).appColors.gfBlackColor
           ),
         ),
         actions: actions,

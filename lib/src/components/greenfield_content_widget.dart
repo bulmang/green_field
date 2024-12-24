@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/enums/feature_type.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/model/recruit.dart';
 
 import '../design_system/app_colors.dart';
@@ -37,14 +38,14 @@ class GreenFieldContentWidget extends StatelessWidget {
             Text(
               title,
               style: AppTextsTheme.main().gfHeading1.copyWith(
-                color: AppColorsTheme().gfBlackColor,
+                color: Theme.of(context).appColors.gfBlackColor,
               ),
             ),
             SizedBox(height: 17),
             Text(
               bodyText,
               style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                color: AppColorsTheme().gfBlackColor,
+                color: Theme.of(context).appColors.gfBlackColor,
               ),
             ),
             SizedBox(height: 17),
@@ -106,7 +107,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     Text(
                       likes.toString(),
                       style: AppTextsTheme.main().gfCaption5.copyWith(
-                        color: AppColorsTheme().gfMainColor,
+                        color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),
                   ],
@@ -124,7 +125,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     Text(
                       commentCount.toString(),
                       style: AppTextsTheme.main().gfCaption5.copyWith(
-                        color: AppColorsTheme().gfMainColor,
+                        color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),
                   ],
@@ -136,7 +137,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: AppColorsTheme().gfGray800Color, // 테두리 색상
+                      color: Theme.of(context).appColors.gfGray800Color, // 테두리 색상
                       width: 1, // 테두리 두께
                     ),
                     borderRadius: BorderRadius.circular(3),
@@ -156,7 +157,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                           style: AppTextsTheme.main()
                               .gfCaption5
                               .copyWith(
-                            color: AppColorsTheme().gfGray800Color,
+                            color: Theme.of(context).appColors.gfGray800Color,
                           ),
                         ),
                       ],
@@ -167,7 +168,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                 if (recruit!.remainTime <= 30)
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColorsTheme()
+                      color: Theme.of(context).appColors
                           .gfWarningYellowBackGroundColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -187,7 +188,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                             style: AppTextsTheme.main()
                                 .gfCaption5
                                 .copyWith(
-                              color: AppColorsTheme()
+                              color: Theme.of(context).appColors
                                   .gfWarningYellowColor,
                             ),
                           ),
@@ -208,7 +209,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     Text(
                       '${recruit!.remainTime.toString()} min',
                       style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                        color: AppColorsTheme().gfMainColor,
+                        color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),
                   ],
@@ -226,7 +227,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     Text(
                       '${recruit!.currentParticipants.length.toString()} / ${recruit!.maxParticipants.toString()}',
                       style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                        color: AppColorsTheme().gfMainColor,
+                        color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),
                   ],

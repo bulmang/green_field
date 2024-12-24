@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../design_system/app_colors.dart';
 import '../../design_system/app_icons.dart';
 import '../../design_system/app_texts.dart';
 import '../../model/campus.dart';
@@ -25,7 +26,7 @@ class CampusOperatingSection extends StatelessWidget {
                 child: Text(
                   hour,
                   style: AppTextsTheme.main().gfBody1.copyWith(
-                    color: AppColorsTheme().gfBlackColor,
+                    color: Theme.of(context).appColors.gfBlackColor,
                   ),
                 ),
               );
@@ -42,7 +43,7 @@ class CampusOperatingSection extends StatelessWidget {
               Text(
                 CampusExample().gwanack.contactNumber,
                 style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                  color: AppColorsTheme().gfBlackColor,
+                  color: Theme.of(context).appColors.gfBlackColor,
                 ),
               ),
               SizedBox(width: 8),
@@ -63,7 +64,7 @@ class CampusOperatingSection extends StatelessWidget {
                 child: Text(
                   "전화하기",
                   style: AppTextsTheme.main().gfCaption2.copyWith(
-                    color: AppColorsTheme().gfMainColor,
+                    color: Theme.of(context).appColors.gfMainColor,
                   ),
                 ),
               ),

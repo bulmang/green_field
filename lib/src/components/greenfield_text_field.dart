@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/enums/feature_type.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import '../design_system/app_texts.dart';
 
 class GreenFieldTextField extends StatefulWidget {
@@ -24,13 +25,13 @@ class GreenFieldTextFieldState extends State<GreenFieldTextField> {
       children: [
         Container(
           height: 90,
-          color: AppColorsTheme().gfBackGroundColor,
+          color: Theme.of(context).appColors.gfBackGroundColor,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 12, left: 16.0, right: 16.0),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColorsTheme().gfMainBackGroundColor,
+              color: Theme.of(context).appColors.gfMainBackGroundColor,
               borderRadius: BorderRadius.circular(8),
             ),
             child: TextField(
@@ -56,12 +57,12 @@ class GreenFieldTextFieldState extends State<GreenFieldTextField> {
                       }
                     },
                     color: Colors.transparent,
-                    child: Icon(CupertinoIcons.paperplane_fill, color: AppColorsTheme().gfMainColor),
+                    child: Icon(CupertinoIcons.paperplane_fill, color: Theme.of(context).appColors.gfMainColor),
                   ),
                 ),
               ),
               style: AppTextsTheme.main().gfTitle2.copyWith(
-                color: _isEmpty ? AppColorsTheme().gfGray400Color : AppColorsTheme().gfBlackColor,
+                color: _isEmpty ? Theme.of(context).appColors.gfGray400Color : Theme.of(context).appColors.gfBlackColor,
               ),
             ),
           ),
