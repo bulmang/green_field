@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth;
@@ -64,5 +65,29 @@ class FirebaseAuthService {
 
   Future<void> signOutWithKakao() async {
 
+  }
+
+  Future<void> signInWithApple() async {
+    try {
+      final AuthorizationCredentialAppleID appleCredential = await SignInWithApple
+          .getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final OAuthCredential credential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on SignInWithAppleAuthorizationException catch (appleError) {
+      throw Exception(
+          'SignInWithAppleAuthorizationException Authentication failed: ${appleError.message}'); // 에러를 던짐
+    } catch (error) {
+      throw Exception('Apple Authentication failed: $error');
+    }
   }
 }

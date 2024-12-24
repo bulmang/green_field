@@ -7,8 +7,11 @@ import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/enums/login_type.dart';
 import 'package:green_field/src/extensions/theme_data_extension.dart';
 
+import '../../viewmodels/firebase_auth_service.dart';
+
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  LoginView({super.key});
+  final _auth = FirebaseAuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +33,28 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 signInButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        await _auth.signInWithKakao();
+                        context.go('/home');
+                      } catch (e) {
+                        print('Error during Kakao sign-in: $e');
+                      }
+                    },
                     loginType: LoginType.kakao
                 ),
 
                 SizedBox(height: 12),
 
-                signInButton(onPressed: () {},
+                signInButton(
+                    onPressed: () async {
+                      try {
+                        await _auth.signInWithApple();
+                        context.go('/home');
+                      } catch (e) {
+                        print('Error during Apple sign-in: $e');
+                      }
+                    },
                     loginType: LoginType.apple
                 ),
                 Row(
