@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/campus/camus_floor_section.dart';
 import 'package:green_field/src/views/campus/camus_map_section.dart';
 import 'package:green_field/src/views/campus/campus_operating_section.dart';
 
-import '../../design_system/app_colors.dart';
 import '../../design_system/app_texts.dart';
 
 class CampusView extends StatefulWidget {
@@ -128,7 +128,7 @@ class _CampusViewState extends State<CampusView> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppColorsTheme().gfMainColor, // 테두리 색상
+                  color: Theme.of(context).appColors.gfMainColor, // 테두리 색상
                   width: 1, // 테두리 두께
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -144,14 +144,14 @@ class _CampusViewState extends State<CampusView> {
                       child: Text(
                         '관악 캠퍼스',
                         style: AppTextsTheme.main().gfHeading3.copyWith(
-                              color: AppColorsTheme().gfMainColor,
+                              color: Theme.of(context).appColors.gfMainColor,
                             ),
                       ),
                     ),
                     SizedBox(width: 3), // Space between icon and text
                     Icon(
                       CupertinoIcons.chevron_down,
-                      color: AppColorsTheme().gfMainColor,
+                      color: Theme.of(context).appColors.gfMainColor,
                       size: 18,
                     ),
                   ],
@@ -163,8 +163,8 @@ class _CampusViewState extends State<CampusView> {
         ],
       ),
       bottom: TabBar(
-        indicatorColor: AppColorsTheme().gfMainColor,
-        labelColor: AppColorsTheme().gfMainColor,
+        indicatorColor: Theme.of(context).appColors.gfMainColor,
+        labelColor: Theme.of(context).appColors.gfMainColor,
         splashFactory: NoSplash.splashFactory,
         onTap: (int index) => scrollToIndex(index),
         tabs: List.generate(3, (int index) {
@@ -173,13 +173,13 @@ class _CampusViewState extends State<CampusView> {
             child: Text(
               titles[index],
               style: AppTextsTheme.main().gfTitle1.copyWith(
-                    color: AppColorsTheme().gfMainColor,
+                    color: Theme.of(context).appColors.gfMainColor,
                   ),
             ),
           );
         }),
       ),
-      backgroundColor: AppColorsTheme().gfBackGroundColor,
+      backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
     );
   }
 
@@ -197,7 +197,7 @@ class _CampusViewState extends State<CampusView> {
               Text(
                 title,
                 style: AppTextsTheme.main().gfTitle1.copyWith(
-                      color: AppColorsTheme().gfBlackColor,
+                      color: Theme.of(context).appColors.gfBlackColor,
                     ),
               ),
             ],

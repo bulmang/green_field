@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../design_system/app_colors.dart';
@@ -58,7 +59,7 @@ Widget iconText(String imagePath, String label, VoidCallback onPressed) {
         Text(
           label,
           style: AppTextsTheme.main().gfCaption2.copyWith(
-            color: AppColorsTheme().gfBlackColor,
+            color: AppColorsTheme.main().gfBlackColor,
           ),
         ),
       ],

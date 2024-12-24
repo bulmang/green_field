@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,12 +5,10 @@ import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/enums/login_type.dart';
-import 'package:green_field/src/viewmodels/firebase_auth_service.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 
 class LoginView extends StatelessWidget {
-  LoginView({super.key});
-  final _auth = FirebaseAuthService();
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +20,7 @@ class LoginView extends StatelessWidget {
             Text('새싹 수강생 커뮤니티, 그린필드',
                 style: AppTextsTheme.main()
                     .gfHeading1
-                    .copyWith(color: AppColorsTheme().gfMainColor)),
+                    .copyWith(color: Theme.of(context).appColors.gfMainColor)),
             Image.asset(
               AppIcons.loginSesac,
               width: 240,
@@ -33,14 +30,7 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 signInButton(
-                    onPressed: () async {
-                      try {
-                        await _auth.signInWithKakao();
-                        context.go('/home');
-                      } catch (e) {
-                        print('Error during Kakao sign-in: $e');
-                      }
-                    },
+                    onPressed: () {},
                     loginType: LoginType.kakao
                 ),
 
@@ -60,7 +50,7 @@ class LoginView extends StatelessWidget {
                         '로그인 없이 둘러보기',
                         style: AppTextsTheme.main()
                             .gfCaption1
-                            .copyWith(color: AppColorsTheme().gfGray400Color),
+                            .copyWith(color: Theme.of(context).appColors.gfGray400Color),
                       ),
                     ),
                     SizedBox(width: 10),
@@ -71,7 +61,7 @@ class LoginView extends StatelessWidget {
                         child: Text(
                           '문의하기',
                           style: AppTextsTheme.main().gfCaption1.copyWith(
-                              color: AppColorsTheme().gfGray400Color),
+                              color: Theme.of(context).appColors.gfGray400Color),
                         )),
                   ],
                 ),
@@ -99,7 +89,7 @@ Widget signInButton({
           borderRadius: BorderRadius.circular(8),
           color: loginType == LoginType.kakao
               ? const Color(0XFFFEE500)
-              : AppColorsTheme().gfBlackColor,
+              : AppColorsTheme.main().gfBlackColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -123,8 +113,8 @@ Widget signInButton({
                 ,
                 style: AppTextsTheme.main().gfTitle1.copyWith(
                       color: loginType == LoginType.kakao
-                          ? AppColorsTheme().gfBlackColor
-                          : AppColorsTheme().gfWhiteColor,
+                          ? AppColorsTheme.main().gfBlackColor
+                          : AppColorsTheme.main().gfWhiteColor,
                     ),
               ),
             ),

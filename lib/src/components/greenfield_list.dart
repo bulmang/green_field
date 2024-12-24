@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import '../design_system/app_colors.dart';
 
 class GreenFieldList extends StatelessWidget {
@@ -51,7 +52,7 @@ class GreenFieldList extends StatelessWidget {
                             title,
                             maxLines: 1,
                             style: AppTextsTheme.main().gfHeading3.copyWith(
-                              color: AppColorsTheme().gfBlackColor,
+                              color: Theme.of(context).appColors.gfBlackColor,
                             ),
                           ),
                           Text(
@@ -59,7 +60,7 @@ class GreenFieldList extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                              color: AppColorsTheme().gfBlackColor,
+                              color: Theme.of(context).appColors.gfBlackColor,
                             ),
                           ),
                           SizedBox(height: 6),
@@ -69,14 +70,14 @@ class GreenFieldList extends StatelessWidget {
                               Text(
                                 date,
                                 style: AppTextsTheme.main().gfCaption5.copyWith(
-                                  color: AppColorsTheme().gfGray800Color,
+                                  color: Theme.of(context).appColors.gfGray800Color,
                                 ),
                               ),
                               SizedBox(width: 5),
                               Text(
                                 campus,
                                 style: AppTextsTheme.main().gfCaption5.copyWith(
-                                  color: AppColorsTheme().gfMainColor,
+                                  color: Theme.of(context).appColors.gfMainColor,
                                 ),
                               ),
                               SizedBox(width: 5),
@@ -92,7 +93,7 @@ class GreenFieldList extends StatelessWidget {
                                   Text(
                                     likes.toString(),
                                     style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: AppColorsTheme().gfMainColor,
+                                      color: Theme.of(context).appColors.gfMainColor,
                                     ),
                                   ),
                                 ],
@@ -110,7 +111,7 @@ class GreenFieldList extends StatelessWidget {
                                   Text(
                                     commentCount.toString(),
                                     style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: AppColorsTheme().gfMainColor,
+                                      color: Theme.of(context).appColors.gfMainColor,
                                     ),
                                   ),
                                 ],
@@ -137,7 +138,7 @@ class GreenFieldList extends StatelessWidget {
             SizedBox(height: 6),
             Divider(
               height: 2,
-              color: AppColorsTheme().gfGray300Color,
+              color: Theme.of(context).appColors.gfGray300Color,
             )
           ],
         ),

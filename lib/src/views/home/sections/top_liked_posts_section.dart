@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:intl/intl.dart';
 
 import 'package:green_field/src/design_system/app_icons.dart';
-import '../../../design_system/app_colors.dart';
 import '../../../design_system/app_texts.dart';
 import '../../../model/post.dart';
 import '../../../viewmodels/post_view_model.dart';
@@ -29,9 +29,9 @@ class TopLikedPostsSection extends StatelessWidget {
 
           return Column(
             children: [
-              if (index == 1) Container(height: 1, color: AppColorsTheme().gfGray300Color),
+              if (index == 1) Container(height: 1, color: Theme.of(context).appColors.gfGray300Color),
               Container(
-                color: AppColorsTheme().gfWhiteColor,
+                color: Theme.of(context).appColors.gfWhiteColor,
                 child: CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: () {
@@ -50,7 +50,7 @@ class TopLikedPostsSection extends StatelessWidget {
                                 post.title,
                                 maxLines: 1,
                                 style: AppTextsTheme.main().gfHeading3.copyWith(
-                                  color: AppColorsTheme().gfBlackColor,
+                                  color: Theme.of(context).appColors.gfBlackColor,
                                 ),
                               ),
                               SizedBox(height: 6),
@@ -60,14 +60,14 @@ class TopLikedPostsSection extends StatelessWidget {
                                   Text(
                                     formattedDate,
                                     style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: AppColorsTheme().gfGray800Color,
+                                      color: Theme.of(context).appColors.gfGray800Color,
                                     ),
                                   ),
                                   SizedBox(width: 5),
                                   Text(
                                     post.creatorCampus,
                                     style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: AppColorsTheme().gfMainColor,
+                                      color: Theme.of(context).appColors.gfMainColor,
                                     ),
                                   ),
                                   Spacer(),
@@ -84,7 +84,7 @@ class TopLikedPostsSection extends StatelessWidget {
                                       Text(
                                         post.like.length.toString(),
                                         style: AppTextsTheme.main().gfCaption5.copyWith(
-                                          color: AppColorsTheme().gfMainColor,
+                                          color: Theme.of(context).appColors.gfMainColor,
                                         ),
                                       ),
                                     ],
@@ -102,7 +102,7 @@ class TopLikedPostsSection extends StatelessWidget {
                                       Text(
                                         '0',
                                         style: AppTextsTheme.main().gfCaption5.copyWith(
-                                          color: AppColorsTheme().gfMainColor,
+                                          color: Theme.of(context).appColors.gfMainColor,
                                         ),
                                       ),
                                     ],
@@ -117,7 +117,7 @@ class TopLikedPostsSection extends StatelessWidget {
                   ),
                 ),
               ),
-              if (index == 1) Container(height: 1, color: AppColorsTheme().gfGray300Color),
+              if (index == 1) Container(height: 1, color: Theme.of(context).appColors.gfGray300Color),
             ],
           );
         }),
