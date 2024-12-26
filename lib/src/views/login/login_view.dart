@@ -65,11 +65,26 @@ class LoginView extends StatelessWidget {
                 SizedBox(height: 12),
                 signInButton(
                     onPressed: () async {
-                      try {
-                        await _auth.signInWithApple();
-                        context.go('/home');
-                      } catch (e) {
-                        print('Error during Apple sign-in: $e');
+                      final result = await _loginVM.signInWithApple();
+
+                      switch (result) {
+                        case Success():
+                          context.go('/home');
+
+                        case Failure(exception: final e):
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('로그인 실패'),
+                              content: Text('에러 발생: $e'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            ),
+                          );
                       }
                     },
                     loginType: LoginType.apple),

@@ -20,6 +20,19 @@ class LoginRepository {
     }
   }
 
+  Future<Result<User, Exception>> signInWithApple() async {
+    final result = await _firebaseAuthService.signInWithApple();
+
+    switch (result) {
+      case Success(value: final authUser):
+        return Success(_createUserFromAuth(authUser));
+      case Failure(exception: final exception):
+        return Failure(exception);
+      default:
+        throw Exception('Unexpected result type');
+    }
+  }
+
   User _createUserFromAuth(authUser) {
     Map<String, dynamic> data = {
       'id': authUser.uid,

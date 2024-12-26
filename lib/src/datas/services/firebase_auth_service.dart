@@ -41,7 +41,7 @@ class FirebaseAuthService {
     }
   }
 
-  Future<void> signInWithApple() async {
+  Future<Result<User, Exception>> signInWithApple() async {
     try {
       final AuthorizationCredentialAppleID appleCredential = await SignInWithApple
           .getAppleIDCredential(
@@ -56,12 +56,19 @@ class FirebaseAuthService {
         accessToken: appleCredential.authorizationCode,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    } on SignInWithAppleAuthorizationException catch (appleError) {
-      throw Exception(
-          'SignInWithAppleAuthorizationException Authentication failed: ${appleError.message}'); // 에러를 던짐
-    } catch (error) {
-      throw Exception('Apple Authentication failed: $error');
+      if (credential.idToken != null && credential.accessToken != null) {
+        final result = await _connectFirebaseAuth(credential.providerId, credential.idToken!, credential.accessToken!);
+        final authUser = switch (result) {
+          Success(value: final user) => user,
+          Failure(exception: final e) => throw e,
+        };
+        return Success(authUser);
+      } else {
+        return Failure(Exception('signInWithApple Error'));
+      }
+
+    } on Exception catch (error) {
+      return Failure(error);
     }
   }
 
