@@ -1,6 +1,7 @@
+import 'package:green_field/src/datas/repositories/login_repository.dart';
+
 import '../model/user.dart';
 
 class UserViewModel {
-  User user = User(id: "1", simpleLoginId: "kakao", campus: "관악", course: "course", name: "name");
-
+  User? user;
 }

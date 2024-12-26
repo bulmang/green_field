@@ -48,14 +48,14 @@ class _HomeViewState extends State<HomeView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '익명(${userVM.user.campus})',
+                              '익명(${userVM.user?.campus})',
                               style: AppTextsTheme.main().gfTitle1.copyWith(
                                     color: Theme.of(context).appColors.gfBlackColor,
                                   ),
                             ),
                             SizedBox(height: 3),
                             Text(
-                              userVM.user.course,
+                              userVM.user?.course ?? '없음',
                               style: AppTextsTheme.main().gfBody5.copyWith(
                                     color: Theme.of(context).appColors.gfGray400Color,
                                   ),
@@ -71,7 +71,7 @@ class _HomeViewState extends State<HomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${userVM.user.campus} 공지사항',
+                          '${userVM.user?.campus} 공지사항',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
                                 color: Theme.of(context).appColors.gfBlackColor,
                               ),
