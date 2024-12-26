@@ -4,7 +4,7 @@ import '../../utilities/components/greenfield_comment_widget.dart';
 import '../../utilities/components/greenfield_content_widget.dart';
 import '../../utilities/components/greenfield_text_field.dart';
 import '../../utilities/components/greenfield_user_info_widget.dart';
-import 'package:green_field/src/enums/feature_type.dart';
+import '../../utilities/enums/feature_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/model/post.dart';
 

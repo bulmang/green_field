@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/design_system/app_icons.dart';
 import '../../utilities/design_system/app_texts.dart';
-import 'package:green_field/src/enums/login_type.dart';
+import '../../utilities/enums/login_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../services/firebase_auth_service.dart';

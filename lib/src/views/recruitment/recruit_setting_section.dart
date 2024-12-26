@@ -4,7 +4,7 @@ import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
 
 import '../../utilities/design_system/app_texts.dart';
-import '../../enums/recruit_setting_type.dart';
+import '../../utilities/enums/recruit_setting_type.dart';
 
 class RecruitSettingSection extends StatefulWidget {
   const RecruitSettingSection({super.key});

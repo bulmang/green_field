@@ -5,10 +5,9 @@ import '../../utilities/components/greenfield_app_bar.dart';
 import '../../utilities/components/greenfield_confirm_button.dart';
 import '../../utilities/components/greenfield_content_widget.dart';
 import '../../utilities/components/greenfield_user_info_widget.dart';
-import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-
-import '../../model/recruit.dart'; // Assuming you have a Recruit model
+import '../../model/recruit.dart';
+import '../../utilities/enums/feature_type.dart'; // Assuming you have a Recruit model
 
 class RecruitDetailView extends StatefulWidget {
   final Recruit recruit; // Recruit object to display details
