@@ -7,7 +7,7 @@ import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/enums/login_type.dart';
 import 'package:green_field/src/extensions/theme_data_extension.dart';
 
-import '../../viewmodels/firebase_auth_service.dart';
+import '../../services/firebase_auth_service.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
