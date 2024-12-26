@@ -9,13 +9,13 @@ import 'package:green_field/src/views/notice/notice_view.dart';
 import 'package:green_field/src/views/notice/notice_deatil_view.dart';
 import 'package:green_field/src/views/post/post_detail_view.dart';
 import 'package:green_field/src/views/post/post_edit_view.dart';
+import 'package:green_field/src/views/post/post_view.dart';
 import 'package:green_field/src/views/recruitment/recruit_edit_view.dart';
 import 'package:green_field/src/views/recruitment/recruitment_detail_view.dart';
 import 'package:green_field/src/views/recruitment/recruitment_view.dart';
 
-import '../viewmodels/notice_view_model.dart';
-import '../viewmodels/recruit_view_model.dart';
-import '../views/post/post_view.dart';
+import '../../viewmodels/notice_view_model.dart';
+import '../../viewmodels/recruit_view_model.dart';
 
 final noticeVM = NoticeViewModel();
 final recruitVM = RecruitViewModel();

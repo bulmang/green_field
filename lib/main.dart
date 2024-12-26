@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:green_field/src/router/router.dart';
+import 'package:green_field/src/cores/router/router.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
 import 'package:green_field/src/utilities/design_system/app_texts.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
