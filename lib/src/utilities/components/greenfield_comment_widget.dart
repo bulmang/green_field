@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-import '../utilities/design_system/app_icons.dart';
-import '../utilities/design_system/app_texts.dart';
+import '../design_system/app_icons.dart';
+import '../design_system/app_texts.dart';
 
 class GreenFieldCommentWidget extends StatelessWidget {
   final String campus;

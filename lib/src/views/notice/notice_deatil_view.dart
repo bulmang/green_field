@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:green_field/src/components/greenfield_app_bar.dart';
-import 'package:green_field/src/components/greenfield_content_widget.dart';
-import 'package:green_field/src/components/greenfield_user_info_widget.dart';
 import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-
 import '../../model/notice.dart';
+import '../../utilities/components/greenfield_app_bar.dart';
+import '../../utilities/components/greenfield_content_widget.dart';
+import '../../utilities/components/greenfield_user_info_widget.dart';
 
 class NoticeDetailView extends StatefulWidget {
   final Notice notice;

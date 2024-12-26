@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:wheel_picker/wheel_picker.dart';
-import '../utilities/design_system/app_colors.dart';
-import '../utilities/design_system/app_texts.dart';
+import '../design_system/app_texts.dart';
 
 class GreenFieldCampusPicker extends StatefulWidget {
   const GreenFieldCampusPicker({super.key});

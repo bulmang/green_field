@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:green_field/src/components/greenfield_campus_picker.dart';
-import 'package:green_field/src/components/greenfield_confirm_button.dart';
+import '../../utilities/components/greenfield_campus_picker.dart';
+import '../../utilities/components/greenfield_confirm_button.dart';
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/design_system/app_texts.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';

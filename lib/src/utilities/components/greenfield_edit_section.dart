@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import '../utilities/design_system/app_texts.dart';
-import '../utilities/design_system/app_icons.dart';
+import '../../views/recruitment/recruit_setting_section.dart';
+import '../design_system/app_icons.dart';
+import '../design_system/app_texts.dart';
 import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-import '../views/recruitment/recruit_setting_section.dart';
 
 class GreenFieldEditSection extends StatefulWidget {
   final FeatureType type;

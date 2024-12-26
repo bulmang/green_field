@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/model/recruit.dart';
-import '../utilities/design_system/app_texts.dart';
-import '../utilities/design_system/app_icons.dart';
+import '../design_system/app_icons.dart';
+import '../design_system/app_texts.dart';
 
 class GreenFieldContentWidget extends StatelessWidget {
   final FeatureType? featureType;

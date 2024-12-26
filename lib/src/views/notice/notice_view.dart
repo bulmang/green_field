@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:green_field/src/components/greenfield_app_bar.dart';
-import 'package:green_field/src/components/greenfield_list.dart';
+import '../../utilities/components/greenfield_app_bar.dart';
+import '../../utilities/components/greenfield_list.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../viewmodels/notice_view_model.dart';

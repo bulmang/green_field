@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../utilities/design_system/app_texts.dart';
+import '../design_system/app_texts.dart';
 
 class GreenFieldConfirmButton extends StatelessWidget {
   final String text; // 버튼에 표시할 텍스트

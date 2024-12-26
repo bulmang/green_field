@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:green_field/src/components/greenfield_app_bar.dart';
-import 'package:green_field/src/components/greenfield_recruit_list.dart'; // Import your GreenFieldRecruitList
+import '../../utilities/components/greenfield_app_bar.dart';
+import '../../utilities/components/greenfield_recruit_list.dart'; // Import your GreenFieldRecruitList
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../viewmodels/recruit_view_model.dart';
