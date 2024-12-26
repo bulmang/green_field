@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
-import '../../design_system/app_texts.dart';
+import '../../utilities/design_system/app_texts.dart';
 import '../../model/campus.dart';
 
 class CampusFloorSection extends StatelessWidget {

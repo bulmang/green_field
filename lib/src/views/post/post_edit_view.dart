@@ -5,7 +5,7 @@ import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_edit_section.dart';
 import 'package:green_field/src/enums/feature_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-import '../../design_system/app_texts.dart';
+import '../../utilities/design_system/app_texts.dart';
 
 class PostEditView extends StatefulWidget {
   const PostEditView({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/recruit_view_model.dart';
-import '../../../design_system/app_texts.dart';
+import '../../../utilities/design_system/app_texts.dart';
+import '../../../utilities/design_system/app_icons.dart';
 
 class ExpiringSoonRecruitSection extends StatelessWidget {
 

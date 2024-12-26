@@ -5,7 +5,7 @@ import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_list.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/post_view_model.dart';
-import '../../design_system/app_texts.dart';
+import '../../utilities/design_system/app_texts.dart';
 
 class PostView extends StatefulWidget {
   const PostView({super.key});
