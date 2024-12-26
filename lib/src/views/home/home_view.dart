@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
 import 'package:green_field/src/design_system/app_icons.dart';
 import 'package:green_field/src/views/home/sections/notice_carousel_section.dart';

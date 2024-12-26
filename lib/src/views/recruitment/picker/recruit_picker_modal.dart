@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 import 'package:green_field/src/enums/recruit_setting_type.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
-import '../../../design_system/app_colors.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 class RecruitPickerModal extends StatefulWidget {
   final RecruitSettingType type; // Type of picker (timer or people)

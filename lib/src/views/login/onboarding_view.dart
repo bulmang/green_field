@@ -3,7 +3,7 @@ import 'package:green_field/src/components/greenfield_campus_picker.dart';
 import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 class OnboardingView extends StatelessWidget {
   const OnboardingView({super.key});

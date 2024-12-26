@@ -6,7 +6,7 @@ import 'package:green_field/src/components/greenfield_confirm_button.dart';
 import 'package:green_field/src/components/greenfield_content_widget.dart';
 import 'package:green_field/src/components/greenfield_user_info_widget.dart';
 import 'package:green_field/src/enums/feature_type.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../model/recruit.dart'; // Assuming you have a Recruit model
 

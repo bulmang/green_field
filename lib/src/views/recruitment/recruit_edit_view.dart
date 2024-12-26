@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:green_field/src/components/greenfield_app_bar.dart';
 import 'package:green_field/src/components/greenfield_edit_section.dart'; // Assuming you have a GreenFieldEditSection
 import 'package:green_field/src/enums/feature_type.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../design_system/app_texts.dart'; // Assuming you have a Recruit model
 

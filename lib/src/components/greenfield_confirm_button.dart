@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
 import 'package:green_field/src/design_system/app_texts.dart';
 
 class GreenFieldConfirmButton extends StatelessWidget {
