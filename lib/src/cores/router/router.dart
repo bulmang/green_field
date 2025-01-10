@@ -42,20 +42,20 @@ final GlobalKey<NavigatorState> _campusTabNavigatorKey =
 
 @riverpod
 GoRouter goRouter(Ref ref) {
-  final authRepository = ref.watch(firebaseAuthServiceProvider);
+  final authState = ref.watch(firebaseAuthServiceProvider);
   return GoRouter(
     initialLocation: '/',
     navigatorKey: GlobalKey<NavigatorState>(debugLabel: 'root'),
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      final isLoggedIn = authRepository.currentUser != null;
+      final isLoggedIn = authState.currentUser != null;
       if (isLoggedIn) {
         return '/home';
       }
 
       return null;
     },
-    refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
+    refreshListenable: GoRouterRefreshStream(authState.authStateChanges()),
     routes: <RouteBase>[
       GoRoute(
         path: '/',
