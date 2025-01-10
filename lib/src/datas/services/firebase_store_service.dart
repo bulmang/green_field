@@ -13,25 +13,16 @@ class FirebaseStoreService {
       // User 컬렉션에 사용자 데이터 추가
       await _store.collection('user').doc(user.id).set(user.toMap());
 
-      print('user.id : ${user.id}');
-      // 사용자 ID로 사용자 정보를 가져옴
-      final result = await _getUserById(user.id);
-
-      // 결과를 처리
-      return switch (result) {
-        Success(value: final user) => Success(user),
-        Failure(exception: final e) => Failure(e),
-      };
-
+      return Success(user);
     } catch (e) {
       return Failure(Exception('사용자 생성 실패: $e'));
     }
   }
 
   /// Firestore에서 UserId로 사용자 데이터 가져오기
-  Future<Result<GFUser.User, Exception>> _getUserById(String userId) async {
+  Future<Result<GFUser.User, Exception>> getUserById(String userId) async {
     try {
-      final docSnapshot = await _store.collection('users').doc(userId).get();
+      final docSnapshot = await _store.collection('user').doc(userId).get();
 
       if (docSnapshot.exists) {
         final userData = GFUser.User.fromMap(docSnapshot.data()!);
