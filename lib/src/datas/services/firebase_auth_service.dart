@@ -1,17 +1,39 @@
-import 'package:firebase_auth/firebase_auth.dart' ;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../cores/error_handler/result.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../model/token.dart';
+
+part 'firebase_auth_service.g.dart';
 
 class FirebaseAuthService {
-  final FirebaseAuth _auth;
+  FirebaseAuthService(this._auth);
+  final firebase_auth.FirebaseAuth _auth;
 
-  FirebaseAuthService():_auth=FirebaseAuth.instance{
-    _auth.setLanguageCode('kr');
+  Stream<firebase_auth.User?> authStateChanges() => _auth.authStateChanges();
+  firebase_auth.User? get currentUser => _auth.currentUser;
+
+  /// 현재 유저 Auth 가져오기
+  Future<Result<firebase_auth.User, Exception>> getCurrentUser() async {
+    try {
+      // 현재 사용자 정보를 가져옵니다.
+      final user = _auth.currentUser;
+
+      if (user != null) {
+        return Success(user); // 성공 시 User 객체 반환
+      } else {
+        return Failure(Exception('로그인이 필요합니다.')); // 로그인 필요 시 실패 반환
+      }
+    } on Exception catch (error) {
+      return Failure(error); // 예외 발생 시 실패 반환
+    }
   }
 
-  /// 카카오 로그인 - Firebase Auth User 전달
-  Future<Result<User, Exception>> signInWithKakao() async {
+  /// 카카오 로그인 - Token 전달
+  Future<Result<Token, Exception>> signInWithKakao() async {
     try {
       // 토큰 발급하기
       kakao.OAuthToken? token;
@@ -21,18 +43,19 @@ class FirebaseAuthService {
         token = await kakao.UserApi.instance.loginWithKakaoAccount();
       }
 
-      if (token.idToken != null) {
+      if (token != null) {
         final provider = 'oidc.kakao';
         final idToken = token.idToken!; // idToken 언래핑
         final accessToken = token.accessToken;
 
-        final result = await _connectFirebaseAuth(provider, idToken, accessToken);
-        final authUser = switch (result) {
-          Success(value: final user) => user,
-          Failure(exception: final e) => throw e,
-        };
+        // Token 객체 생성
+        final tokenObject = Token(
+          provider: provider,
+          idToken: idToken,
+          accessToken: accessToken,
+        );
 
-        return Success(authUser);
+        return Success(tokenObject);
       } else {
         return Failure(Exception('signInWithKakao Error'));
       }
@@ -41,23 +64,22 @@ class FirebaseAuthService {
     }
   }
 
-  Future<Result<User, Exception>> signInWithApple() async {
+  Future<Result<firebase_auth.User, Exception>> signInWithApple() async {
     try {
-      final AuthorizationCredentialAppleID appleCredential = await SignInWithApple
-          .getAppleIDCredential(
+      final AuthorizationCredentialAppleID appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
       );
 
-      final OAuthCredential credential = OAuthProvider('apple.com').credential(
+      final firebase_auth.OAuthCredential credential = firebase_auth.OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );
 
       if (credential.idToken != null && credential.accessToken != null) {
-        final result = await _connectFirebaseAuth(credential.providerId, credential.idToken!, credential.accessToken!);
+        final result = await connectFirebaseAuth(credential.providerId, credential.idToken!, credential.accessToken!);
         final authUser = switch (result) {
           Success(value: final user) => user,
           Failure(exception: final e) => throw e,
@@ -66,26 +88,25 @@ class FirebaseAuthService {
       } else {
         return Failure(Exception('signInWithApple Error'));
       }
-
     } on Exception catch (error) {
       return Failure(error);
     }
   }
 
-  /// Firebase Auth
-  Future<Result<User, Exception>> _connectFirebaseAuth(String provider, String idToken, String accessToken) async {
+  /// Firebase Auth 생성
+  Future<Result<firebase_auth.User, Exception>> connectFirebaseAuth(String provider, String idToken, String accessToken) async {
     try {
       // OAuthCredential 생성
-      final OAuthCredential credential = OAuthProvider(provider).credential(
+      final firebase_auth.OAuthCredential credential = firebase_auth.OAuthProvider(provider).credential(
         idToken: idToken,
         accessToken: accessToken,
       );
 
       // Firebase에 자격 증명으로 로그인
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential);
 
       // 현재 로그인된 사용자 정보 가져오기
-      User? user = FirebaseAuth.instance.currentUser;
+      firebase_auth.User? user = _auth.currentUser;
 
       if (user != null) {
         return Success(user);
@@ -97,4 +118,35 @@ class FirebaseAuthService {
     }
   }
 
+  /// 회원 탈퇴 함수
+  Future<Result<void, Exception>> deleteUser() async {
+    try {
+      final user = _auth.currentUser;
+
+      if (user != null) {
+        await user.delete(); // 현재 사용자 계정 삭제
+        return Success(null); // 성공적으로 삭제되었음을 나타냄
+      } else {
+        return Failure(Exception('사용자가 로그인되어 있지 않습니다.'));
+      }
+    } catch (e) {
+      return Failure(Exception('회원 탈퇴 실패: $e'));
+    }
+  }
+}
+
+// Riverpod provider 정의
+@riverpod
+FirebaseAuthService firebaseAuthService(Ref ref) {
+  return FirebaseAuthService(firebase_auth.FirebaseAuth.instance);
+}
+
+@riverpod
+FirebaseAuthService authRepository(Ref ref) {
+  return FirebaseAuthService(ref.watch(firebaseAuthServiceProvider as ProviderListenable<firebase_auth.FirebaseAuth>));
+}
+
+@riverpod
+Stream<firebase_auth.User?> authStateChanges(Ref ref) {
+  return ref.watch(authRepositoryProvider).authStateChanges();
 }
