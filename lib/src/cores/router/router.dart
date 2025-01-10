@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/router/go_router_refresh_stream.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
+import 'package:green_field/src/viewmodels/onboarding_view_model.dart';
 import 'package:green_field/src/viewmodels/post_view_model.dart';
 import 'package:green_field/src/views/campus/campus_view.dart';
 import 'package:green_field/src/views/home/home_view.dart';
@@ -47,10 +48,10 @@ GoRouter goRouter(Ref ref) {
     navigatorKey: GlobalKey<NavigatorState>(debugLabel: 'root'),
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      // final isLoggedIn = authRepository.currentUser != null;
-      // if (isLoggedIn) {
-      //   return '/home';
-      // }
+      final isLoggedIn = authRepository.currentUser != null;
+      if (isLoggedIn) {
+        return '/home';
+      }
 
       return null;
     },
