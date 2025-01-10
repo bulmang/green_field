@@ -91,7 +91,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
               padding: const EdgeInsets.all(16.0),
               child: GreenFieldConfirmButton(
                 text: "시작하기",
-                isAble: true,
+                isAble: _isActive(),
                 textColor: Theme.of(context).appColors.gfWhiteColor,
                 backGroundColor: _isActive()
                     ? Theme.of(context).appColors.gfMainColor

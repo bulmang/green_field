@@ -13,7 +13,6 @@ part 'onboarding_view_model.g.dart'; // 생성된 코드를 위한 파일
 class OnboardingViewModel extends _$OnboardingViewModel {
   @override
   Future<myUser.User?> build() async {
-    state = AsyncLoading();
     final authRepository = ref.read(firebaseAuthServiceProvider);
     if(authRepository.currentUser != null) {
       final result = await getUser(authRepository.currentUser!.uid);
