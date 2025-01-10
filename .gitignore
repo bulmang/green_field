@@ -127,7 +127,6 @@ lib/generated_plugin_registrant.dart
 # Icon must end with two \r
 Icon
 
-
 # Thumbnails
 ._*
 
@@ -173,3 +172,10 @@ storage.rules
 ios/Runner/GoogleService-Info.plist
 lib/firebase_options.dart
 firestore.rules
+assets/config/env
+android/app/src/main/AndroidManifest.xml
+assets/config/.env
+android/app/src/main/AndroidManifest.xml
+
+# FVM Version Cache
+.fvm/

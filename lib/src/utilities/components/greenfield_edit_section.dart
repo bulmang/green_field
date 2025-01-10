@@ -1,16 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
-import 'package:green_field/src/views/recruitment/picker/recruit_picker_modal.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
-import 'package:green_field/src/design_system/app_icons.dart';
-import 'package:green_field/src/design_system/app_texts.dart';
-import 'package:green_field/src/enums/feature_type.dart';
-import '../enums/recruit_setting_type.dart';
-import '../views/recruitment/recruit_setting_section.dart';
-import 'greenfield_campus_picker.dart';
+import '../../views/recruitment/recruit_setting_section.dart';
+import '../design_system/app_icons.dart';
+import '../design_system/app_texts.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
+import '../enums/feature_type.dart';
 
 class GreenFieldEditSection extends StatefulWidget {
   final FeatureType type;

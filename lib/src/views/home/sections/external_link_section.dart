@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../design_system/app_colors.dart';
-import '../../../design_system/app_icons.dart';
-import '../../../design_system/app_texts.dart';
+import '../../../utilities/design_system/app_colors.dart';
+import '../../../utilities/design_system/app_texts.dart';
+import '../../../utilities/design_system/app_icons.dart';
 
 class ExternalLinkSection extends StatelessWidget {
 

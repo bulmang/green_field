@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:green_field/src/design_system/app_colors.dart';
-import 'package:green_field/src/design_system/app_icons.dart';
-import 'package:green_field/src/design_system/app_texts.dart';
-import 'package:green_field/src/enums/feature_type.dart';
+import '../design_system/app_colors.dart';
+import '../design_system/app_icons.dart';
+import '../design_system/app_texts.dart';
+import '../enums/feature_type.dart';
 
 class GreenfieldUserInfoWidget extends StatelessWidget {
   final FeatureType featureType;

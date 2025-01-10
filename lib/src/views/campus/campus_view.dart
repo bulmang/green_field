@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:green_field/src/extensions/theme_data_extension.dart';
+import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/views/campus/camus_floor_section.dart';
 import 'package:green_field/src/views/campus/camus_map_section.dart';
 import 'package:green_field/src/views/campus/campus_operating_section.dart';
 
-import '../../design_system/app_texts.dart';
+import '../../utilities/design_system/app_texts.dart';
 
 class CampusView extends StatefulWidget {
   const CampusView({super.key});
