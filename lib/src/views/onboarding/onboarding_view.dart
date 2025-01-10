@@ -22,8 +22,7 @@ class OnboardingView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _OnboardingViewState();
 }
 
-class _OnboardingViewState extends ConsumerState<OnboardingView>
-    with WidgetsBindingObserver {
+class _OnboardingViewState extends ConsumerState<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     final onboardingState = ref.watch(onboardingViewModelProvider);

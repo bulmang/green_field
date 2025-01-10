@@ -15,7 +15,7 @@ class LoginViewModel extends _$LoginViewModel {
   }
 
   Future<Result<Token, Exception>> signInWithKakao() async {
-    state = AsyncLoading(); // 로딩 상태로 변경
+    state = AsyncLoading();
     try {
       final result = await ref.read(loginRepositoryProvider).signInWithKakao();
 

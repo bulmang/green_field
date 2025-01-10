@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_view_model.dart';
+part of 'home_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loginViewModelHash() => r'a704b93cfa47a2928e23edbbce1826ba59c17053';
+String _$homeViewModelHash() => r'e82f52e0c04799eb5edd4885d0accc7ce960ff22';
 
-/// See also [LoginViewModel].
-@ProviderFor(LoginViewModel)
-final loginViewModelProvider =
-    AsyncNotifierProvider<LoginViewModel, Token>.internal(
-  LoginViewModel.new,
-  name: r'loginViewModelProvider',
+/// See also [HomeViewModel].
+@ProviderFor(HomeViewModel)
+final homeViewModelProvider =
+    AsyncNotifierProvider<HomeViewModel, HomeSetState?>.internal(
+  HomeViewModel.new,
+  name: r'homeViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$loginViewModelHash,
+      : _$homeViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$LoginViewModel = AsyncNotifier<Token>;
+typedef _$HomeViewModel = AsyncNotifier<HomeSetState?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
