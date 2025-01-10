@@ -24,12 +24,12 @@ class LoginRepository {
     }
   }
 
-  Future<Result<firebase_auth.User, Exception>> signInWithApple() async {
+  Future<Result<Token, Exception>> signInWithApple() async {
     final result = await firebaseAuthService.signInWithApple();
 
     switch (result) {
-      case Success(value: final authUser):
-        return Success(authUser);
+      case Success(value: final token):
+        return Success(token);
       case Failure(exception: final exception):
         return Failure(exception);
       default:

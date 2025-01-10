@@ -37,18 +37,18 @@ class LoginViewModel extends _$LoginViewModel {
   }
 
 
-  // Future<Result<Token, Exception>> signInWithApple() async {
-  //   state = AsyncLoading();
-  //   final result = await ref.read(loginRepositoryProvider).signInWithApple();
-  //
-  //   switch (result) {
-  //     case Success(value: final token):
-  //       state = AsyncData(Success(token));
-  //       return Success('애플 로그인 성공');
-  //     case Failure(exception: final e):
-  //       state = AsyncData(Failure(Exception('$e')));
-  //       return Failure(Exception('로그인 실패: $e'));
-  //   }
-  // }
+  Future<Result<Token, Exception>> signInWithApple() async {
+    state = AsyncLoading();
+    final result = await ref.read(loginRepositoryProvider).signInWithApple();
+
+    switch (result) {
+      case Success(value: final token):
+        state = AsyncData(token);
+        return Success(token);
+      case Failure(exception: final e):
+        state = AsyncError(e, StackTrace.current);
+        return Failure(Exception('애플 로그인 실패: $e'));
+    }
+  }
 }
 

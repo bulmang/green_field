@@ -57,7 +57,7 @@ class _HomeViewState extends ConsumerState<HomeView>{
                                 ? const CircularProgressIndicator()
                                 : Text(
                               onboardingState.value != null
-                                  ? onboardingState.value!.name
+                                  ? onboardingState.value!.name != '(empty)' ? onboardingState.value!.name : '(익명)'
                                   : 'null',
                               style: AppTextsTheme.main().gfTitle1.copyWith(
                                 color: Theme.of(context).appColors.gfBlackColor,

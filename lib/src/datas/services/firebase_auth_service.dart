@@ -64,7 +64,8 @@ class FirebaseAuthService {
     }
   }
 
-  Future<Result<firebase_auth.User, Exception>> signInWithApple() async {
+  /// 애플 로그인 - Token 전달
+  Future<Result<Token, Exception>> signInWithApple() async {
     try {
       final AuthorizationCredentialAppleID appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -79,12 +80,17 @@ class FirebaseAuthService {
       );
 
       if (credential.idToken != null && credential.accessToken != null) {
-        final result = await connectFirebaseAuth(credential.providerId, credential.idToken!, credential.accessToken!);
-        final authUser = switch (result) {
-          Success(value: final user) => user,
-          Failure(exception: final e) => throw e,
-        };
-        return Success(authUser);
+        final provider = credential.providerId;
+        final idToken = credential.idToken!;
+        final accessToken = credential.accessToken!;
+
+        final tokenObject = Token(
+          provider: provider,
+          idToken: idToken,
+          accessToken: accessToken,
+        );
+
+        return Success(tokenObject);
       } else {
         return Failure(Exception('signInWithApple Error'));
       }

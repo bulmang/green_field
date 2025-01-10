@@ -78,31 +78,30 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 // 애플 로그인 버튼
                 signInButton(
                   onPressed: () async {
-                    print('loginState.value?.provider : ${loginState.value!.provider}');
-                    print('loginState.value?.idToken : ${loginState.value!.idToken}');
-                    print('loginState.value?.accessToken : ${loginState.value!.accessToken}');
-                    // final result = await ref
-                    //     .read(loginViewModelProvider.notifier)
-                    //     .signInWithApple();
-                    //
-                    // switch (result) {
-                    //   case Success():
-                    //     context.go('/home');
-                    //   case Failure(exception: final e):
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) => AlertDialog(
-                    //         title: Text('로그인 실패'),
-                    //         content: Text('에러 발생: $e'),
-                    //         actions: [
-                    //           TextButton(
-                    //             onPressed: () => Navigator.of(context).pop(),
-                    //             child: Text('확인'),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     );
-                    // }
+
+                    final result = await ref
+                        .read(loginViewModelProvider.notifier)
+                        .signInWithApple();
+
+                    switch (result) {
+                      case Success():
+                        context.go('/onboarding'); // 온보딩 화면으로 이동
+
+                      case Failure(exception: final e):
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('로그인 실패'),
+                            content: Text('에러 발생: $e'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('확인'),
+                              ),
+                            ],
+                          ),
+                        );
+                    }
                   },
                   loginType: LoginType.apple,
                 ),
