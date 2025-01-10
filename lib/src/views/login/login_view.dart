@@ -1,29 +1,36 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/viewmodels/login_view_model.dart';
-import 'package:green_field/src/viewmodels/user_view_model.dart';
 import '../../cores/error_handler/result.dart';
-import '../../datas/services/firebase_auth_service.dart';
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/design_system/app_icons.dart';
 import '../../utilities/design_system/app_texts.dart';
 import '../../utilities/enums/login_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends ConsumerStatefulWidget {
   LoginView({super.key});
-  final _auth = FirebaseAuthService();
-  final _userVM = UserViewModel();
-  final _loginVM = LoginViewModel();
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends ConsumerState<LoginView> {
+  @override
   Widget build(BuildContext context) {
+    final loginState = ref.watch(loginViewModelProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            loginState.isLoading ? const CircularProgressIndicator() : const SizedBox.shrink(),
+
             Text('새싹 수강생 커뮤니티, 그린필드',
                 style: AppTextsTheme.main()
                     .gfHeading1
@@ -36,13 +43,17 @@ class LoginView extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // 카카오 로그인 버튼
                 signInButton(
                   onPressed: () async {
-                    final result = await _loginVM.signInWithKakao();
+
+                    final result = await ref
+                        .read(loginViewModelProvider.notifier)
+                        .signInWithKakao();
 
                     switch (result) {
                       case Success():
-                        context.go('/home');
+                        context.go('/onboarding'); // 온보딩 화면으로 이동
 
                       case Failure(exception: final e):
                         showDialog(
@@ -62,32 +73,39 @@ class LoginView extends StatelessWidget {
                   },
                   loginType: LoginType.kakao,
                 ),
+
                 SizedBox(height: 12),
+                // 애플 로그인 버튼
                 signInButton(
-                    onPressed: () async {
-                      final result = await _loginVM.signInWithApple();
-
-                      switch (result) {
-                        case Success():
-                          context.go('/home');
-
-                        case Failure(exception: final e):
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('로그인 실패'),
-                              content: Text('에러 발생: $e'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('확인'),
-                                ),
-                              ],
-                            ),
-                          );
-                      }
-                    },
-                    loginType: LoginType.apple),
+                  onPressed: () async {
+                    print('loginState.value?.provider : ${loginState.value!.provider}');
+                    print('loginState.value?.idToken : ${loginState.value!.idToken}');
+                    print('loginState.value?.accessToken : ${loginState.value!.accessToken}');
+                    // final result = await ref
+                    //     .read(loginViewModelProvider.notifier)
+                    //     .signInWithApple();
+                    //
+                    // switch (result) {
+                    //   case Success():
+                    //     context.go('/home');
+                    //   case Failure(exception: final e):
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) => AlertDialog(
+                    //         title: Text('로그인 실패'),
+                    //         content: Text('에러 발생: $e'),
+                    //         actions: [
+                    //           TextButton(
+                    //             onPressed: () => Navigator.of(context).pop(),
+                    //             child: Text('확인'),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     );
+                    // }
+                  },
+                  loginType: LoginType.apple,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -103,13 +121,13 @@ class LoginView extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     CupertinoButton(
-                        onPressed: () {},
-                        child: Text(
-                          '문의하기',
-                          style: AppTextsTheme.main().gfCaption1.copyWith(
-                              color:
-                                  Theme.of(context).appColors.gfGray400Color),
-                        )),
+                      onPressed: () {},
+                      child: Text(
+                        '문의하기',
+                        style: AppTextsTheme.main().gfCaption1.copyWith(
+                            color: Theme.of(context).appColors.gfGray400Color),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -153,10 +171,10 @@ Widget signInButton({
               child: Text(
                 loginType == LoginType.kakao ? '카카오로 시작하기' : 'Apple로 시작하기',
                 style: AppTextsTheme.main().gfTitle1.copyWith(
-                      color: loginType == LoginType.kakao
-                          ? AppColorsTheme.main().gfBlackColor
-                          : AppColorsTheme.main().gfWhiteColor,
-                    ),
+                  color: loginType == LoginType.kakao
+                      ? AppColorsTheme.main().gfBlackColor
+                      : AppColorsTheme.main().gfWhiteColor,
+                ),
               ),
             ),
           ],

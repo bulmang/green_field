@@ -1,18 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
-import 'package:green_field/src/viewmodels/user_view_model.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:green_field/src/model/token.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
 import '../../cores/error_handler/result.dart';
-import '../../model/user.dart';
 
 class LoginRepository {
-  final _firebaseAuthService = FirebaseAuthService();
+  final FirebaseAuthService firebaseAuthService;
 
-  Future<Result<User, Exception>> signInWithKakao() async {
-    final result = await _firebaseAuthService.signInWithKakao();
+  LoginRepository({ required this.firebaseAuthService});
+
+  Future<Result<Token, Exception>> signInWithKakao() async {
+    final result = await firebaseAuthService.signInWithKakao();
 
     switch (result) {
-      case Success(value: final authUser):
-        return Success(_createUserFromAuth(authUser));
+      case Success(value: final token):
+        return Success(token);
       case Failure(exception: final exception):
         return Failure(exception);
       default:
@@ -20,31 +24,21 @@ class LoginRepository {
     }
   }
 
-  Future<Result<User, Exception>> signInWithApple() async {
-    final result = await _firebaseAuthService.signInWithApple();
+  Future<Result<firebase_auth.User, Exception>> signInWithApple() async {
+    final result = await firebaseAuthService.signInWithApple();
 
     switch (result) {
       case Success(value: final authUser):
-        return Success(_createUserFromAuth(authUser));
+        return Success(authUser);
       case Failure(exception: final exception):
         return Failure(exception);
       default:
         throw Exception('Unexpected result type');
     }
-  }
-
-  User _createUserFromAuth(authUser) {
-    Map<String, dynamic> data = {
-      'id': authUser.uid,
-      'simple_login_id': authUser.providerData.isNotEmpty ? authUser.providerData.first.providerId : 'unknown',
-      'user_type': '카카오',
-      'campus': '관악',
-      'course': 'Flutter',
-      'name': '하명관',
-      'create_date': authUser.metadata.creationTime?.toIso8601String(),
-      'last_login_date': authUser.metadata.lastSignInTime?.toIso8601String(),
-    };
-
-    return User.fromMap(data);
   }
 }
+
+final loginRepositoryProvider = Provider<LoginRepository>((ref) {
+  return LoginRepository(firebaseAuthService: FirebaseAuthService(FirebaseAuth.instance));
+});
+
