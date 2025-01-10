@@ -43,6 +43,22 @@ class OnboardingRepository {
       return Failure(error); // 예외 발생 시 실패 반환
     }
   }
+
+  /// User DB 호출
+  Future<Result<myUser.User, Exception>> getUser(userId) async {
+    try {
+      final result = await firebaseStoreService.getUserById(userId);
+
+      switch (result) {
+        case Success(value: final authUser):
+          return Success(authUser);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } on Exception catch (error) {
+      return Failure(error); // 예외 발생 시 실패 반환
+    }
+  }
 }
 
 /// OnboardingRepositoryProvider 생성
