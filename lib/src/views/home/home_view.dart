@@ -22,8 +22,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     final onboardingState = ref.watch(onboardingViewModelProvider);
-    final homeState = ref.watch(homeViewModelProvider);
-    print('homeState: ${homeState.value}');
+
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
       body: SafeArea(
@@ -36,64 +35,36 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  onboardingState.isLoading
-                      ? const CircularProgressIndicator()
-                      : const SizedBox.shrink(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          AppIcons.profile,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
+                  Skeletonizer(
+                    enabled: onboardingState.isLoading,
+                    effect: ShimmerEffect(
+                      baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                      highlightColor: Theme.of(context).appColors.gfWhiteColor,
+                      duration: const Duration(seconds: 2),
+                    ),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Image.asset(
+                        AppIcons.profile,
+                        width: 40,
+                        height: 40,
+                      ),
+                      title: Text(
+                        onboardingState.value?.name != null && onboardingState.value!.name.isNotEmpty
+                            ? onboardingState.value!.name
+                            : '(익명)',
+                        style: AppTextsTheme.main().gfTitle1.copyWith(
+                          color: Theme.of(context).appColors.gfBlackColor,
                         ),
-                        SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            onboardingState.isLoading
-                                ? Skeletonizer.zone(
-                                    child: Card(
-                                      child: ListTile(
-                                        leading: Bone.circle(size: 48),
-                                        title: Bone.text(words: 2),
-                                        subtitle: Bone.text(),
-                                        trailing: Bone.icon(),
-                                      ),
-                                    ),
-                                  )
-                                : Text(
-                                    onboardingState.value!.name != ''
-                                            ? onboardingState.value!.name
-                                            : '(익명)',
-                                    style:
-                                        AppTextsTheme.main().gfTitle1.copyWith(
-                                              color: Theme.of(context)
-                                                  .appColors
-                                                  .gfBlackColor,
-                                            ),
-                                  ),
-                            SizedBox(height: 3),
-                            onboardingState.isLoading
-                                ? const CircularProgressIndicator()
-                                : Text(
-                                    onboardingState.value != null
-                                        ? onboardingState.value!.campus + '캠퍼스' + ' ' + onboardingState.value!.course
-                                        : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
-                                    style:
-                                        AppTextsTheme.main().gfBody5.copyWith(
-                                              color: Theme.of(context)
-                                                  .appColors
-                                                  .gfGray400Color,
-                                            ),
-                                  ),
-                          ],
+                      ),
+                      subtitle: Text(
+                        onboardingState.value != null
+                            ? '${onboardingState.value!.campus} 캠퍼스 ${onboardingState.value!.course}'
+                            : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
+                        style: AppTextsTheme.main().gfBody5.copyWith(
+                          color: Theme.of(context).appColors.gfGray400Color,
                         ),
-                      ],
+                      ), // 서브타이틀 텍스트
                     ),
                   ),
                   Padding(
@@ -104,8 +75,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         Text(
                           '공지사항',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                                color: Theme.of(context).appColors.gfBlackColor,
-                              ),
+                            color: Theme.of(context).appColors.gfBlackColor,
+                          ),
                         ),
                         SizedBox(height: 5),
                         NoticeCarouselSection(),
@@ -124,8 +95,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         Text(
                           'HOT 게시판',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                                color: Theme.of(context).appColors.gfBlackColor,
-                              ),
+                            color: Theme.of(context).appColors.gfBlackColor,
+                          ),
                         ),
                         SizedBox(height: 5),
                         ClipRRect(
@@ -142,8 +113,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 child: Text(
                   '곧 사라지는 실시간 모집글',
                   style: AppTextsTheme.main().gfTitle2.copyWith(
-                        color: Theme.of(context).appColors.gfBlackColor,
-                      ),
+                    color: Theme.of(context).appColors.gfBlackColor,
+                  ),
                 ),
               ),
               ExpiringSoonRecruitSection()
