@@ -27,28 +27,44 @@ class _OnboardingTextFieldState extends ConsumerState<OnboardingTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColorsTheme.main().gfGray100Color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: TextField(
-        controller: controller,
-        onChanged: (value) {
-          ref
-              .read(courseTextFieldProvider.notifier)
-              .setKeyword(value);
-        },
-        decoration: InputDecoration(
-          hintText: '학습중이거나 학습완료 강좌 입력.',
-          hintStyle: TextStyle(color: AppColorsTheme.main().gfGray400Color),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+    final courseState = ref.watch(courseTextFieldProvider);
+    final courseNotfier = ref.watch(courseTextFieldProvider.notifier);
+
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: courseNotfier.checkTextfield()
+                ? AppColorsTheme.main().gfGray100Color
+                : AppColorsTheme.main().gfWarningBackGroundColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextField(
+            controller: controller,
+            onChanged: (value) {
+              ref.read(courseTextFieldProvider.notifier).setKeyword(value);
+            },
+            decoration: InputDecoration(
+              hintText: '학습중이거나 학습완료 강좌 입력.',
+              hintStyle: TextStyle(color: AppColorsTheme.main().gfGray400Color),
+              border: InputBorder.none,
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            ),
+            style: AppTextsTheme.main().gfTitle2.copyWith(
+                  color: AppColorsTheme.main().gfBlackColor,
+                ),
+          ),
         ),
-        style: AppTextsTheme.main().gfTitle2.copyWith(
-          color: AppColorsTheme.main().gfBlackColor,
+        SizedBox(height: 8),
+        courseNotfier.checkTextfield()
+            ? Text('')
+            : Text("강의명은 50자 미만으로 입력해주세요.",
+          style: AppTextsTheme.main().gfTitle3.copyWith(
+            color: AppColorsTheme.main().gfWarningColor,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

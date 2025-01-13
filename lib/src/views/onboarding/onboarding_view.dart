@@ -44,7 +44,9 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
-                    onboardingState.isLoading ? const CircularProgressIndicator() : const SizedBox.shrink(),
+                    onboardingState.isLoading
+                        ? const CircularProgressIndicator()
+                        : const SizedBox.shrink(),
                     SizedBox(height: 40),
                     Text(
                       '안녕하세요\n캠퍼스와 강의를 알려주세요.',

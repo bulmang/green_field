@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/home_view_model.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
 import 'package:green_field/src/views/home/sections/notice_carousel_section.dart';
-import '../../cores/error_handler/result.dart';
-import '../../model/user.dart' as myUser;
 import '../../utilities/design_system/app_icons.dart';
 import '../../utilities/design_system/app_texts.dart';
 import '../../viewmodels/onboarding_view_model.dart';
@@ -19,7 +18,7 @@ class HomeView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends ConsumerState<HomeView>{
+class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     final onboardingState = ref.watch(onboardingViewModelProvider);
@@ -36,7 +35,9 @@ class _HomeViewState extends ConsumerState<HomeView>{
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  onboardingState.isLoading ? const CircularProgressIndicator() : const SizedBox.shrink(),
+                  onboardingState.isLoading
+                      ? const CircularProgressIndicator()
+                      : const SizedBox.shrink(),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Row(
@@ -54,26 +55,41 @@ class _HomeViewState extends ConsumerState<HomeView>{
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             onboardingState.isLoading
-                                ? const CircularProgressIndicator()
+                                ? Skeletonizer.zone(
+                                    child: Card(
+                                      child: ListTile(
+                                        leading: Bone.circle(size: 48),
+                                        title: Bone.text(words: 2),
+                                        subtitle: Bone.text(),
+                                        trailing: Bone.icon(),
+                                      ),
+                                    ),
+                                  )
                                 : Text(
-                              onboardingState.value != null
-                                  ? onboardingState.value!.name != '(empty)' ? onboardingState.value!.name : '(익명)'
-                                  : 'null',
-                              style: AppTextsTheme.main().gfTitle1.copyWith(
-                                color: Theme.of(context).appColors.gfBlackColor,
-                              ),
-                            ),
+                                    onboardingState.value != null
+                                            ? onboardingState.value!.name
+                                            : '(익명)',
+                                    style:
+                                        AppTextsTheme.main().gfTitle1.copyWith(
+                                              color: Theme.of(context)
+                                                  .appColors
+                                                  .gfBlackColor,
+                                            ),
+                                  ),
                             SizedBox(height: 3),
                             onboardingState.isLoading
                                 ? const CircularProgressIndicator()
                                 : Text(
-                              onboardingState.value != null
-                                  ? onboardingState.value!.campus + '캠퍼스' + ' ' + onboardingState.value!.course // 성공 시 course 프로퍼티
-                                  : 'null', // 실패 시 기본 메시지
-                              style: AppTextsTheme.main().gfBody5.copyWith(
-                                color: Theme.of(context).appColors.gfGray400Color,
-                              ),
-                            ),
+                                    onboardingState.value != null
+                                        ? onboardingState.value!.campus + '캠퍼스' + ' ' + onboardingState.value!.course
+                                        : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
+                                    style:
+                                        AppTextsTheme.main().gfBody5.copyWith(
+                                              color: Theme.of(context)
+                                                  .appColors
+                                                  .gfGray400Color,
+                                            ),
+                                  ),
                           ],
                         ),
                       ],
@@ -107,8 +123,8 @@ class _HomeViewState extends ConsumerState<HomeView>{
                         Text(
                           'HOT 게시판',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                            color: Theme.of(context).appColors.gfBlackColor,
-                          ),
+                                color: Theme.of(context).appColors.gfBlackColor,
+                              ),
                         ),
                         SizedBox(height: 5),
                         ClipRRect(
@@ -125,8 +141,8 @@ class _HomeViewState extends ConsumerState<HomeView>{
                 child: Text(
                   '곧 사라지는 실시간 모집글',
                   style: AppTextsTheme.main().gfTitle2.copyWith(
-                    color: Theme.of(context).appColors.gfBlackColor,
-                  ),
+                        color: Theme.of(context).appColors.gfBlackColor,
+                      ),
                 ),
               ),
               ExpiringSoonRecruitSection()

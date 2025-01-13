@@ -84,7 +84,7 @@ class OnboardingViewModel extends _$OnboardingViewModel {
         userType: 'student', // TODO: 추후 manager type 추가.
         campus: campus,
         course: course,
-        name: firebaseUser.displayName ?? '(empty)',
+        name: firebaseUser.displayName ?? '',
         createDate: firebaseUser.metadata.creationTime,
         lastSignInDate: firebaseUser.metadata.lastSignInTime,
         lastLoginInDate: firebaseUser.metadata.lastSignInTime,
@@ -126,16 +126,19 @@ class OnboardingViewModel extends _$OnboardingViewModel {
 }
 
 /// courseProvider 생성
-final courseTextFieldProvider =
-    StateNotifierProvider<CourseNotifier, String>(
-  (ref) => CourseNotifier(),
+final courseTextFieldProvider = StateNotifierProvider<CourseNotifier, String>(
+      (ref) => CourseNotifier(),
 );
 
 class CourseNotifier extends StateNotifier<String> {
   CourseNotifier() : super(''); // 초기 상태 설정
 
   void setKeyword(String inputText) {
-    state = inputText;
+      state = inputText;
+  }
+
+  bool checkTextfield() {
+    return state.isEmpty || (state.length <= 50 && state.length > 0);
   }
 }
 
