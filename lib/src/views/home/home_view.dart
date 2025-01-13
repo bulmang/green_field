@@ -25,6 +25,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final homeState = ref.watch(homeViewModelProvider);
     print('homeState: ${homeState.value}');
     return Scaffold(
+      backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
@@ -66,7 +67,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                                     ),
                                   )
                                 : Text(
-                                    onboardingState.value != null
+                                    onboardingState.value!.name != ''
                                             ? onboardingState.value!.name
                                             : '(익명)',
                                     style:
