@@ -28,13 +28,12 @@ class _OnboardingTextFieldState extends ConsumerState<OnboardingTextField> {
   @override
   Widget build(BuildContext context) {
     final courseState = ref.watch(courseTextFieldProvider);
-    final courseNotfier = ref.watch(courseTextFieldProvider.notifier);
 
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: courseNotfier.checkTextfield()
+            color: courseState.length < 50
                 ? AppColorsTheme.main().gfGray100Color
                 : AppColorsTheme.main().gfWarningBackGroundColor,
             borderRadius: BorderRadius.circular(8),
@@ -57,7 +56,7 @@ class _OnboardingTextFieldState extends ConsumerState<OnboardingTextField> {
           ),
         ),
         SizedBox(height: 8),
-        courseNotfier.checkTextfield()
+        courseState.length < 50
             ? Text('')
             : Text("강의명은 50자 미만으로 입력해주세요.",
           style: AppTextsTheme.main().gfTitle3.copyWith(

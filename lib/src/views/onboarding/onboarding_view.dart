@@ -32,7 +32,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     final tokenState = ref.watch(loginViewModelProvider);
 
     bool _isActive() {
-      return course.isNotEmpty && campusState != '---';
+      return (0 < course.length && course.length < 50) && campusState != '---';
     }
 
     return Scaffold(
