@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-import 'package:green_field/src/viewmodels/home_view_model.dart';
+import 'package:green_field/src/viewmodels/home/home_view_model.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
 import 'package:green_field/src/views/home/sections/notice_carousel_section.dart';
 import '../../utilities/design_system/app_icons.dart';
 import '../../utilities/design_system/app_texts.dart';
-import '../../viewmodels/onboarding_view_model.dart';
+import '../../viewmodels/onboarding/onboarding_view_model.dart';
 import 'sections/external_link_section.dart';
 import 'sections/top_liked_posts_section.dart';
 

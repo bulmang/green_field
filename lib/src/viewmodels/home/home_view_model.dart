@@ -1,14 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/datas/repositories/login_repository.dart';
 import 'package:green_field/src/model/recruit.dart';
-import 'package:green_field/src/viewmodels/login_view_model.dart';
-import 'package:green_field/src/viewmodels/onboarding_view_model.dart';
+import 'package:green_field/src/viewmodels/login/login_view_model.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../cores/error_handler/result.dart';
-import '../datas/repositories/onboarding_repository.dart';
-import '../datas/services/firebase_auth_service.dart';
-import '../model/user.dart' as myUser;
+import '../../cores/error_handler/result.dart';
+import '../../datas/repositories/onboarding_repository.dart';
+import '../../datas/services/firebase_auth_service.dart';
+import '../../model/user.dart' as myUser;
 
 part 'home_view_model.g.dart';
 
