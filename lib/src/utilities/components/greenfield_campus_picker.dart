@@ -6,7 +6,7 @@ import '../design_system/app_texts.dart';
 class GreenFieldCampusPicker extends StatefulWidget {
   final ValueChanged<String> onCampusSelected; // 콜백 함수
 
-  const GreenFieldCampusPicker({super.key, required this.onCampusSelected});
+  GreenFieldCampusPicker({super.key, required this.onCampusSelected});
 
   @override
   State<GreenFieldCampusPicker> createState() => _GreenFieldCampusPickerState();
@@ -69,7 +69,7 @@ class _GreenFieldCampusPickerState extends State<GreenFieldCampusPicker> {
       child: WheelPicker(
         builder: itemBuilder,
         controller: _campusWheel,
-        looping: false,
+        looping: true,
         style: wheelStyle.copyWith(
           itemExtent: 23.0,
         ),
