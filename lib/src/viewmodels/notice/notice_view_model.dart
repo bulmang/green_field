@@ -1,4 +1,4 @@
-import '../model/notice.dart';
+import '../../model/notice.dart';
 
 class NoticeViewModel {
   final List<Notice> notices = [
