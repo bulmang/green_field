@@ -44,21 +44,32 @@ final GlobalKey<NavigatorState> _campusTabNavigatorKey =
 GoRouter goRouter(Ref ref) {
   final authState = ref.watch(firebaseAuthServiceProvider);
   return GoRouter(
-    initialLocation: '/',
-    navigatorKey: GlobalKey<NavigatorState>(debugLabel: 'root'),
+    initialLocation: '/signIn',
+    navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
     redirect: (context, state) {
       final isLoggedIn = authState.currentUser != null;
-      if (isLoggedIn) {
-        return '/home';
-      }
+      final path = state.uri.path;
 
+      if (isLoggedIn) {
+        if (path.startsWith('/onboarding') || path.startsWith('/signIn')) {
+          return '/home';
+        }
+      } else {
+        if (path.startsWith('/onboarding') ||
+            path.startsWith('/home') ||
+            path.startsWith('/recruit') ||
+            path.startsWith('/post') ||
+            path.startsWith('/campus')) {
+          return '/signIn';
+        }
+      }
       return null;
     },
     refreshListenable: GoRouterRefreshStream(authState.authStateChanges()),
     routes: <RouteBase>[
       GoRoute(
-        path: '/',
+        path: '/signIn',
         builder: (context, state) => LoginView(),
       ),
       GoRoute(
@@ -67,7 +78,7 @@ GoRouter goRouter(Ref ref) {
       ),
       StatefulShellRoute.indexedStack(
         pageBuilder: (context, state, navigationShell) => NoTransitionPage(
-          child:  MainView(navigationShell: navigationShell),
+          child: MainView(navigationShell: navigationShell),
         ),
         branches: [
           StatefulShellBranch(
