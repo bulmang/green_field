@@ -48,10 +48,10 @@ GoRouter goRouter(Ref ref) {
     navigatorKey: GlobalKey<NavigatorState>(debugLabel: 'root'),
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      // final isLoggedIn = authState.currentUser != null;
-      // if (isLoggedIn) {
-      //   return '/home';
-      // }
+      final isLoggedIn = authState.currentUser != null;
+      if (isLoggedIn) {
+        return '/home';
+      }
 
       return null;
     },
