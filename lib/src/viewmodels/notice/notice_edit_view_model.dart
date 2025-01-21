@@ -58,7 +58,25 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
   }
 
   /// Notice 객체 삭제
+  Future<Result<void, Exception>> deleteNoticeModel(String noticeId) async {
+    try {
+      state = AsyncLoading();
 
+      final result = await ref
+          .read(noticeRepositoryProvider)
+          .deleteNoticeDB(noticeId);
+
+      switch (result) {
+        case Success():
+          return Success(null);
+        case Failure(exception: final exception):
+          state = AsyncError(exception, StackTrace.current);
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      return Failure(Exception('공지사항 삭제 실패: $error'));
+    }
+  }
 
   /// 글을 수정할 때 기존 글과 이미지를 가져오는 함수
   List<ImageType> loadPostForEditing(

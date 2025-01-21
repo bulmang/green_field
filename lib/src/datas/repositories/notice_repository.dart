@@ -56,6 +56,23 @@ class NoticeRepository {
     }
   }
 
+  /// Notice 문서 삭제
+  Future<Result<void, Exception>> deleteNoticeDB(String noticeId) async {
+    try {
+      final result = await firebaseStoreService.deleteNoticeDB(noticeId);
+
+      switch (result) {
+        case Success():
+          return Success(null);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('공지사항 삭제 실패: $error'));
+    }
+  }
+
+
   /// Image 업로드 후 ImageURL 가져오기
   Future<Result<List<String>?, Exception>> uploadImage(User user, List<ImageType>? images) async {
     try {

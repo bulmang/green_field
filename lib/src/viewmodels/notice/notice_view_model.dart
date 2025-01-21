@@ -39,7 +39,6 @@ class NoticeViewModel extends _$NoticeViewModel {
 
     switch (result) {
       case Success(value: final noticeList):
-        print('noticeList $noticeList');
         state = AsyncData(noticeList);
         return Success(noticeList);
       case Failure(exception: final exception):

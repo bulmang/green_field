@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/cores/router/router.dart';
 import 'package:green_field/src/utilities/design_system/app_icons.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
+import 'package:green_field/src/viewmodels/notice/notice_edit_view_model.dart';
+import 'package:green_field/src/viewmodels/notice/notice_view_model.dart';
 import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import '../../model/notice.dart';
 import '../../utilities/components/greenfield_app_bar.dart';
@@ -34,7 +37,8 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
         backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
         actions: [
-          if (userState.value?.userType == 'manager' || userState.value?.userType == 'master')
+          if (userState.value?.userType == 'manager' ||
+              userState.value?.userType == 'master')
             CupertinoButton(
                 child: ImageIcon(
                   AssetImage(AppIcons.menu),
@@ -42,7 +46,12 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
                   color: Theme.of(context).appColors.gfGray400Color,
                 ),
                 onPressed: () {
-                  _showCupertinoActionSheet(context, notice);
+                  _showCupertinoActionSheet(
+                    context,
+                    notice, // 현재 공지사항 객체
+                    ref.read(noticeEditViewModelProvider.notifier),
+                    ref.read(noticeViewModelProvider.notifier),
+                  );
                 })
         ],
       ),
@@ -55,13 +64,16 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
               child: GreenfieldUserInfoWidget(
                 featureType: FeatureType.notice,
                 campus: notice.userCampus,
-                createTimeText: '${notice.createdAt.year}-${notice.createdAt.month}-${notice.createdAt.day}',
+                createTimeText:
+                    '${notice.createdAt.year}-${notice.createdAt.month}-${notice.createdAt.day}',
               ),
             ),
             GreenFieldContentWidget(
               title: notice.title,
               bodyText: notice.body,
-              imageAssets: notice.images != null && notice.images!.isNotEmpty ? notice.images! : [],
+              imageAssets: notice.images != null && notice.images!.isNotEmpty
+                  ? notice.images!
+                  : [],
               likes: notice.like.length,
               commentCount: 0,
             ),
@@ -72,7 +84,12 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
   }
 }
 
-void _showCupertinoActionSheet(BuildContext context,Notice notice) {
+void _showCupertinoActionSheet(
+  BuildContext context,
+  Notice notice,
+  NoticeEditViewModel noticEditState,
+  NoticeViewModel noticeState,
+) {
   showCupertinoModalPopup(
     context: context,
     builder: (BuildContext context) {
@@ -80,11 +97,11 @@ void _showCupertinoActionSheet(BuildContext context,Notice notice) {
         actions: <Widget>[
           CupertinoActionSheetAction(
             child: Text(
-                '글 수정',
-                style: AppTextsTheme.main().gfTitle2.copyWith(
-                  color: Theme.of(context).appColors.gfBlueColor,
-                ),
-              ),
+              '글 수정',
+              style: AppTextsTheme.main().gfTitle2.copyWith(
+                    color: Theme.of(context).appColors.gfBlueColor,
+                  ),
+            ),
             onPressed: () {
               context.go('/home/notice/edit/modify/${notice.id}');
               Navigator.pop(context);
@@ -92,24 +109,30 @@ void _showCupertinoActionSheet(BuildContext context,Notice notice) {
           ),
           CupertinoActionSheetAction(
             child: Text(
-                '글 삭제',
+              '글 삭제',
               style: AppTextsTheme.main().gfTitle2.copyWith(
-                color: Theme.of(context).appColors.gfWarningColor,
-              ),
+                    color: Theme.of(context).appColors.gfWarningColor,
+                  ),
             ),
-            onPressed: () {
+            onPressed: () async {
+              final result = await noticEditState.deleteNoticeModel(notice.id);
 
-              Navigator.pop(context);
+              switch (result) {
+                case Success():
+                  noticeState.getNoticeList();
+                  Navigator.pop(context);
+                  context.go('/home/notice');
+                case Failure(exception: final e):
+                  noticEditState.flutterToast(e.toString());
+              }
             },
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text(
-            '취소',
+          child: Text('취소',
               style: AppTextsTheme.main().gfTitle2.copyWith(
-                color: Theme.of(context).appColors.gfBlueColor,
-              )
-          ),
+                    color: Theme.of(context).appColors.gfBlueColor,
+                  )),
           isDefaultAction: true,
           onPressed: () {
             Navigator.pop(context); // Close the action sheet
@@ -119,4 +142,3 @@ void _showCupertinoActionSheet(BuildContext context,Notice notice) {
     },
   );
 }
-

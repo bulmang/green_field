@@ -53,9 +53,20 @@ class FirebaseStoreService {
     }
   }
 
+  /// Notice Collection에서 Notice 데이터 삭제
+  Future<Result<void, Exception>> deleteNoticeDB(String noticeId) async {
+    try {
+      await _store.collection('Notice').doc(noticeId).delete();
+
+      return Success(null);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('notice 데이터 삭제 실패: $e'));
+    }
+  }
+
   /// Notice Collection의 특정 Notice 데이터 업데이트
   Future<Result<Notice, Exception>> updateNoticeDB(Notice notice) async {
-    print('updateNoticeDB service 실행');
     try {
       // Firestore에서 해당 문서 업데이트
       await _store.collection('Notice').doc(notice.id).update(notice.toMap());
