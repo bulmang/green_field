@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/router/go_router_refresh_stream.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
-import 'package:green_field/src/viewmodels/onboarding_view_model.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:green_field/src/viewmodels/post_view_model.dart';
 import 'package:green_field/src/views/campus/campus_view.dart';
 import 'package:green_field/src/views/home/home_view.dart';
 import 'package:green_field/src/views/login/login_view.dart';
+import 'package:green_field/src/views/notice/notice_edit_view.dart';
 import 'package:green_field/src/views/onboarding/onboarding_view.dart';
 import 'package:green_field/src/views/main_view.dart';
 import 'package:green_field/src/views/notice/notice_view.dart';
@@ -20,7 +21,7 @@ import 'package:green_field/src/views/recruitment/recruitment_detail_view.dart';
 import 'package:green_field/src/views/recruitment/recruitment_view.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../viewmodels/notice_view_model.dart';
+import '../../viewmodels/notice/notice_view_model.dart';
 import '../../viewmodels/recruit_view_model.dart';
 
 part 'router.g.dart';
@@ -43,6 +44,7 @@ final GlobalKey<NavigatorState> _campusTabNavigatorKey =
 @riverpod
 GoRouter goRouter(Ref ref) {
   final authState = ref.watch(firebaseAuthServiceProvider);
+  final noticeState = ref.watch(noticeViewModelProvider.notifier);
   return GoRouter(
     initialLocation: '/signIn',
     navigatorKey: _rootNavigatorKey,
@@ -56,11 +58,12 @@ GoRouter goRouter(Ref ref) {
           return '/home';
         }
       } else {
-        if (path.startsWith('/onboarding') ||
+        if (
             path.startsWith('/home') ||
             path.startsWith('/recruit') ||
             path.startsWith('/post') ||
-            path.startsWith('/campus')) {
+            path.startsWith('/campus')
+        ) {
           return '/signIn';
         }
       }
@@ -98,8 +101,59 @@ GoRouter goRouter(Ref ref) {
                         name: 'notice_detail',
                         path: 'detail/:id',
                         builder: (context, state) => NoticeDetailView(
-                            notice: noticeVM
-                                .getNoticeById(state.pathParameters['id']!)),
+                            notice: noticeState.getNoticeById(state.pathParameters['id'] ?? '')),
+                      ),
+                      GoRoute(
+                        name: "notice_edit",
+                        path: 'edit',
+                        pageBuilder: (context, state) {
+                          return CustomTransitionPage(
+                            key: state.pageKey,
+                            child: NoticeEditView(),
+                            transitionsBuilder:
+                                (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(0.0, 1.0); // 아래에서 시작
+                              const end = Offset.zero; // 현재 위치
+                              const curve = Curves.easeInOut;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        name: "notice_edit_modify",
+                        path: 'edit/modify/:id',
+                        pageBuilder: (context, state) {
+                          return CustomTransitionPage(
+                            key: state.pageKey,
+                            child: NoticeEditView(
+                                notice: noticeState.getNoticeById(state.pathParameters['id'] ?? '')
+                            ),
+                            transitionsBuilder:
+                                (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(0.0, 1.0); // 아래에서 시작
+                              const end = Offset.zero; // 현재 위치
+                              const curve = Curves.easeInOut;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),

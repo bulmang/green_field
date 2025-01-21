@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:green_field/src/cores/router/router.dart';
+import 'package:green_field/src/viewmodels/notice/notice_view_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/home/home_view_model.dart';
@@ -22,6 +26,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     final onboardingState = ref.watch(onboardingViewModelProvider);
+    final noticeState = ref.watch(noticeViewModelProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
@@ -38,7 +43,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   Skeletonizer(
                     enabled: onboardingState.isLoading,
                     effect: ShimmerEffect(
-                      baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                      baseColor:
+                          Theme.of(context).appColors.gfMainBackGroundColor,
                       highlightColor: Theme.of(context).appColors.gfWhiteColor,
                       duration: const Duration(seconds: 2),
                     ),
@@ -50,20 +56,21 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         height: 40,
                       ),
                       title: Text(
-                        onboardingState.value?.name != null && onboardingState.value!.name.isNotEmpty
+                        onboardingState.value?.name != null &&
+                                onboardingState.value!.name.isNotEmpty
                             ? onboardingState.value!.name
                             : '(익명)',
                         style: AppTextsTheme.main().gfTitle1.copyWith(
-                          color: Theme.of(context).appColors.gfBlackColor,
-                        ),
+                              color: Theme.of(context).appColors.gfBlackColor,
+                            ),
                       ),
                       subtitle: Text(
                         onboardingState.value != null
                             ? '${onboardingState.value!.campus} 캠퍼스 ${onboardingState.value!.course}'
                             : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
                         style: AppTextsTheme.main().gfBody5.copyWith(
-                          color: Theme.of(context).appColors.gfGray400Color,
-                        ),
+                              color: Theme.of(context).appColors.gfGray400Color,
+                            ),
                       ), // 서브타이틀 텍스트
                     ),
                   ),
@@ -72,14 +79,47 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '공지사항',
-                          style: AppTextsTheme.main().gfTitle2.copyWith(
-                            color: Theme.of(context).appColors.gfBlackColor,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              '공지사항',
+                              style: AppTextsTheme.main().gfTitle2.copyWith(
+                                    color: Theme.of(context)
+                                        .appColors
+                                        .gfBlackColor,
+                                  ),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                context.go('/home/notice');
+                              },
+                              child: Text(
+                                "더보기 >",
+                                style: AppTextsTheme.main().gfCaption1.copyWith(
+                                      color: Theme.of(context)
+                                          .appColors
+                                          .gfGray800Color,
+                                    ),
+                              ),
+                            )
+                          ],
                         ),
                         SizedBox(height: 5),
-                        NoticeCarouselSection(),
+                        noticeState.isLoading
+                            ? Skeletonizer.zone(
+                                child: Card(
+                                  child: ListTile(
+                                    leading: Bone.circle(size: 48),
+                                    title: Bone.text(words: 2),
+                                    subtitle: Bone.text(),
+                                    trailing: Bone.icon(),
+                                  ),
+                                ),
+                              )
+                            : NoticeCarouselSection(),
                       ],
                     ),
                   ),
@@ -95,8 +135,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         Text(
                           'HOT 게시판',
                           style: AppTextsTheme.main().gfTitle2.copyWith(
-                            color: Theme.of(context).appColors.gfBlackColor,
-                          ),
+                                color: Theme.of(context).appColors.gfBlackColor,
+                              ),
                         ),
                         SizedBox(height: 5),
                         ClipRRect(
@@ -113,8 +153,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 child: Text(
                   '곧 사라지는 실시간 모집글',
                   style: AppTextsTheme.main().gfTitle2.copyWith(
-                    color: Theme.of(context).appColors.gfBlackColor,
-                  ),
+                        color: Theme.of(context).appColors.gfBlackColor,
+                      ),
                 ),
               ),
               ExpiringSoonRecruitSection()

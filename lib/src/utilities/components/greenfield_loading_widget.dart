@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:green_field/src/utilities/design_system/app_colors.dart';
 import 'package:lottie/lottie.dart';
 
 class GreenFieldLoadingWidget extends StatelessWidget {
@@ -17,11 +18,16 @@ class GreenFieldLoadingWidget extends StatelessWidget {
           child: Container(
             width: size,
             height: size,
-            color: Colors.transparent,
-            child: Lottie.asset(
-              'assets/lotties/loading.json',
-              repeat: true,
-              animate: true,
+            decoration: BoxDecoration(
+              color: AppColorsTheme.main().gfWhiteColor,
+              shape: BoxShape.circle, // 원형으로 설정
+            ),
+            child: ClipOval(
+              child: Lottie.asset(
+                'assets/lotties/loading.json',
+                repeat: true,
+                animate: true,
+              ),
             ),
           ),
         ),
