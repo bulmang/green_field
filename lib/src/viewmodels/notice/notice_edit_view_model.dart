@@ -68,6 +68,7 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
 
       switch (result) {
         case Success():
+          state = AsyncData(null);
           return Success(null);
         case Failure(exception: final exception):
           state = AsyncError(exception, StackTrace.current);
