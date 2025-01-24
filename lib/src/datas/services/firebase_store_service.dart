@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import '../../model/notice.dart';
 import '../../model/user.dart' as GFUser;
@@ -41,7 +38,6 @@ class FirebaseStoreService {
 
   /// Notice Collection 생성 및 Notice 데이터 추가
   Future<Result<Notice, Exception>> createNoticeDB(Notice notice) async {
-    print('createNoticeDB service 실행');
     try {
       await _store.collection('Notice').doc(notice.id).set(notice.toMap());
 
