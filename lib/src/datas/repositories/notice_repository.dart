@@ -32,6 +32,22 @@ class NoticeRepository {
     }
   }
 
+  /// 다음 Notice 리스트 가져오기
+  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice) async {
+    try {
+      final result = await firebaseStoreService.getNextNoticeList(lastNotice);
+
+      switch(result) {
+        case Success(value: final noticeList):
+          return Success(noticeList);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } on Exception catch (error) {
+      return Failure(error); // 예외 발생 시 실패 반환
+    }
+  }
+
   /// Notice DB 생성
   Future<Result<Notice, Exception>> createNoticeDB(User user, Notice notice, List<ImageType>? images) async {
     try {

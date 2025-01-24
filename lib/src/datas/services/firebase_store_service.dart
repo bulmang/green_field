@@ -6,7 +6,6 @@ import 'package:green_field/src/cores/error_handler/result.dart';
 import '../../model/notice.dart';
 import '../../model/user.dart' as GFUser;
 
-
 class FirebaseStoreService {
   FirebaseStoreService(this._store);
   final firebase_store.FirebaseFirestore _store;
@@ -32,7 +31,8 @@ class FirebaseStoreService {
         final userData = GFUser.User.fromMap(docSnapshot.data()!);
         return Success(userData);
       } else {
-        return Failure(Exception('firebase_store_service _getUserById error: 사용자를 찾을 수 없습니다.'));
+        return Failure(Exception(
+            'firebase_store_service _getUserById error: 사용자를 찾을 수 없습니다.'));
       }
     } catch (e) {
       return Failure(Exception('사용자 데이터 가져오기 실패: $e'));
@@ -43,7 +43,6 @@ class FirebaseStoreService {
   Future<Result<Notice, Exception>> createNoticeDB(Notice notice) async {
     print('createNoticeDB service 실행');
     try {
-
       await _store.collection('Notice').doc(notice.id).set(notice.toMap());
 
       return Success(notice);
@@ -81,23 +80,63 @@ class FirebaseStoreService {
   /// Notice List 가져오기
   Future<Result<List<Notice>, Exception>> getNoticeList() async {
     try {
-      // 'notice' 컬렉션에서 상위 10개의 문서를 가져오는 쿼리
-      final querySnapshot = await _store.collection('Notice')
-          .orderBy('created_at', descending: true) // createdAt 필드로 정렬 (내림차순)
-          .limit(10) // 상위 10개 문서만 가져오기
-          .get();
+      // 기본 쿼리
+      var query = _store
+          .collection('Notice')
+          .orderBy('created_at', descending: true)
+          .limit(10);
 
-      // 쿼리 결과에서 Notice 객체 리스트 생성
-      List<Notice> noticeList = querySnapshot.docs.map((doc) =>
-          Notice.fromMap(doc.data())).toList();
-      if (noticeList != []) {
-        return Success(noticeList);
+
+      // 첫 번째 페이지 또는 페이징 데이터를 가져오기
+      var querySnapshot = await query.get();
+
+      // 데이터를 Notice 객체로 매핑
+      List<Notice> noticeList = querySnapshot.docs
+          .map((doc) => Notice.fromMap(doc.data()))
+          .toList();
+
+      if (noticeList.isEmpty) {
+        return Success([]);
       } else {
-        return Success([Notice(id: '', creatorId: '', userCampus: '관리자', title: '공지사항이 없습니다.', body: '공지사항을 등록해주세요.', like: [], createdAt: DateTime.now())]);
+        return Success(noticeList);
       }
     } catch (e) {
       return Failure(Exception('공지사항 데이터 가져오기 실패: $e'));
     }
   }
 
+  /// Notice List 추가로 가져오기
+  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice) async {
+    try {
+
+      var query = _store
+          .collection('Notice')
+          .orderBy('created_at', descending: true)
+          .limit(10);
+
+      if (lastNotice != null) {
+        final lastDoc = await _store.collection('Notice')
+            .doc(lastNotice.last.id)
+            .get();
+        query = query.startAfterDocument(lastDoc);
+      }
+
+      var querySnapshot = await query.get();
+
+      List<Notice> noticeList = querySnapshot.docs
+          .map((doc) => Notice.fromMap(doc.data()))
+          .toList();
+
+      if (noticeList.isEmpty) {
+        return Success([]);
+      } else {
+        if (lastNotice != null)
+          lastNotice!.addAll(noticeList);
+
+        return Success(lastNotice ?? noticeList);
+      }
+    } catch (e) {
+      return Failure(Exception('공지사항 데이터 가져오기 실패: $e'));
+    }
+  }
 }
