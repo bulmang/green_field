@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:green_field/src/utilities/components/greenfield_cached_network_image.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'dart:io';
 import '../../cores/image_type/image_type.dart';
@@ -41,12 +42,7 @@ class GreenFieldImageWidgetState extends ConsumerState<GreenFieldImageWidget> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        value, // Network 이미지 표시
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+                      child: GreenFieldCachedNetworkImage(imageUrl: value, width: 120, height: 120)
                     ),
                     if(widget.type != FeatureType.campus)
                       CupertinoButton(

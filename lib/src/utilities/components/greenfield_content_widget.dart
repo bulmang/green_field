@@ -7,6 +7,7 @@ import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import '../enums/feature_type.dart';
 import 'greenfield_cached_network_image.dart';
+import 'greenfield_images_detail.dart';
 
 class GreenFieldContentWidget extends StatelessWidget {
   final FeatureType? featureType;
@@ -55,19 +56,56 @@ class GreenFieldContentWidget extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.width,
-                child: GreenFieldCachedNetworkImage(imageUrl: imageAssets[0]!, width: double.infinity, height: double.infinity),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => GreenFieldImagesDetail(
+                          tags: imageAssets,
+                          initialIndex: 0,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: imageAssets.first!,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: GreenFieldCachedNetworkImage(imageUrl: imageAssets.first!, width: 120, height: 120),
+                    ),
+                  ),
+                ),
               )
             else
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: imageAssets.map((imageUrl) {
+                  children: imageAssets.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String? imageUrl = entry.value;
                     if (imageUrl != null) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => GreenFieldImagesDetail(
+                                  tags: imageAssets,
+                                  initialIndex: index,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: imageUrl,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120),
+                            ),
+                          ),
                         ),
                       );
                     } else {
