@@ -15,6 +15,7 @@ import '../../utilities/components/greenfield_content_widget.dart';
 import '../../utilities/components/greenfield_user_info_widget.dart';
 import '../../utilities/design_system/app_texts.dart';
 import '../../utilities/enums/feature_type.dart';
+import '../../utilities/enums/user_type.dart';
 
 class NoticeDetailView extends ConsumerStatefulWidget {
   final Notice notice;
@@ -37,8 +38,7 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
         backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
         actions: [
-          if (userState.value?.userType == 'manager' ||
-              userState.value?.userType == 'master')
+          if (userState.value?.userType != UserType.master.toString() || userState.value?.userType != UserType.manager.toString())
             CupertinoButton(
                 child: ImageIcon(
                   AssetImage(AppIcons.menu),

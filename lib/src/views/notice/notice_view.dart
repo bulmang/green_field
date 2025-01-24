@@ -13,6 +13,7 @@ import '../../utilities/components/greenfield_list.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../utilities/design_system/app_texts.dart';
+import '../../utilities/enums/user_type.dart';
 import '../../viewmodels/notice/notice_view_model.dart';
 import '../../viewmodels/onboarding/onboarding_view_model.dart';
 
@@ -79,7 +80,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
         backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
         actions: [
-          if (userState.value?.userType != 'student')
+          if (userState.value?.userType != UserType.master.toString() || userState.value?.userType != UserType.manager.toString())
             CupertinoButton(
               child: Icon(
                 CupertinoIcons.square_pencil,
