@@ -120,7 +120,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                                   shadowColor: Colors.transparent,
                                   color: Theme.of(context).appColors.gfWhiteColor,
                                   child: ListTile(
-                                    trailing: Bone.circle(size: 40),
+                                    trailing: Bone.square(size: 40),
                                     title: Bone.text(words: 2),
                                     subtitle: Bone.text(),
                                   ),

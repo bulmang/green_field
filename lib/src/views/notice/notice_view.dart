@@ -7,6 +7,7 @@ import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
 import 'package:green_field/src/utilities/design_system/app_icons.dart';
 import 'package:lottie/lottie.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../utilities/components/greenfield_app_bar.dart';
 import '../../utilities/components/greenfield_list.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
@@ -34,7 +35,6 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
     switch (result) {
       case Success():
         hasMore = true;
-        noticeNotifier.showToast('새로 고침 성공!', ToastGravity.TOP,AppColorsTheme.main().gfMainColor, AppColorsTheme.main().gfWhiteColor);
 
       case Failure(exception: final e):
         noticeNotifier.showToast('에러가 발생했어요! $e', ToastGravity.TOP, AppColorsTheme.main().gfWarningColor, AppColorsTheme.main().gfWhiteColor);
@@ -104,7 +104,25 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
                 itemBuilder: (context, index) {
                   if (index < noticeState.value!.length) {
                     final notice = noticeState.value![index];
-                    return GreenFieldList(
+                    return noticeState.isLoading
+                    ? Skeletonizer.zone(
+                      effect: ShimmerEffect(
+                        baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                        highlightColor:
+                        Theme.of(context).appColors.gfWhiteColor,
+                        duration: const Duration(seconds: 2),
+                      ),
+                      child: Card(
+                        shadowColor: Colors.transparent,
+                        color: Theme.of(context).appColors.gfWhiteColor,
+                        child: ListTile(
+                          trailing: Bone.square(size: 40),
+                          title: Bone.text(words: 2),
+                          subtitle: Bone.text(),
+                        ),
+                      ),
+                    )
+                    : GreenFieldList(
                       title: notice.title,
                       content: notice.body,
                       date:
@@ -150,8 +168,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
                 },
               ),
             )
-          :
-      Center(
+          : Center(
               child: Column(
                 children: [
                   Text(
