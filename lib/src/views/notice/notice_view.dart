@@ -92,7 +92,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
             )
         ],
       ),
-      body: (noticeState.value!.isNotEmpty)
+      body: (noticeState.hasValue)
           ? RefreshIndicator(
               onRefresh: refresh,
               color: Theme.of(context).appColors.gfGray400Color, // 로딩 스피너의 색상
@@ -150,18 +150,19 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
                 },
               ),
             )
-          : Center(
+          :
+      Center(
               child: Column(
                 children: [
                   Text(
-                    '${userState.value!.campus}캠퍼스의 공지사항이 없습니다.\n',
+                    '${userState.value?.campus ?? ''}캠퍼스의 공지사항이 없습니다.\n',
                     overflow: TextOverflow.ellipsis,
                     style: AppTextsTheme.main().gfTitle1.copyWith(
                           color: Theme.of(context).appColors.gfBlackColor,
                         ),
                   ),
                   Text(
-                    '${userState.value!.campus}캠퍼스 관리자님께 문의 부탁드립니다.',
+                    '${userState.value?.campus ?? ''}캠퍼스 관리자님께 문의 부탁드립니다.',
                     overflow: TextOverflow.ellipsis,
                     style: AppTextsTheme.main().gfTitle2.copyWith(
                           color: Theme.of(context).appColors.gfBlackColor,
