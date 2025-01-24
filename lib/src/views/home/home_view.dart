@@ -110,12 +110,19 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         SizedBox(height: 5),
                         noticeState.isLoading
                             ? Skeletonizer.zone(
+                                effect: ShimmerEffect(
+                                  baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                                  highlightColor:
+                                      Theme.of(context).appColors.gfWhiteColor,
+                                  duration: const Duration(seconds: 2),
+                                ),
                                 child: Card(
+                                  shadowColor: Colors.transparent,
+                                  color: Theme.of(context).appColors.gfWhiteColor,
                                   child: ListTile(
-                                    leading: Bone.circle(size: 48),
+                                    trailing: Bone.circle(size: 40),
                                     title: Bone.text(words: 2),
                                     subtitle: Bone.text(),
-                                    trailing: Bone.icon(),
                                   ),
                                 ),
                               )
