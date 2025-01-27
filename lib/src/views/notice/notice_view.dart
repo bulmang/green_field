@@ -80,7 +80,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
         backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
         actions: [
-          if (userState.value?.userType != UserType.master.toString() || userState.value?.userType != UserType.manager.toString())
+          if (userState.value?.userType == UserType.master.toString() || userState.value?.userType == UserType.manager.toString())
             CupertinoButton(
               child: Icon(
                 CupertinoIcons.square_pencil,
