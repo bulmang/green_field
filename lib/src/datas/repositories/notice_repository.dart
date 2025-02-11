@@ -72,6 +72,22 @@ class NoticeRepository {
     }
   }
 
+  /// 특정 Notice 가져오기
+  Future<Result<Notice, Exception>> getNotcie(String noticeId) async {
+    try {
+      final result = await firebaseStoreService.getNotice(noticeId);
+
+      switch(result) {
+        case Success(value: final noticeId):
+          return Success(noticeId);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } on Exception catch (error) {
+      return Failure(error); // 예외 발생 시 실패 반환
+    }
+  }
+
   /// Notice 문서 삭제
   Future<Result<void, Exception>> deleteNoticeDB(String noticeId) async {
     try {

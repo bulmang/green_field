@@ -135,4 +135,28 @@ class FirebaseStoreService {
       return Failure(Exception('공지사항 데이터 가져오기 실패: $e'));
     }
   }
+
+  /// 특정 Notice 가져오기
+  Future<Result<Notice, Exception>> getNotice(String noticeId) async {
+    try {
+      // Firestore에서 특정 문서 가져오기
+      final documentSnapshot = await _store.collection('Notice').doc(noticeId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          // Firestore 데이터를 Notice 객체로 변환
+          final notice = Notice.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(notice);
+        }
+      }
+      return Failure(Exception('데이터가 존재 하지 않습니다.'));
+    } catch (e) {
+      return Failure(Exception('공지사항 데이터 가져오기 실패: $e'));
+    }
+  }
+
 }

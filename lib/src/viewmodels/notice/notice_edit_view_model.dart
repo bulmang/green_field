@@ -33,6 +33,8 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
     final Uuid uuid = Uuid();
     String noticeId = pastNotice?.id ?? uuid.v4();
 
+    final DateTime date = pastNotice?.createdAt ?? DateTime.now();
+
     final notice = Notice(
       id: noticeId,
       creatorId: user!.id ?? '',
@@ -40,7 +42,7 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
       title: title,
       body: body,
       like: [],
-      createdAt: DateTime.now(),
+      createdAt: date,
     );
 
     final result = await ref

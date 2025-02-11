@@ -87,11 +87,11 @@ class _NoticeEditViewState extends ConsumerState<NoticeEditView> {
                   case Success(value: final value):
                     final getNotice = await ref
                         .read(noticeViewModelProvider.notifier)
-                        .getNoticeList();
+                        .getNotice(widget.notice?.id ?? '');
 
                     switch (getNotice) {
                       case Success(value: final value):
-                        context.go('/home/notice/detail/${value.first.id}');
+                        context.go('/home/notice/detail/${value.id}');
                       case Failure(exception: final e):
                         ref
                             .read(noticeEditViewModelProvider.notifier)
