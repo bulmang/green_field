@@ -47,7 +47,7 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
