@@ -80,7 +80,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
         backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
         actions: [
-          if (userState.value?.userType == UserType.master.toString() || userState.value?.userType == UserType.manager.toString())
+          if (noticeNotifier.checkAuth(userState.value?.userType ?? ''))
             CupertinoButton(
               child: Icon(
                 CupertinoIcons.square_pencil,
@@ -157,7 +157,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
                               date: '9999-01-17',
                               campus: '개발자 생일',
                               imageUrl:
-                                  'https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/sesacGif.gif?alt=media&token=66759c09-b94e-422d-8827-19d4cf608427',
+                                  'https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/sesacGif.gif?alt=media',
                               likes: 999,
                               commentCount: 0,
                               onTap: () {

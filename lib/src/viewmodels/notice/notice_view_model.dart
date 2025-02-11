@@ -12,6 +12,7 @@ import '../../datas/services/firebase_auth_service.dart';
 import '../../model/notice.dart';
 import '../../model/user.dart';
 import '../../utilities/design_system/app_colors.dart';
+import '../../utilities/enums/user_type.dart';
 
 part 'notice_view_model.g.dart';
 
@@ -51,7 +52,7 @@ class NoticeViewModel extends _$NoticeViewModel {
     }
   }
 
-  /// Notice 리스트 가져오기
+  /// Notice 다음 리스트 가져오기
   Future<Result<List<Notice>, Exception>> getNextNoticeList() async {
 
     final result = await ref
@@ -60,7 +61,6 @@ class NoticeViewModel extends _$NoticeViewModel {
 
     switch (result) {
       case Success(value: final noticeList):
-        print('noticeList: ${noticeList.toString()}');
 
         return Success(noticeList);
       case Failure(exception: final exception):
@@ -68,6 +68,41 @@ class NoticeViewModel extends _$NoticeViewModel {
     }
   }
 
+  /// 특정 Notice 가져오기
+  Future<Result<Notice, Exception>> getNotice(String noticeId) async {
+
+    final result = await ref
+        .read(noticeRepositoryProvider)
+        .getNotcie(noticeId);
+
+    switch (result) {
+      case Success(value: final notice):
+        _updateNoticeInList(noticeId, notice);
+        return Success(notice);
+      case Failure(exception: final exception):
+        return Failure(Exception(exception));
+    }
+  }
+
+  /// 특정 Notice 업데이트
+  void _updateNoticeInList(String noticeId, Notice updatedNotice) {
+    if (state.value!.isNotEmpty) {
+      final index = state.value!.indexWhere((notice) => notice.id == noticeId);
+
+      if (index != -1) {
+        // 일치하는 항목이 있으면 덮어쓰기
+        state.value![index] = updatedNotice;
+
+      } else {
+        print('Notice with ID $noticeId not found.');
+      }
+    }
+  }
+
+  /// 권한 확인
+  bool checkAuth(String? userType) {
+    return userType == getUserTypeName(UserType.manager) || userType == getUserTypeName(UserType.master);
+  }
 
   Notice getNoticeById(String id) {
     return state.value!.firstWhere((notice) => notice.id == id, orElse: () {

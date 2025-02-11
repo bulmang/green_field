@@ -31,6 +31,7 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
   Widget build(BuildContext context) {
     final notice = widget.notice;
     final userState = ref.watch(onboardingViewModelProvider);
+    final noticeNotifier = ref.watch(noticeViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfWhiteColor,
@@ -38,7 +39,7 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
         backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
         title: "공지사항",
         actions: [
-          if (userState.value?.userType == UserType.master.toString() || userState.value?.userType == UserType.manager.toString())
+          if (noticeNotifier.checkAuth(userState.value?.userType ?? ''))
             CupertinoButton(
                 child: ImageIcon(
                   AssetImage(AppIcons.menu),
