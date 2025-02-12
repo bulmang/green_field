@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:green_field/src/utilities/design_system/app_colors.dart';
 import 'package:lottie/lottie.dart';
 import '../design_system/app_icons.dart';
 
@@ -28,15 +29,10 @@ class GreenFieldCachedNetworkImage extends StatelessWidget {
           width: width,
           height: height,
           child: Center(
-            child: Container(
-              width: width,
-              height: height,
-              color: Colors.transparent,
-              child: Lottie.asset(
-                'assets/lotties/image_loading.json',
-                repeat: true,
-                animate: true,
-              ),
+            child: Lottie.asset(
+              'assets/lotties/box_loading.json',
+              repeat: true,
+              animate: true,
             ),
           ),
         ),
