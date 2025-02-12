@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../cores/error_handler/result.dart';
-import '../datas/services/firebase_auth_service.dart';
-import '../model/user.dart' as myUser;
+import '../../cores/error_handler/result.dart';
+import '../../datas/services/firebase_auth_service.dart';
+import '../../model/user.dart' as myUser;
 
 
 part 'onboarding_view_model.g.dart'; // 생성된 코드를 위한 파일

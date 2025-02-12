@@ -4,6 +4,8 @@ import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
+import 'greenfield_cached_network_image.dart';
+
 class GreenFieldList extends StatelessWidget {
   final String title;
   final String content;
@@ -13,18 +15,19 @@ class GreenFieldList extends StatelessWidget {
   final int likes;
   final int commentCount;
   final VoidCallback onTap;
+  final bool? last;
 
-  const GreenFieldList({
-    super.key,
-    required this.title,
-    required this.content,
-    required this.date,
-    required this.campus,
-    required this.imageUrl,
-    required this.likes,
-    required this.commentCount,
-    required this.onTap,
-  });
+  const GreenFieldList(
+      {super.key,
+      required this.title,
+      required this.content,
+      required this.date,
+      required this.campus,
+      required this.imageUrl,
+      required this.likes,
+      required this.commentCount,
+      required this.onTap,
+      this.last});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,8 @@ class GreenFieldList extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(right: imageUrl.isNotEmpty ? 14.0 : 30.0),
+                      padding: EdgeInsets.only(
+                          right: imageUrl.isNotEmpty ? 14.0 : 30.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -51,16 +55,16 @@ class GreenFieldList extends StatelessWidget {
                             title,
                             maxLines: 1,
                             style: AppTextsTheme.main().gfHeading3.copyWith(
-                              color: Theme.of(context).appColors.gfBlackColor,
-                            ),
+                                  color: Theme.of(context).appColors.gfBlackColor,
+                                ),
                           ),
                           Text(
                             content,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                              color: Theme.of(context).appColors.gfBlackColor,
-                            ),
+                                  color: Theme.of(context).appColors.gfBlackColor,
+                                ),
                           ),
                           SizedBox(height: 6),
                           Row(
@@ -76,8 +80,8 @@ class GreenFieldList extends StatelessWidget {
                               Text(
                                 campus,
                                 style: AppTextsTheme.main().gfCaption5.copyWith(
-                                  color: Theme.of(context).appColors.gfMainColor,
-                                ),
+                                      color: Theme.of(context).appColors.gfMainColor,
+                                    ),
                               ),
                               SizedBox(width: 5),
                               Row(
@@ -92,8 +96,8 @@ class GreenFieldList extends StatelessWidget {
                                   Text(
                                     likes.toString(),
                                     style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: Theme.of(context).appColors.gfMainColor,
-                                    ),
+                                          color: Theme.of(context).appColors.gfMainColor,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -123,22 +127,20 @@ class GreenFieldList extends StatelessWidget {
                   ),
                   if (imageUrl.isNotEmpty)
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        imageUrl,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      ),
+                        borderRadius: BorderRadius.circular(8),
+                        child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 60, height: 60)
                     )
                 ],
               ),
             ),
             SizedBox(height: 6),
-            Divider(
-              height: 2,
-              color: Theme.of(context).appColors.gfGray300Color,
-            )
+            if (last == null || last == false)
+              Divider(
+                height: 2,
+                color: Theme.of(context).appColors.gfGray300Color,
+              )
+            else
+              SizedBox.shrink(),
           ],
         ),
       ),

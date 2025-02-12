@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/components/greenfield_loading_widget.dart';
 import 'package:lottie/lottie.dart';
-import 'package:green_field/src/viewmodels/login_view_model.dart';
+import 'package:green_field/src/viewmodels/login/login_view_model.dart';
 import '../../cores/error_handler/result.dart';
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/design_system/app_icons.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/design_system/app_texts.dart';
-import '../../viewmodels/onboarding_view_model.dart';
+import '../../viewmodels/onboarding/onboarding_view_model.dart';
 
 class OnboardingTextField extends ConsumerStatefulWidget {
   @override

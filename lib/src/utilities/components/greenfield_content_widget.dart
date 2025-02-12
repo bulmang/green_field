@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/model/recruit.dart';
+import 'package:lottie/lottie.dart';
 import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import '../enums/feature_type.dart';
+import 'greenfield_cached_network_image.dart';
+import 'greenfield_images_detail.dart';
 
 class GreenFieldContentWidget extends StatelessWidget {
   final FeatureType? featureType;
@@ -52,13 +56,24 @@ class GreenFieldContentWidget extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.width,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    imageAssets[0]!,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => GreenFieldImagesDetail(
+                          tags: imageAssets,
+                          initialIndex: 0,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: imageAssets.first!,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: GreenFieldCachedNetworkImage(imageUrl: imageAssets.first!, width:  double.infinity, height: MediaQuery.of(context).size.width),
+                    ),
                   ),
                 ),
               )
@@ -66,18 +81,29 @@ class GreenFieldContentWidget extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: imageAssets.map((imageUrl) {
+                  children: imageAssets.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String? imageUrl = entry.value;
                     if (imageUrl != null) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            width: 120, // 정사각형 너비
-                            height: 120, // 정사각형 높이
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => GreenFieldImagesDetail(
+                                  tags: imageAssets,
+                                  initialIndex: index,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: imageUrl,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120),
                             ),
                           ),
                         ),

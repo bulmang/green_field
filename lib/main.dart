@@ -41,6 +41,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
         routerConfig: ref.watch(goRouterProvider),
+        title: '풀밭',
+        debugShowCheckedModeBanner: false,
         theme: Theme.of(context).copyWith(
         extensions: [
           AppColorsTheme.main(),

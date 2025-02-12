@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
-import '../datas/repositories/login_repository.dart';
-import '../model/token.dart';
+import '../../datas/repositories/login_repository.dart';
+import '../../model/token.dart';
 
 part 'login_view_model.g.dart';
 
