@@ -73,7 +73,7 @@ class NoticeRepository {
   }
 
   /// 특정 Notice 가져오기
-  Future<Result<Notice, Exception>> getNotcie(String noticeId) async {
+  Future<Result<Notice, Exception>> getNotice(String noticeId) async {
     try {
       final result = await firebaseStoreService.getNotice(noticeId);
 

@@ -80,7 +80,7 @@ class FirebaseStoreService {
       var query = _store
           .collection('Notice')
           .orderBy('created_at', descending: true)
-          .limit(10);
+          .limit(15);
 
 
       // 첫 번째 페이지 또는 페이징 데이터를 가져오기

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:green_field/src/datas/repositories/notice_repository.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,6 +55,7 @@ class NoticeViewModel extends _$NoticeViewModel {
 
   /// Notice 다음 리스트 가져오기
   Future<Result<List<Notice>, Exception>> getNextNoticeList() async {
+    await Future.delayed(Duration(seconds: 1));
 
     final result = await ref
         .read(noticeRepositoryProvider)
@@ -61,19 +63,19 @@ class NoticeViewModel extends _$NoticeViewModel {
 
     switch (result) {
       case Success(value: final noticeList):
-
         return Success(noticeList);
       case Failure(exception: final exception):
         return Failure(Exception(exception));
     }
   }
 
+
   /// 특정 Notice 가져오기
   Future<Result<Notice, Exception>> getNotice(String noticeId) async {
 
     final result = await ref
         .read(noticeRepositoryProvider)
-        .getNotcie(noticeId);
+        .getNotice(noticeId);
 
     switch (result) {
       case Success(value: final notice):
@@ -98,6 +100,18 @@ class NoticeViewModel extends _$NoticeViewModel {
       }
     }
   }
+
+  /// 특정 Notice 제거
+  void deleteNoticeInList(String noticeId) {
+    if (state.value!.isNotEmpty) {
+      final currentList = state.value ?? [];
+
+      final updatedList = currentList.where((notice) => notice.id != noticeId).toList();
+
+      state = AsyncData(updatedList);
+    }
+  }
+
 
   /// 권한 확인
   bool checkAuth(String? userType) {

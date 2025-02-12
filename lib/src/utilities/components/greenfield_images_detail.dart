@@ -28,10 +28,13 @@ class GreenFieldImagesDetail extends StatelessWidget {
         .toList();
 
     return Scaffold(
+      appBar: GreenFieldAppBar(backgGroundColor: Theme.of(context).appColors.gfWhiteColor, title: ''),
       backgroundColor: Theme.of(context).appColors.gfWhiteColor,
-      body: DetailScreenPageView(
-        widgets: heroWidgets,
-        initialIndex: initialIndex,
+      body: SafeArea(
+        child: DetailScreenPageView(
+          widgets: heroWidgets,
+          initialIndex: initialIndex,
+        ),
       ),
     );
   }

@@ -72,7 +72,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     tag: imageAssets.first!,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: GreenFieldCachedNetworkImage(imageUrl: imageAssets.first!, width: 120, height: 120),
+                      child: GreenFieldCachedNetworkImage(imageUrl: imageAssets.first!, width:  double.infinity, height: MediaQuery.of(context).size.width),
                     ),
                   ),
                 ),

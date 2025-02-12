@@ -62,7 +62,6 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
   /// Notice 객체 삭제
   Future<Result<void, Exception>> deleteNoticeModel(String noticeId) async {
     try {
-      state = AsyncLoading();
 
       final result = await ref
           .read(noticeRepositoryProvider)
@@ -70,10 +69,8 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
 
       switch (result) {
         case Success():
-          state = AsyncData(null);
           return Success(null);
         case Failure(exception: final exception):
-          state = AsyncError(exception, StackTrace.current);
           return Failure(Exception(exception));
       }
     } catch (error) {
@@ -119,7 +116,7 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
       msg: alarmMessage, // 메시지 내용
       toastLength: Toast.LENGTH_SHORT, // 메시지 시간 - 안드로이드
       gravity: ToastGravity.TOP, // 메시지 위치
-      timeInSecForIosWeb: 1, // 메시지 시간 - iOS 및 웹
+      timeInSecForIosWeb: 2, // 메시지 시간 - iOS 및 웹
       backgroundColor: AppColorsTheme.main().gfWarningColor, // 배경
       textColor: AppColorsTheme.main().gfWhiteColor, // 글자
       fontSize: 16.0,

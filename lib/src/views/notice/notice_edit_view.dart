@@ -77,25 +77,43 @@ class _NoticeEditViewState extends ConsumerState<NoticeEditView> {
           body: GreenFieldEditSection(
             instanceModel: widget.notice,
             type: FeatureType.post,
-            onSubmit: (String title, String body, List<ImageType> images) async {
+            onSubmit:
+                (String title, String body, List<ImageType> images) async {
               if (title != '' && body != '') {
                 final result = await ref
                     .read(noticeEditViewModelProvider.notifier)
-                    .createNoticeModel(userState.value, title, body, images, widget.notice);
+                    .createNoticeModel(
+                        userState.value, title, body, images, widget.notice);
 
                 switch (result) {
                   case Success(value: final value):
                     final getNotice = await ref
                         .read(noticeViewModelProvider.notifier)
-                        .getNotice(widget.notice?.id ?? '');
+                        .getNotice(widget.notice?.id ?? value.id);
 
                     switch (getNotice) {
                       case Success(value: final value):
-                        context.go('/home/notice/detail/${value.id}');
+                        if(widget.notice == null) {
+                          final getNoticeList = await ref
+                              .read(noticeViewModelProvider.notifier)
+                              .getNoticeList();
+
+                          switch (getNoticeList) {
+                            case Success():
+                              context.go('/home/notice/detail/${value.id}');
+                            case Failure(exception: final e):
+                              ref
+                                  .read(noticeEditViewModelProvider.notifier)
+                                  .flutterToast('공지사항 글을 가져오기 실패하였습니다.');
+                          }
+                        } else {
+                          context.go('/home/notice/detail/${value.id}');
+                        }
+
                       case Failure(exception: final e):
                         ref
                             .read(noticeEditViewModelProvider.notifier)
-                            .flutterToast('공지사항 글을 가져오기 실패하였습니다.${e.toString()}');
+                            .flutterToast('공지사항 글을 가져오기 실패하였습니다.');
                     }
 
                   case Failure(exception: final e):

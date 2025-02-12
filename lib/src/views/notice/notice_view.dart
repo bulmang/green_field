@@ -28,6 +28,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
   final controller = ScrollController();
   final noticeVM = NoticeViewModel();
   bool hasMore = true;
+  bool loading = false;
 
   Future refresh() async {
     final noticeNotifier = ref.watch(noticeViewModelProvider.notifier);
@@ -38,7 +39,11 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
         hasMore = true;
 
       case Failure(exception: final e):
-        noticeNotifier.showToast('에러가 발생했어요! $e', ToastGravity.TOP, AppColorsTheme.main().gfWarningColor, AppColorsTheme.main().gfWhiteColor);
+        noticeNotifier.showToast(
+            '에러가 발생했어요! $e',
+            ToastGravity.TOP,
+            AppColorsTheme.main().gfWarningColor,
+            AppColorsTheme.main().gfWhiteColor);
     }
   }
 
@@ -48,6 +53,9 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
+        setState(() {
+          loading = true;
+        });
         fetch();
       }
     });
@@ -59,11 +67,17 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
     setState(() {
       switch (result) {
         case Success(value: final value):
+          loading = false;
           if (value.isEmpty) {
             hasMore = false;
           }
         case Failure(exception: final e):
-          noticeNotifier.showToast('에러가 발생했어요! $e', ToastGravity.BOTTOM, AppColorsTheme.main().gfWarningColor, AppColorsTheme.main().gfWhiteColor);
+          loading = false;
+          noticeNotifier.showToast(
+              '에러가 발생했어요!',
+              ToastGravity.BOTTOM,
+              AppColorsTheme.main().gfWarningColor,
+              AppColorsTheme.main().gfWhiteColor);
       }
     });
   }
@@ -106,51 +120,64 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
                   if (index < noticeState.value!.length) {
                     final notice = noticeState.value![index];
                     return noticeState.isLoading
-                    ? Skeletonizer.zone(
-                      effect: ShimmerEffect(
-                        baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
-                        highlightColor:
-                        Theme.of(context).appColors.gfWhiteColor,
-                        duration: const Duration(seconds: 2),
-                      ),
-                      child: Card(
-                        shadowColor: Colors.transparent,
-                        color: Theme.of(context).appColors.gfWhiteColor,
-                        child: ListTile(
-                          trailing: Bone.square(size: 40),
-                          title: Bone.text(words: 2),
-                          subtitle: Bone.text(),
-                        ),
-                      ),
-                    )
-                    : GreenFieldList(
-                      title: notice.title,
-                      content: notice.body,
-                      date:
-                          '${notice.createdAt.year}-${notice.createdAt.month}-${notice.createdAt.day}',
-                      campus: notice.userCampus,
-                      imageUrl:
-                          notice.images != null && notice.images!.isNotEmpty
-                              ? notice.images![0]
-                              : "",
-                      likes: notice.like.length,
-                      commentCount: 0,
-                      onTap: () {
-                        context.go('/home/notice/detail/${notice.id}');
-                      },
-                    );
+                        ? Skeletonizer.zone(
+                            effect: ShimmerEffect(
+                              baseColor: Theme.of(context)
+                                  .appColors
+                                  .gfMainBackGroundColor,
+                              highlightColor:
+                                  Theme.of(context).appColors.gfWhiteColor,
+                              duration: const Duration(seconds: 2),
+                            ),
+                            child: Card(
+                              shadowColor: Colors.transparent,
+                              color: Theme.of(context).appColors.gfWhiteColor,
+                              child: ListTile(
+                                trailing: Bone.square(size: 40),
+                                title: Bone.text(words: 2),
+                                subtitle: Bone.text(),
+                              ),
+                            ),
+                          )
+                        : GreenFieldList(
+                            title: notice.title,
+                            content: notice.body,
+                            date:
+                                '${notice.createdAt.year}-${notice.createdAt.month}-${notice.createdAt.day}',
+                            campus: notice.userCampus,
+                            imageUrl: notice.images != null &&
+                                    notice.images!.isNotEmpty
+                                ? notice.images![0]
+                                : "",
+                            likes: notice.like.length,
+                            commentCount: 0,
+                            onTap: () {
+                              context.go('/home/notice/detail/${notice.id}');
+                            },
+                          );
                   } else {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child:
-                      hasMore
-                          ? Center(
-                          child: Lottie.asset(
-                            'assets/lotties/loading_list.json',
-                            repeat: true,
-                            animate: true,
-                          ),
-                      )
+                      child: hasMore
+                          ? loading
+                              ? Center(
+                                  child: Transform.scale(
+                                    scale: 5.0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Lottie.asset(
+                                        height: 60,
+                                        'assets/lotties/loading_list.json',
+                                        repeat: true,
+                                        animate: true,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  color: Theme.of(context).appColors.gfWhiteColor,
+                                  height: 60,
+                                )
                           : GreenFieldList(
                               title: '해당 캠퍼스의 공지사항이 없습니다.',
                               content: '모든 공지사항을 보셨어요!',
@@ -160,8 +187,13 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
                                   'https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/sesacGif.gif?alt=media',
                               likes: 999,
                               commentCount: 0,
+                              last: true,
                               onTap: () {
-                                noticeNotifier.showToast('더 이상 공지사항은 없어요!', ToastGravity.BOTTOM, AppColorsTheme.main().gfWarningColor, AppColorsTheme.main().gfWhiteColor);
+                                noticeNotifier.showToast(
+                                    '더 이상 공지사항은 없어요!',
+                                    ToastGravity.BOTTOM,
+                                    AppColorsTheme.main().gfWarningColor,
+                                    AppColorsTheme.main().gfWhiteColor);
                               },
                             ),
                     );

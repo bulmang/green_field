@@ -120,7 +120,7 @@ void _showCupertinoActionSheet(
 
               switch (result) {
                 case Success():
-                  noticeState.getNoticeList();
+                  noticeState.deleteNoticeInList(notice.id);
                   Navigator.pop(context);
                   context.go('/home/notice');
                 case Failure(exception: final e):
