@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:green_field/src/model/user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,23 +14,27 @@ class FirebaseStorageService {
 
   /// 이미지 리스트를 Firebase Storage에 업로드
   Future<Result<List<String>?, Exception>> uploadImages(User user, List<XFile>? images) async {
-
     print('이미지 업로드 서비스 실행');
     try {
       List<String>? downloadURLS = [];
       for (var image in images!) {
         Uint8List bytes = await image.readAsBytes();
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-        Reference storageRef = _storage.ref().child("images/notices/${user.campus}/$fileName");
-        UploadTask uploadTask = storageRef.putData(bytes, SettableMetadata(contentType: 'image/jpeg'));
+        List<int>? compressedBytes = await FlutterImageCompress.compressWithList(
+          bytes,
+          quality: 80,
+        );
 
-        TaskSnapshot snapshot = await uploadTask;
+        if (compressedBytes != null) {
+          String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+          Reference storageRef = _storage.ref().child("images/notices/${user.campus}/$fileName");
+          UploadTask uploadTask = storageRef.putData(Uint8List.fromList(compressedBytes), SettableMetadata(contentType: 'image/jpeg'));
 
-        String downloadURL = await snapshot.ref.getDownloadURL();
-        downloadURLS.add(downloadURL);
-        print("dowloadURL: $downloadURL");
+          TaskSnapshot snapshot = await uploadTask;
+
+          String downloadURL = await snapshot.ref.getDownloadURL();
+          downloadURLS.add(downloadURL);
+        }
       }
-
 
       return Success(downloadURLS); // 업로드된 이미지 URL 리스트 반환
     } catch (e) {
