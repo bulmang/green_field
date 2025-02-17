@@ -55,7 +55,6 @@ class NoticeViewModel extends _$NoticeViewModel {
 
   /// Notice 다음 리스트 가져오기
   Future<Result<List<Notice>, Exception>> getNextNoticeList() async {
-    await Future.delayed(Duration(seconds: 1));
 
     final result = await ref
         .read(noticeRepositoryProvider)

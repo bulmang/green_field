@@ -50,9 +50,8 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
   @override
   void initState() {
     super.initState();
-
     controller.addListener(() {
-      if (controller.position.maxScrollExtent == controller.offset) {
+      if ((controller.position.maxScrollExtent * 0.8 <= controller.offset) && !loading) {
         setState(() {
           loading = true;
         });
@@ -67,10 +66,11 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
     setState(() {
       switch (result) {
         case Success(value: final value):
-          loading = false;
           if (value.isEmpty) {
             hasMore = false;
           }
+          loading = false;
+
         case Failure(exception: final e):
           loading = false;
           noticeNotifier.showToast(
