@@ -4,6 +4,8 @@ import 'package:green_field/src/model/user.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import '../../model/notice.dart';
 
@@ -19,13 +21,19 @@ class FirebaseStorageService {
       List<String>? downloadURLS = [];
       for (var image in images!) {
         Uint8List bytes = await image.readAsBytes();
+        // Decode the image to get its dimensions
+        final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+        final ui.FrameInfo frameInfo = await codec.getNextFrame();
+        final int width = frameInfo.image.width;
+        final int height = frameInfo.image.height;
+
         List<int>? compressedBytes = await FlutterImageCompress.compressWithList(
           bytes,
           quality: 80,
         );
 
         if (compressedBytes != null) {
-          String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+          String fileName = '${DateTime.now().millisecondsSinceEpoch}_width=${width}_height=${height}.jpg';
           Reference storageRef = _storage.ref().child("images/notices/${user.campus}/$fileName");
           UploadTask uploadTask = storageRef.putData(Uint8List.fromList(compressedBytes), SettableMetadata(contentType: 'image/jpeg'));
 

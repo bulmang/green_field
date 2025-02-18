@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import '../enums/feature_type.dart';
+import '../extensions/image_dimension_parser.dart';
 import 'greenfield_cached_network_image.dart';
 import 'greenfield_images_detail.dart';
 
@@ -72,7 +73,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     tag: imageAssets.first!,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: GreenFieldCachedNetworkImage(imageUrl: imageAssets.first!, width:  double.infinity, height: MediaQuery.of(context).size.width),
+                      child: GreenFieldCachedNetworkImage(imageUrl: imageAssets.first!, width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.width, scaleEffect: ImageDimensionParser().parseDimensions(imageAssets.first)),
                     ),
                   ),
                 ),
@@ -103,7 +104,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                             tag: imageUrl,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120),
+                              child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120, scaleEffect: ImageDimensionParser().parseDimensions(imageUrl)),
                             ),
                           ),
                         ),

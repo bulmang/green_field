@@ -114,26 +114,27 @@ class _DetailScreenPageView extends State<DetailScreenPageView>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
+    return Column(
       children: [
-        PageView.builder(
-          controller: _pageViewController,
-          onPageChanged: _handlePageViewChanged,
-          itemCount: widget.widgets.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => context.pop(),
-              onDoubleTapDown: (d) => _doubleTapDetails = d,
-              onDoubleTap: _doubleTapZoom,
-              child: InteractiveViewer(
-                transformationController: _transformationController,
-                minScale: 1.0,
-                maxScale: 4.0,
-                child: widget.widgets[index],
-              ),
-            );
-          },
+        Expanded(
+          child: PageView.builder(
+            controller: _pageViewController,
+            onPageChanged: _handlePageViewChanged,
+            itemCount: widget.widgets.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () => context.pop(),
+                onDoubleTapDown: (d) => _doubleTapDetails = d,
+                onDoubleTap: _doubleTapZoom,
+                child: InteractiveViewer(
+                  transformationController: _transformationController,
+                  minScale: 1.0,
+                  maxScale: 4.0,
+                  child: widget.widgets[index],
+                ),
+              );
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 40),
