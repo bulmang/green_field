@@ -48,6 +48,7 @@ class _NoticeEditViewState extends ConsumerState<NoticeEditView> {
             actions: [
               CupertinoButton(
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   isCompleteActive.value = !isCompleteActive.value;
                 },
                 child: Container(

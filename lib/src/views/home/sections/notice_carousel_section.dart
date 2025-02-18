@@ -9,6 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../utilities/components/greenfield_cached_network_image.dart';
 import '../../../utilities/design_system/app_icons.dart';
 import '../../../utilities/design_system/app_texts.dart';
+import '../../../utilities/extensions/image_dimension_parser.dart';
 import '../../../viewmodels/notice/notice_view_model.dart';
 
 class NoticeCarouselSection extends ConsumerStatefulWidget {
@@ -79,7 +80,7 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child:
-                                  GreenFieldCachedNetworkImage(imageUrl: notice.images!.first, width: 60, height: 60)
+                                  GreenFieldCachedNetworkImage(imageUrl: notice.images!.first, width: 60, height: 60, scaleEffect: ImageDimensionParser().parseDimensions(notice.images!.first))
                                 ),
                               )
                           ],

@@ -7,6 +7,7 @@ import 'dart:io';
 import '../../cores/image_type/image_type.dart';
 import '../../viewmodels/notice/notice_edit_view_model.dart';
 import '../enums/feature_type.dart';
+import '../extensions/image_dimension_parser.dart';
 
 class GreenFieldImageWidget extends ConsumerStatefulWidget {
   final List<ImageType> tempImages;
@@ -42,7 +43,7 @@ class GreenFieldImageWidgetState extends ConsumerState<GreenFieldImageWidget> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: GreenFieldCachedNetworkImage(imageUrl: value, width: 120, height: 120)
+                      child: GreenFieldCachedNetworkImage(imageUrl: value, width: 120, height: 120, scaleEffect: ImageDimensionParser().parseDimensions(value))
                     ),
                     if(widget.type != FeatureType.campus)
                       CupertinoButton(

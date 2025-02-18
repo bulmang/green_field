@@ -128,7 +128,9 @@ class GreenFieldList extends StatelessWidget {
                   if (imageUrl.isNotEmpty)
                     ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 60, height: 60)
+                        child: Transform.scale(
+                          scale: 1.5,
+                            child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 60, height: 60))
                     )
                 ],
               ),
