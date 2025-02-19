@@ -25,6 +25,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     final loginState = ref.watch(loginViewModelProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       body: Stack(
         children: [
           SafeArea(

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/foundation.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -37,27 +38,42 @@ class FirebaseAuthService {
     try {
       // 토큰 발급하기
       kakao.OAuthToken? token;
-      if (await kakao.isKakaoTalkInstalled()) {
-        token = await kakao.UserApi.instance.loginWithKakaoTalk();
+      token = await kakao.UserApi.instance.loginWithKakaoAccount();
+
+      if (kIsWeb) {
+        if (token != null) {
+          final provider = 'oidc.kakaoweb';
+          final idToken = token.idToken!; // idToken 언래핑
+          final accessToken = token.accessToken;
+
+          // Token 객체 생성
+          final tokenObject = Token(
+            provider: provider,
+            idToken: idToken,
+            accessToken: accessToken,
+          );
+
+          return Success(tokenObject);
+        } else {
+          return Failure(Exception('signInWithKakao Error'));
+        }
       } else {
-        token = await kakao.UserApi.instance.loginWithKakaoAccount();
-      }
+        if (token != null) {
+          final provider = 'oidc.kakao';
+          final idToken = token.idToken!; // idToken 언래핑
+          final accessToken = token.accessToken;
 
-      if (token != null) {
-        final provider = 'oidc.kakao';
-        final idToken = token.idToken!; // idToken 언래핑
-        final accessToken = token.accessToken;
+          // Token 객체 생성
+          final tokenObject = Token(
+            provider: provider,
+            idToken: idToken,
+            accessToken: accessToken,
+          );
 
-        // Token 객체 생성
-        final tokenObject = Token(
-          provider: provider,
-          idToken: idToken,
-          accessToken: accessToken,
-        );
-
-        return Success(tokenObject);
-      } else {
-        return Failure(Exception('signInWithKakao Error'));
+          return Success(tokenObject);
+        } else {
+          return Failure(Exception('signInWithKakao Error'));
+        }
       }
     } on Exception catch (error) {
       return Failure(error);

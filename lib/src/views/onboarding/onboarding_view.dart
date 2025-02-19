@@ -36,6 +36,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       body: Stack(
         children: [
           SafeArea(
