@@ -17,9 +17,9 @@ class NoticeRepository {
   NoticeRepository({required this.firebaseStoreService, required this.firebaseStorageService});
 
   /// Notice 리스트 가져오기
-  Future<Result<List<Notice>, Exception>> getNoticeList() async {
+  Future<Result<List<Notice>, Exception>> getNoticeList(User user) async {
     try {
-      final result = await firebaseStoreService.getNoticeList();
+      final result = await firebaseStoreService.getNoticeList(user);
 
       switch(result) {
         case Success(value: final noticeList):
@@ -33,9 +33,9 @@ class NoticeRepository {
   }
 
   /// 다음 Notice 리스트 가져오기
-  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice) async {
+  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice, User user) async {
     try {
-      final result = await firebaseStoreService.getNextNoticeList(lastNotice);
+      final result = await firebaseStoreService.getNextNoticeList(lastNotice, user);
 
       switch(result) {
         case Success(value: final noticeList):
@@ -56,7 +56,7 @@ class NoticeRepository {
       switch(uploadImageResult) {
         case Success(value: final imageUrls):
           notice.images = imageUrls;
-          final result = await firebaseStoreService.createNoticeDB(notice);
+          final result = await firebaseStoreService.createNoticeDB(notice, user);
 
           switch (result) {
             case Success(value: final notice):
@@ -73,9 +73,9 @@ class NoticeRepository {
   }
 
   /// 특정 Notice 가져오기
-  Future<Result<Notice, Exception>> getNotice(String noticeId) async {
+  Future<Result<Notice, Exception>> getNotice(String noticeId, User user) async {
     try {
-      final result = await firebaseStoreService.getNotice(noticeId);
+      final result = await firebaseStoreService.getNotice(noticeId, user);
 
       switch(result) {
         case Success(value: final noticeId):
@@ -89,9 +89,9 @@ class NoticeRepository {
   }
 
   /// Notice 문서 삭제
-  Future<Result<void, Exception>> deleteNoticeDB(String noticeId) async {
+  Future<Result<void, Exception>> deleteNoticeDB(String noticeId, User user) async {
     try {
-      final result = await firebaseStoreService.deleteNoticeDB(noticeId);
+      final result = await firebaseStoreService.deleteNoticeDB(noticeId, user);
 
       switch (result) {
         case Success():

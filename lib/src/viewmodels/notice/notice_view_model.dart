@@ -14,6 +14,7 @@ import '../../model/notice.dart';
 import '../../model/user.dart';
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/enums/user_type.dart';
+import '../onboarding/onboarding_view_model.dart';
 
 part 'notice_view_model.g.dart';
 
@@ -38,13 +39,15 @@ class NoticeViewModel extends _$NoticeViewModel {
   /// Notice 리스트 가져오기
   Future<Result<List<Notice>, Exception>> getNoticeList() async {
     state = AsyncLoading();
+    final userState = ref.watch(onboardingViewModelProvider);
+    if (userState.value == null) return Failure(Exception('유저가 없습니다.'));
+
     final result = await ref
         .read(noticeRepositoryProvider)
-        .getNoticeList();
+        .getNoticeList(userState.value!);
 
     switch (result) {
       case Success(value: final noticeList):
-        print('noticeList: ${noticeList.toString()}');
         state = AsyncData(noticeList);
         return Success(noticeList);
       case Failure(exception: final exception):
@@ -55,10 +58,12 @@ class NoticeViewModel extends _$NoticeViewModel {
 
   /// Notice 다음 리스트 가져오기
   Future<Result<List<Notice>, Exception>> getNextNoticeList() async {
+    final userState = ref.watch(onboardingViewModelProvider);
+    if (userState.value == null) return Failure(Exception('유저가 없습니다.'));
 
     final result = await ref
         .read(noticeRepositoryProvider)
-        .getNextNoticeList(state.value);
+        .getNextNoticeList(state.value, userState.value!);
 
     switch (result) {
       case Success(value: final noticeList):
@@ -71,10 +76,12 @@ class NoticeViewModel extends _$NoticeViewModel {
 
   /// 특정 Notice 가져오기
   Future<Result<Notice, Exception>> getNotice(String noticeId) async {
+    final userState = ref.watch(onboardingViewModelProvider);
+    if (userState.value == null) return Failure(Exception('유저가 없습니다.'));
 
     final result = await ref
         .read(noticeRepositoryProvider)
-        .getNotice(noticeId);
+        .getNotice(noticeId, userState.value!);
 
     switch (result) {
       case Success(value: final notice):
