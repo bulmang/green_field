@@ -1,16 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/cores/router/router.dart';
+import 'package:green_field/constants.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
 import 'package:green_field/src/utilities/design_system/app_texts.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'firebase_options.dart';
 
 void main() async {
   // env 파일 읽기
-  await dotenv.load(fileName: 'assets/config/.env');
+  await dotenv.load(fileName: 'assets/config/env');
 
   // Flutter 프레임워크가 초기화되기 전에 Firebase 초기화
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,11 +30,20 @@ void main() async {
 
 
 
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  if(kIsWeb) {
+    usePathUrlStrategy();
+    runApp(
+      ProviderScope(
+        child: MyAppForWeb(),
+      ),
+    );
+  } else {
+    runApp(
+      ProviderScope(
+        child: MyApp(),
+      ),
+    );
+  }
 }
 
 class MyApp extends ConsumerWidget {
@@ -49,6 +61,44 @@ class MyApp extends ConsumerWidget {
           AppTextsTheme.main(),
         ]
       )
+    );
+  }
+}
+
+class MyAppForWeb extends ConsumerWidget {
+  const MyAppForWeb({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+        routerConfig: ref.watch(goRouterProvider),
+        title: '풀밭',
+        debugShowCheckedModeBanner: false,
+        theme: Theme.of(context).copyWith(
+            extensions: [
+              AppColorsTheme.main(),
+              AppTextsTheme.main(),
+            ]
+        ),
+        builder: (context, child) {
+          return LayoutBuilder(builder: (context, constraints) {
+            double width = (constraints.maxWidth > kMaxScreenWidth) ? kMaxScreenWidth : constraints.maxWidth;
+            double height = (constraints.maxHeight < kMinScreenHeight) ? kMinScreenHeight : constraints.maxHeight;
+            return Center(
+              child: SingleChildScrollView(
+                child : Column(
+                  children: [
+                    SizedBox(
+                        width: width,
+                        height: height,
+                        child: child
+                    ),
+                  ],
+                )
+              ),
+            );
+          });
+    },
     );
   }
 }
