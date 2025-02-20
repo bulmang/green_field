@@ -7,7 +7,7 @@ part of 'notice_edit_view_model.dart';
 // **************************************************************************
 
 String _$noticeEditViewModelHash() =>
-    r'058b053b3c9516d15ac77fde1a81b10accb70326';
+    r'1c25149b6f8aa2c5da2cb3c9ab6df1d06a1e0654';
 
 /// See also [NoticeEditViewModel].
 @ProviderFor(NoticeEditViewModel)

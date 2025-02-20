@@ -155,6 +155,17 @@ class FirebaseAuthService {
       return Failure(Exception('회원 탈퇴 실패: $e'));
     }
   }
+
+  /// 로그아웃 함수
+  Future<Result<void, Exception>> signOut() async {
+    try {
+      await _auth.signOut();
+      return Success(null);
+    } catch (e) {
+      return Failure(Exception('로그아웃 실패: $e'));
+    }
+  }
+
 }
 
 // Riverpod provider 정의
