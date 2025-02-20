@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
 import 'package:green_field/src/cores/error_handler/result.dart';
+import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
+import 'package:green_field/src/utilities/enums/user_type.dart';
 import '../../model/notice.dart';
 import '../../model/user.dart' as GFUser;
 
@@ -37,9 +39,12 @@ class FirebaseStoreService {
   }
 
   /// Notice Collection 생성 및 Notice 데이터 추가
-  Future<Result<Notice, Exception>> createNoticeDB(Notice notice) async {
+  Future<Result<Notice, Exception>> createNoticeDB(Notice notice, GFUser.User user) async {
     try {
-      await _store.collection('Notice').doc(notice.id).set(notice.toMap());
+      if(user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      var campusDocRef = _store.collection('Campus').doc(user.campus);
+
+      await campusDocRef.collection('Notice').doc(notice.id).set(notice.toMap());
 
       return Success(notice);
     } catch (e) {
@@ -49,9 +54,10 @@ class FirebaseStoreService {
   }
 
   /// Notice Collection에서 Notice 데이터 삭제
-  Future<Result<void, Exception>> deleteNoticeDB(String noticeId) async {
+  Future<Result<void, Exception>> deleteNoticeDB(String noticeId, GFUser.User user) async {
     try {
-      await _store.collection('Notice').doc(noticeId).delete();
+      if(user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      await _store.collection('Campus').doc(user.campus ?? '관악').collection('Notice').doc(noticeId).delete();
 
       return Success(null);
     } catch (e) {
@@ -61,10 +67,13 @@ class FirebaseStoreService {
   }
 
   /// Notice Collection의 특정 Notice 데이터 업데이트
-  Future<Result<Notice, Exception>> updateNoticeDB(Notice notice) async {
+  Future<Result<Notice, Exception>> updateNoticeDB(Notice notice, GFUser.User user) async {
     try {
+      if(user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) return Failure(Exception('인증 되지 않은 사용자입니다.'));
       // Firestore에서 해당 문서 업데이트
-      await _store.collection('Notice').doc(notice.id).update(notice.toMap());
+      await _store
+          .collection('Campus').doc(user.campus).collection('Notice')
+          .doc(notice.id).update(notice.toMap());
 
       return Success(notice);
     } catch (e) {
@@ -74,14 +83,13 @@ class FirebaseStoreService {
   }
 
   /// Notice List 가져오기
-  Future<Result<List<Notice>, Exception>> getNoticeList() async {
+  Future<Result<List<Notice>, Exception>> getNoticeList(GFUser.User user) async {
     try {
       // 기본 쿼리
       var query = _store
-          .collection('Notice')
-          .orderBy('created_at', descending: true)
+          .collection('Campus').doc(user.campus == '익명' ? '관악' : user.campus)
+          .collection('Notice').orderBy('created_at', descending: true)
           .limit(15);
-
 
       // 첫 번째 페이지 또는 페이징 데이터를 가져오기
       var querySnapshot = await query.get();
@@ -102,16 +110,15 @@ class FirebaseStoreService {
   }
 
   /// Notice List 추가로 가져오기
-  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice) async {
+  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice, GFUser.User user) async {
     try {
-
       var query = _store
-          .collection('Notice')
-          .orderBy('created_at', descending: true)
+          .collection('Campus').doc(user.campus == '익명' ? '관악' : user.campus)
+          .collection('Notice').orderBy('created_at', descending: true)
           .limit(10);
 
-      if (lastNotice != null) {
-        final lastDoc = await _store.collection('Notice')
+      if (lastNotice != [] && lastNotice != null) {
+        final lastDoc = await _store.collection('Campus').doc(user.campus == '익명' ? '관악' : user.campus).collection('Notice')
             .doc(lastNotice.last.id)
             .get();
         query = query.startAfterDocument(lastDoc);
@@ -132,15 +139,17 @@ class FirebaseStoreService {
         return Success(lastNotice ?? noticeList);
       }
     } catch (e) {
-      return Failure(Exception('공지사항 데이터 가져오기 실패: $e'));
+      return Failure(Exception('getNextNoticeList 함수 에러: $e'));
     }
   }
 
   /// 특정 Notice 가져오기
-  Future<Result<Notice, Exception>> getNotice(String noticeId) async {
+  Future<Result<Notice, Exception>> getNotice(String noticeId, GFUser.User user) async {
     try {
       // Firestore에서 특정 문서 가져오기
-      final documentSnapshot = await _store.collection('Notice').doc(noticeId).get();
+      final documentSnapshot = await _store
+          .collection('Campus').doc(user.campus == '익명' ? '관악' : user.campus)
+          .collection('Notice').doc(noticeId).get();
 
       if (documentSnapshot.exists) {
         final data = documentSnapshot.data();

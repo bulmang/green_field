@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/router/go_router_refresh_stream.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
+import 'package:green_field/src/utilities/extensions/image_dimension_parser.dart';
 import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:green_field/src/viewmodels/post_view_model.dart';
 import 'package:green_field/src/views/campus/campus_view.dart';
@@ -21,8 +23,10 @@ import 'package:green_field/src/views/recruitment/recruitment_detail_view.dart';
 import 'package:green_field/src/views/recruitment/recruitment_view.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../utilities/components/greenfield_images_detail.dart';
 import '../../viewmodels/notice/notice_view_model.dart';
 import '../../viewmodels/recruit_view_model.dart';
+import '../../views/setting/setting_view.dart';
 
 part 'router.g.dart';
 
@@ -94,6 +98,26 @@ GoRouter goRouter(Ref ref) {
                 ),
                 routes: <RouteBase>[
                   GoRoute(
+                    path: 'setting',
+                    pageBuilder: (context, state) => CustomTransitionPage(
+                      key: state.pageKey,
+                      child: SettingView(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(-1.0, 0.0); // 왼쪽에서 시작
+                        const end = Offset.zero; // 원래 위치로 이동
+                        const curve = Curves.easeInOut; // 부드러운 애니메이션
+
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  ),
+                  GoRoute(
                     path: 'notice',
                     builder: (context, state) => NoticeView(),
                     routes: <RouteBase>[
@@ -101,7 +125,24 @@ GoRouter goRouter(Ref ref) {
                         name: 'notice_detail',
                         path: 'detail/:id',
                         builder: (context, state) => NoticeDetailView(
-                            notice: noticeState.getNoticeById(state.pathParameters['id'] ?? '')),
+                            notice: noticeState.getNoticeById(state.pathParameters['id'] ?? ''),
+                        ),
+                        routes: <RouteBase>[
+                          GoRoute(
+                            name: 'notice_detail_image',
+                            path: 'image',
+                            builder: (context, state) {
+                              final extra = state.extra as Map<String, dynamic>?;
+                              final List<String?> imageAssets = extra?['imageAssets'] ?? [];
+                              final int initialIndex = extra?['initialIndex'] ?? 0;
+
+                              return GreenFieldImagesDetail(
+                                tags: imageAssets,
+                                initialIndex: initialIndex,
+                              );
+                            },
+                          ),
+                        ],
                       ),
                       GoRoute(
                         name: "notice_edit",

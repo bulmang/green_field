@@ -80,6 +80,12 @@ class _NoticeEditViewState extends ConsumerState<NoticeEditView> {
             type: FeatureType.post,
             onSubmit:
                 (String title, String body, List<ImageType> images) async {
+              if(images.length > 8) {
+                ref
+                    .read(noticeEditViewModelProvider.notifier)
+                    .flutterToast('사진은 최대 8장까지 업로드할 수 있어요.');
+                return;
+              }
               if (title != '' && body != '') {
                 final result = await ref
                     .read(noticeEditViewModelProvider.notifier)

@@ -13,7 +13,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// noNavigationBarPaths 배열에 포함된 문자열이 있으면 bottomNavigationBar를 표시하지 않습니다.
-    List<String> noNavigationBarPaths = ['detail', 'edit'];
+    List<String> noNavigationBarPaths = ['detail', 'edit', 'setting'];
 
     bool _showNavigationBar = !noNavigationBarPaths.any((path) => navigationShell.shellRouteContext.routerState.fullPath!.contains(path));
 

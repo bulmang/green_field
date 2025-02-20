@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:green_field/src/cores/image_type/image_type.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -62,10 +64,12 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
   /// Notice 객체 삭제
   Future<Result<void, Exception>> deleteNoticeModel(String noticeId) async {
     try {
+      final userState = ref.watch(onboardingViewModelProvider);
+      if(userState.value == null) return Failure(Exception('유저가 없습니다.'));
 
       final result = await ref
           .read(noticeRepositoryProvider)
-          .deleteNoticeDB(noticeId);
+          .deleteNoticeDB(noticeId, userState.value!);
 
       switch (result) {
         case Success():
@@ -122,4 +126,32 @@ class NoticeEditViewModel extends _$NoticeEditViewModel {
       fontSize: 16.0,
     );
   }
+
+  /// TODO: 테스트용 코드
+/// Future<void> createMultipleNotices(User user) async {
+//     List<Future<Result<Notice, Exception>>> futures = List.generate(40, (index) {
+//       return createNoticeModel(
+//         user,
+//         '공지 제목 $index',
+//         '공지 내용 $index 입니다.',
+//         [],
+//         null, // 이전 공지가 없으므로 null
+//       );
+//     });
+//
+//     // 모든 Notice 생성 병렬 실행
+//     var results = await Future.wait(futures);
+//
+//     // 결과 출력 (성공/실패 확인)
+//     for (var result in results) {
+//       switch (result) {
+//         case Success(value: final notice):
+//           print('✅ ${notice.id} 추가 완료');
+//           break;
+//         case Failure(exception: final error):
+//           print('❌ 실패: $error');
+//           break;
+//       }
+//     }
+//   }
 }

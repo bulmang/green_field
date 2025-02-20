@@ -43,35 +43,39 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   Skeletonizer(
                     enabled: onboardingState.isLoading,
                     effect: ShimmerEffect(
-                      baseColor:
-                          Theme.of(context).appColors.gfMainBackGroundColor,
+                      baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
                       highlightColor: Theme.of(context).appColors.gfWhiteColor,
                       duration: const Duration(seconds: 2),
                     ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Image.asset(
-                        AppIcons.profile,
-                        width: 40,
-                        height: 40,
+                    child: GestureDetector(
+                      onTap: () {
+                        context.go('/home/setting');
+                      },
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Image.asset(
+                          AppIcons.profile,
+                          width: 40,
+                          height: 40,
+                        ),
+                        title: Text(
+                          onboardingState.value?.name != null &&
+                              onboardingState.value!.name.isNotEmpty
+                              ? onboardingState.value!.name
+                              : '(익명)',
+                          style: AppTextsTheme.main().gfTitle1.copyWith(
+                            color: Theme.of(context).appColors.gfBlackColor,
+                          ),
+                        ),
+                        subtitle: Text(
+                          onboardingState.value != null
+                              ? '${onboardingState.value!.campus} 캠퍼스 ${onboardingState.value!.course}'
+                              : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
+                          style: AppTextsTheme.main().gfBody5.copyWith(
+                            color: Theme.of(context).appColors.gfGray400Color,
+                          ),
+                        ),
                       ),
-                      title: Text(
-                        onboardingState.value?.name != null &&
-                                onboardingState.value!.name.isNotEmpty
-                            ? onboardingState.value!.name
-                            : '(익명)',
-                        style: AppTextsTheme.main().gfTitle1.copyWith(
-                              color: Theme.of(context).appColors.gfBlackColor,
-                            ),
-                      ),
-                      subtitle: Text(
-                        onboardingState.value != null
-                            ? '${onboardingState.value!.campus} 캠퍼스 ${onboardingState.value!.course}'
-                            : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
-                        style: AppTextsTheme.main().gfBody5.copyWith(
-                              color: Theme.of(context).appColors.gfGray400Color,
-                            ),
-                      ), // 서브타이틀 텍스트
                     ),
                   ),
                   Padding(

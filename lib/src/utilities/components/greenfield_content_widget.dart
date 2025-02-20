@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/model/recruit.dart';
 import 'package:lottie/lottie.dart';
+import '../../model/notice.dart';
 import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import '../enums/feature_type.dart';
@@ -18,6 +20,7 @@ class GreenFieldContentWidget extends StatelessWidget {
   final int? likes;
   final int? commentCount;
   final Recruit? recruit;
+  final String? router;
 
   GreenFieldContentWidget({
     super.key,
@@ -27,7 +30,8 @@ class GreenFieldContentWidget extends StatelessWidget {
     required this.imageAssets,
     this.likes,
     this.commentCount,
-    this.recruit
+    this.recruit,
+    this.router
   });
 
   @override
@@ -59,15 +63,15 @@ class GreenFieldContentWidget extends StatelessWidget {
                 height: MediaQuery.of(context).size.width,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => GreenFieldImagesDetail(
-                          tags: imageAssets,
-                          initialIndex: 0,
-                        ),
-                      ),
-                    );
+                    if(router != null) {
+                      context.go(
+                        '/home/notice/detail/${router}/image', // 지정한 경로로 이동
+                        extra: {
+                          'imageAssets': imageAssets,
+                          'initialIndex': 0,
+                        },
+                      );
+                    }
                   },
                   child: Hero(
                     tag: imageAssets.first!,
@@ -90,22 +94,19 @@ class GreenFieldContentWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 10.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => GreenFieldImagesDetail(
-                                  tags: imageAssets,
-                                  initialIndex: index,
-                                ),
-                              ),
-                            );
+                            if(router != null) {
+                              context.go(
+                                '/home/notice/detail/${router}/image', // 지정한 경로로 이동
+                                extra: {
+                                  'imageAssets': imageAssets,
+                                  'initialIndex': index,
+                                },
+                              );
+                            }
                           },
                           child: Hero(
                             tag: imageUrl,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120, scaleEffect: ImageDimensionParser().parseDimensions(imageUrl)),
-                            ),
+                            child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 120, height: 120, scaleEffect: ImageDimensionParser().parseDimensions(imageUrl)),
                           ),
                         ),
                       );

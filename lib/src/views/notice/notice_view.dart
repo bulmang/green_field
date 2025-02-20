@@ -107,7 +107,7 @@ class _NoticeViewState extends ConsumerState<NoticeView> {
             )
         ],
       ),
-      body: (noticeState.hasValue)
+      body: (noticeState.value!.isNotEmpty)
           ? RefreshIndicator(
               onRefresh: refresh,
               color: Theme.of(context).appColors.gfGray400Color, // 로딩 스피너의 색상
