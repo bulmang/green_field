@@ -7,7 +7,7 @@ part of 'notice_edit_view_model.dart';
 // **************************************************************************
 
 String _$noticeEditViewModelHash() =>
-    r'63e40486c6d53ea4ce4e05ff0319821f6268e3af';
+    r'058b053b3c9516d15ac77fde1a81b10accb70326';
 
 /// See also [NoticeEditViewModel].
 @ProviderFor(NoticeEditViewModel)
@@ -24,4 +24,4 @@ final noticeEditViewModelProvider =
 
 typedef _$NoticeEditViewModel = AsyncNotifier<Notice?>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
