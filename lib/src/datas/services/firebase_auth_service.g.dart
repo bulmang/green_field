@@ -22,6 +22,8 @@ final firebaseAuthServiceProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FirebaseAuthServiceRef = AutoDisposeProviderRef<FirebaseAuthService>;
 String _$authRepositoryHash() => r'9d4f8e5c8c4836cc26c26025be2b865392354177';
 
@@ -38,6 +40,8 @@ final authRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AuthRepositoryRef = AutoDisposeProviderRef<FirebaseAuthService>;
 String _$authStateChangesHash() => r'6b36f259eb79524c2351d86e4599ee82d0d1d8f4';
 
@@ -54,6 +58,8 @@ final authStateChangesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AuthStateChangesRef = AutoDisposeStreamProviderRef<firebase_auth.User?>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
