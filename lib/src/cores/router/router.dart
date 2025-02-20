@@ -26,6 +26,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../utilities/components/greenfield_images_detail.dart';
 import '../../viewmodels/notice/notice_view_model.dart';
 import '../../viewmodels/recruit_view_model.dart';
+import '../../views/setting/setting_view.dart';
 
 part 'router.g.dart';
 
@@ -96,6 +97,26 @@ GoRouter goRouter(Ref ref) {
                   child: HomeView(),
                 ),
                 routes: <RouteBase>[
+                  GoRoute(
+                    path: 'setting',
+                    pageBuilder: (context, state) => CustomTransitionPage(
+                      key: state.pageKey,
+                      child: SettingView(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(-1.0, 0.0); // 왼쪽에서 시작
+                        const end = Offset.zero; // 원래 위치로 이동
+                        const curve = Curves.easeInOut; // 부드러운 애니메이션
+
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  ),
                   GoRoute(
                     path: 'notice',
                     builder: (context, state) => NoticeView(),
