@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:green_field/src/datas/repositories/login_repository.dart';
 import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
+import 'package:green_field/src/viewmodels/login/login_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../cores/error_handler/result.dart';
 import '../../datas/services/firebase_auth_service.dart';
@@ -14,8 +16,10 @@ class OnboardingViewModel extends _$OnboardingViewModel {
   @override
   Future<myUser.User?> build() async {
     final authRepository = ref.read(firebaseAuthServiceProvider);
+    final loginProvider = ref.read(loginViewModelProvider);
+
     if(authRepository.currentUser != null) {
-      final result = await getUser(authRepository.currentUser!.uid);
+      final result = await getUser();
 
       switch (result) {
         case Success(value: final user):
@@ -29,15 +33,15 @@ class OnboardingViewModel extends _$OnboardingViewModel {
   myUser.User? currentUser; // Firebase User 정보를 담을 변수
 
   /// Auth User 생성
-  Future<Result<firebase_auth.User, Exception>> createAuthUser(String provider, String idToken, String accessToken) async {
+  Future<Result<firebase_auth.User, Exception>> createAuthUser(String provider, String idToken, String accessToken, String providerUID) async {
     state = AsyncLoading();
     final result = await ref
         .read(onboardingRepositoryProvider)
-        .createAuthUser(provider, idToken, accessToken);
+        .createAuthUser(provider, idToken, accessToken, providerUID);
 
     switch (result) {
       case Success(value: final authUser):
-        _createUserModel();
+        _createUserModel(providerUID);
         state = AsyncData(currentUser);
         return Success(authUser);
       case Failure(exception: final e):
@@ -67,7 +71,7 @@ class OnboardingViewModel extends _$OnboardingViewModel {
   }
 
   /// User Model 객체 생성
-  Future<Result<myUser.User, Exception>> _createUserModel() async {
+  Future<Result<myUser.User, Exception>> _createUserModel(String providerUID) async {
     final authRepository = ref.read(firebaseAuthServiceProvider);
     final firebaseUser = authRepository.currentUser;
     final course = ref.read(courseTextFieldProvider);
@@ -80,7 +84,8 @@ class OnboardingViewModel extends _$OnboardingViewModel {
 
       currentUser = myUser.User(
         id: firebaseUser.uid,
-        providerId: userProviderData!.providerId,
+        simpleLoginProvider: userProviderData!.providerId,
+        simpleLoginId: providerUID,
         userType: 'student', // TODO: 추후 manager type 추가.
         campus: campus,
         course: course,
@@ -104,14 +109,14 @@ class OnboardingViewModel extends _$OnboardingViewModel {
   }
 
   /// User DB 호출
-  Future<Result<myUser.User, Exception>> getUser(String userId) async {
+  Future<Result<myUser.User, Exception>> getUser() async {
     final authRepository = ref.read(firebaseAuthServiceProvider);
     final firebaseUser = authRepository.currentUser;
 
     if (firebaseUser != null && firebaseUser.providerData.isNotEmpty) {
       final result = await ref
           .read(onboardingRepositoryProvider)
-          .getUser(userId);
+          .getAuthUser();
 
       switch (result) {
         case Success(value: final user):
@@ -119,6 +124,40 @@ class OnboardingViewModel extends _$OnboardingViewModel {
         case Failure(exception: final e):
           return Failure(e);
       }
+    } else {
+      return Failure(Exception('사용자가 로그인되어 있지 않거나 제공자 데이터가 없습니다.'));
+    }
+  }
+
+  /// User DB 호출
+  Future<Result<void, Exception>> isUserExistGetUser(String providerUID) async {
+    state = AsyncLoading();
+    final onboardingRepository = ref.read(onboardingRepositoryProvider);
+    final loginState = ref.read(loginViewModelProvider);
+    // final firebaseUser = authRepository.currentUser;
+
+    if (loginState.value != null) {
+    final result = await ref
+        .read(onboardingRepositoryProvider)
+        .getUser(providerUID);
+
+    switch (result) {
+      case Success(value: final userDB):
+        final creatAuthResult = await onboardingRepository.isExistUserCreateAuth(loginState.value!);
+
+        switch (creatAuthResult) {
+          case Success(value: final va):
+            state = AsyncData(userDB);
+          case Failure(exception: final e):
+            state = AsyncError(e, StackTrace.current);
+            return Failure(e);
+        }
+        state = AsyncData(userDB);
+        return Success(userDB);
+      case Failure(exception: final e):
+        state = AsyncError(e, StackTrace.current);
+        return Failure(e);
+    }
     } else {
       return Failure(Exception('사용자가 로그인되어 있지 않거나 제공자 데이터가 없습니다.'));
     }

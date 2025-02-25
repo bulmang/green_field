@@ -112,7 +112,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           ],
                         ),
                         SizedBox(height: 5),
-                        noticeState.isLoading
+                        noticeState.isLoading || onboardingState.isLoading
                             ? Skeletonizer.zone(
                                 effect: ShimmerEffect(
                                   baseColor: Theme.of(context).appColors.gfMainBackGroundColor,

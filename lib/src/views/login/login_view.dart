@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/components/greenfield_loading_widget.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:lottie/lottie.dart';
 import 'package:green_field/src/viewmodels/login/login_view_model.dart';
 import '../../cores/error_handler/result.dart';
@@ -23,6 +25,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   @override
   Widget build(BuildContext context) {
     final loginState = ref.watch(loginViewModelProvider);
+    final userState = ref.watch(onboardingViewModelProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfWhiteColor,
@@ -55,8 +58,17 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             .signInWithKakao();
 
                         switch (result) {
-                          case Success():
-                            context.go('/onboarding'); // 온보딩 화면으로 이동
+                          case Success(value: final token):
+                            final getUser = await ref
+                                .read(onboardingViewModelProvider.notifier)
+                                .isUserExistGetUser(token.providerUID);
+
+                            switch (getUser) {
+                              case Success(value: final user):
+                                context.go('/home');
+                              case Failure(exception: final e):
+                                context.go('/onboarding');
+                            }
 
                           case Failure(exception: final e):
                             showDialog(
@@ -79,35 +91,38 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                     SizedBox(height: 12),
                     // 애플 로그인 버튼
-                    signInButton(
-                      onPressed: () async {
 
-                        final result = await ref
-                            .read(loginViewModelProvider.notifier)
-                            .signInWithApple();
+                    kIsWeb
+                        ? SizedBox.shrink()
+                        : signInButton(
+                            onPressed: () async {
 
-                        switch (result) {
-                          case Success():
-                            context.go('/onboarding'); // 온보딩 화면으로 이동
+                              final result = await ref
+                                  .read(loginViewModelProvider.notifier)
+                                  .signInWithApple();
 
-                          case Failure(exception: final e):
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('로그인 실패'),
-                                content: Text('에러 발생: $e'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: Text('확인'),
-                                  ),
-                                ],
-                              ),
-                            );
-                        }
-                      },
-                      loginType: LoginType.apple,
-                    ),
+                              switch (result) {
+                                case Success():
+                                  context.go('/onboarding'); // 온보딩 화면으로 이동
+
+                                case Failure(exception: final e):
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('로그인 실패'),
+                                      content: Text('에러 발생: $e'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: Text('확인'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                              }
+                            },
+                            loginType: LoginType.apple,
+                          ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -137,7 +152,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               ],
             ),
           ),
-          loginState.isLoading
+          loginState.isLoading || userState.isLoading
               ? GreenFieldLoadingWidget()
               : SizedBox.shrink(),
         ],

@@ -106,6 +106,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                             tokenState.value?.provider ?? '',
                             tokenState.value?.idToken ?? '',
                             tokenState.value?.accessToken ?? '',
+                            tokenState.value?.providerUID ?? '',
                           );
 
                       switch (result) {

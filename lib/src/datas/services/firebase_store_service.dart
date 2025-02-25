@@ -22,12 +22,36 @@ class FirebaseStoreService {
   }
 
   /// Firestore에서 UserId로 사용자 데이터 가져오기
+  Future<Result<GFUser.User, Exception>> getUserByPrviderUID(String providerUID) async {
+    try {
+      print('UserId: $providerUID');
+
+      // simple_login_id가 userId와 일치하는 문서 쿼리
+      final querySnapshot = await _store
+          .collection('user')
+          .where('simple_login_id', isEqualTo: providerUID)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData = GFUser.User.fromMap(querySnapshot.docs.first.data());
+        return Success(userData);
+      } else {
+        return Failure(Exception(
+            'firebase_store_service _getUserBySimpleLoginId error: 사용자를 찾을 수 없습니다.'));
+      }
+    } catch (e) {
+      return Failure(Exception('사용자 데이터 가져오기 실패: $e'));
+    }
+  }
+
+  /// Firestore에서 UserId로 사용자 데이터 가져오기
   Future<Result<GFUser.User, Exception>> getUserById(String userId) async {
     try {
       final docSnapshot = await _store.collection('user').doc(userId).get();
 
       if (docSnapshot.exists) {
         final userData = GFUser.User.fromMap(docSnapshot.data()!);
+
         return Success(userData);
       } else {
         return Failure(Exception(
@@ -37,6 +61,7 @@ class FirebaseStoreService {
       return Failure(Exception('사용자 데이터 가져오기 실패: $e'));
     }
   }
+
 
   /// Notice Collection 생성 및 Notice 데이터 추가
   Future<Result<Notice, Exception>> createNoticeDB(Notice notice, GFUser.User user) async {

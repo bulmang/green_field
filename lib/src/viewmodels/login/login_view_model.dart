@@ -11,7 +11,7 @@ class LoginViewModel extends _$LoginViewModel {
 
   @override
   Future<Token> build() async {
-    return Token();
+    return Token(provider: '', providerUID: '', idToken: '', accessToken: '');
   }
 
   Future<Result<Token, Exception>> signInWithKakao() async {

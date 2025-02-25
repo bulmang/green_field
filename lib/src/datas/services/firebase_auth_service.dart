@@ -40,18 +40,25 @@ class FirebaseAuthService {
       kakao.OAuthToken? token;
       token = await kakao.UserApi.instance.loginWithKakaoAccount();
 
+      // 카카오 계정 정보 가져오기
+      kakao.User user = await kakao.UserApi.instance.me();
+      final String userId = user.id.toString(); // 변하지 않는 고유 ID
+
       if (kIsWeb) {
         if (token != null) {
           final provider = 'oidc.kakaoweb';
-          final idToken = token.idToken!; // idToken 언래핑
+          final idToken = token.idToken ?? ''; // idToken 언래핑
           final accessToken = token.accessToken;
 
           // Token 객체 생성
           final tokenObject = Token(
-            provider: provider,
-            idToken: idToken,
-            accessToken: accessToken,
+              provider: provider,
+              idToken: idToken,
+              accessToken: accessToken,
+              providerUID: userId
           );
+
+          print('카카오 ID: ${tokenObject.providerUID}');
 
           return Success(tokenObject);
         } else {
@@ -60,7 +67,7 @@ class FirebaseAuthService {
       } else {
         if (token != null) {
           final provider = 'oidc.kakao';
-          final idToken = token.idToken!; // idToken 언래핑
+          final idToken = token.idToken ?? ''; // idToken 언래핑
           final accessToken = token.accessToken;
 
           // Token 객체 생성
@@ -68,6 +75,7 @@ class FirebaseAuthService {
             provider: provider,
             idToken: idToken,
             accessToken: accessToken,
+            providerUID: userId
           );
 
           return Success(tokenObject);
@@ -99,11 +107,13 @@ class FirebaseAuthService {
         final provider = credential.providerId;
         final idToken = credential.idToken!;
         final accessToken = credential.accessToken!;
+        final providerUID = appleCredential.userIdentifier!;
 
         final tokenObject = Token(
           provider: provider,
           idToken: idToken,
           accessToken: accessToken,
+          providerUID: providerUID,
         );
 
         return Success(tokenObject);
@@ -116,13 +126,14 @@ class FirebaseAuthService {
   }
 
   /// Firebase Auth 생성
-  Future<Result<firebase_auth.User, Exception>> connectFirebaseAuth(String provider, String idToken, String accessToken) async {
+  Future<Result<firebase_auth.User, Exception>> connectFirebaseAuth(String provider, String idToken, String accessToken, String providerUID) async {
     try {
       // OAuthCredential 생성
       final firebase_auth.OAuthCredential credential = firebase_auth.OAuthProvider(provider).credential(
         idToken: idToken,
         accessToken: accessToken,
       );
+      print('파이어베이스 ID: ${credential.idToken}');
 
       // Firebase에 자격 증명으로 로그인
       await _auth.signInWithCredential(credential);
@@ -136,6 +147,38 @@ class FirebaseAuthService {
         return Failure(Exception('User 정보 가져오기 실패 에러 발생 Error'));
       }
     } catch (error) {
+      print('error: $error');
+      return Failure(Exception(error));
+    }
+  }
+
+  /// Firebase Auth 생성
+  Future<Result<void, Exception>> isExistUserConnectFirebaseAuth(Token token) async {
+    try {
+      if (token == null) {
+        return Failure(Exception('토큰이 없습니다.')); // 토큰이 null일 경우 실패 반환
+      }
+
+      final firebase_auth.OAuthCredential credential = firebase_auth.OAuthProvider(token.provider).credential(
+        idToken: token.idToken,
+        accessToken: token.accessToken,
+      );
+
+      print('파이어베이스 ID: ${credential.idToken}');
+
+      // Firebase에 자격 증명으로 로그인
+      await _auth.signInWithCredential(credential);
+
+      // 현재 로그인된 사용자 정보 가져오기
+      firebase_auth.User? user = _auth.currentUser;
+
+      if (user != null) {
+        return Success(user);
+      } else {
+        return Failure(Exception('User 정보 가져오기 실패 에러 발생 Error'));
+      }
+    } catch (error) {
+      print('error: $error');
       return Failure(Exception(error));
     }
   }
