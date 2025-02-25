@@ -177,7 +177,29 @@ class _SettingViewState extends ConsumerState<SettingView> {
 
                           switch (result) {
                             case Success():
-                              context.go('/signIn');
+                              final reset = await ref
+                                  .read(onboardingViewModelProvider.notifier)
+                                  .resetUserState();
+
+                              switch (reset) {
+                                case Success():
+                                  context.go('/signIn');
+
+                                case Failure(exception: final e):
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('익명 로그인 초기화 실패'),
+                                      content: Text('에러 발생: $e'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: Text('확인'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                              }
 
                             case Failure(exception: final e):
                               showDialog(

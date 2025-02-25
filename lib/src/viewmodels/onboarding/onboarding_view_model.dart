@@ -165,7 +165,6 @@ class OnboardingViewModel extends _$OnboardingViewModel {
 
   /// User State 초기화
   Future<Result<void, Exception>> resetUserState() async {
-    state = AsyncLoading();
     try {
       final authRepository = ref.read(firebaseAuthServiceProvider);
       final firebaseUser = authRepository.currentUser;
