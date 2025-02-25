@@ -32,4 +32,25 @@ class ImageDimensionParser {
     }
     return 1.0;
   }
+
+  bool isWidthSizeBiggerThanHeight(String? imageUrl) {
+    if (imageUrl == null) return false; // Default scale if URL is null
+
+    // Regular expression to match width and height
+    RegExp regExp = RegExp(r'width=(\d+)_height=(\d+)');
+    Match? match = regExp.firstMatch(imageUrl);
+
+    if (match != null) {
+      int width = int.parse(match.group(1)!);
+      int height = int.parse(match.group(2)!);
+      print('width: $width, hieght: $height');
+
+      if (width > height) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+    return false;
+  }
 }

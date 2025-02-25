@@ -1,6 +1,7 @@
 class User {
   String id;
-  String providerId;
+  String simpleLoginProvider;
+  String simpleLoginId;
   String userType;
   String campus;
   String course;
@@ -11,7 +12,8 @@ class User {
 
   User({
     required this.id,
-    required this.providerId,
+    required this.simpleLoginProvider,
+    required this.simpleLoginId,
     this.userType = "student",
     required this.campus,
     required this.course,
@@ -24,7 +26,8 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'simple_login_id': providerId,
+      'simple_login_provider': simpleLoginProvider,
+      'simple_login_id': simpleLoginId,
       'user_type': userType,
       'campus': campus,
       'course': course,
@@ -38,14 +41,16 @@ class User {
   static User fromMap(Map<String, dynamic> map) {
     // null 체크 및 기본값 설정
     String id = map['id'] ?? '';
-    String simpleLoginId = map['simple_login_id'] ?? 'unknown';
-    String campus = map['campus'] ?? 'unknown';
-    String course = map['course'] ?? 'unknown';
-    String name = map['name'] ?? 'unknown';
+    String simpleLoginProvider = map['simple_login_provider'] ?? '(익명)';
+    String simpleLoginId = map['simple_login_id'] ?? '(익명)';
+    String campus = map['campus'] ?? '(익명)';
+    String course = map['course'] ?? '(익명)';
+    String name = map['name'] ?? '(익명)';
 
     return User(
       id: id,
-      providerId: simpleLoginId,
+      simpleLoginProvider: simpleLoginProvider,
+      simpleLoginId: simpleLoginId,
       userType: map['user_type'] ?? "student",
       campus: campus,
       course: course,

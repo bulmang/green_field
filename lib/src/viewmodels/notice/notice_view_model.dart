@@ -40,11 +40,10 @@ class NoticeViewModel extends _$NoticeViewModel {
   Future<Result<List<Notice>, Exception>> getNoticeList() async {
     state = AsyncLoading();
     final userState = ref.watch(onboardingViewModelProvider);
-    if (userState.value == null) return Failure(Exception('유저가 없습니다.'));
 
     final result = await ref
         .read(noticeRepositoryProvider)
-        .getNoticeList(userState.value!);
+        .getNoticeList(userState.value);
 
     switch (result) {
       case Success(value: final noticeList):

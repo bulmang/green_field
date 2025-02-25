@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import '../../datas/repositories/login_repository.dart';
@@ -11,7 +12,7 @@ class LoginViewModel extends _$LoginViewModel {
 
   @override
   Future<Token> build() async {
-    return Token();
+    return Token(provider: '', providerUID: '', idToken: '', accessToken: '');
   }
 
   Future<Result<Token, Exception>> signInWithKakao() async {
@@ -45,6 +46,21 @@ class LoginViewModel extends _$LoginViewModel {
       case Success(value: final token):
         state = AsyncData(token);
         return Success(token);
+      case Failure(exception: final e):
+        state = AsyncError(e, StackTrace.current);
+        return Failure(Exception('애플 로그인 실패: $e'));
+    }
+  }
+
+  Future<Result<firebase_auth.User, Exception>> signInWithAnonymously() async {
+    state = AsyncLoading();
+    final result = await ref.read(loginRepositoryProvider).signInWithAnonymously();
+
+    switch (result) {
+      case Success(value: final v):
+        print(v.metadata);
+        state = AsyncData( Token(provider: '', providerUID: '', idToken: '', accessToken: ''));
+        return Success(v);
       case Failure(exception: final e):
         state = AsyncError(e, StackTrace.current);
         return Failure(Exception('애플 로그인 실패: $e'));

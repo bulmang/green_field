@@ -4,6 +4,7 @@ import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
+import '../extensions/image_dimension_parser.dart';
 import 'greenfield_cached_network_image.dart';
 
 class GreenFieldList extends StatelessWidget {
@@ -128,9 +129,7 @@ class GreenFieldList extends StatelessWidget {
                   if (imageUrl.isNotEmpty)
                     ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Transform.scale(
-                          scale: 1.5,
-                            child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 60, height: 60))
+                        child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 60, height: 60, scaleEffect: ImageDimensionParser().parseDimensions(imageUrl),)
                     )
                 ],
               ),

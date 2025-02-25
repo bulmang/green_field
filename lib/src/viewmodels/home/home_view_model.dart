@@ -23,26 +23,6 @@ class HomeViewModel extends _$HomeViewModel {
     );
   }
 
-  /// User DB 호출
-  Future<Result<myUser.User, Exception>> getUser(String userId) async {
-    final authRepository = ref.read(firebaseAuthServiceProvider);
-    final firebaseUser = authRepository.currentUser;
-
-    if (firebaseUser != null && firebaseUser.providerData.isNotEmpty) {
-      final result = await ref
-          .read(onboardingRepositoryProvider)
-          .getUser(userId);
-
-      switch (result) {
-        case Success(value: final user):
-          return Success(user);
-        case Failure(exception: final e):
-          return Failure(e);
-      }
-    } else {
-      return Failure(Exception('사용자가 로그인되어 있지 않거나 제공자 데이터가 없습니다.'));
-    }
-  }
 }
 
 

@@ -9,33 +9,66 @@ import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../cores/image_type/image_type.dart';
 
-class GreenFieldImagesDetail extends StatelessWidget {
+class GreenFieldImagesDetail extends StatefulWidget {
   const GreenFieldImagesDetail({
     super.key,
     required this.tags,
     required this.initialIndex,
   });
+
   final List<String?> tags;
   final int initialIndex;
+
+  @override
+  _GreenFieldImagesDetailState createState() => _GreenFieldImagesDetailState();
+}
+
+class _GreenFieldImagesDetailState extends State<GreenFieldImagesDetail> {
+  late int currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
+
+  void _updateTitle(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final heroWidgets = tags
+    final heroWidgets = widget.tags
         .map((path) => Hero(
-        tag: path!,
-        child: CachedNetworkImage(
-          imageUrl: path.toString(),
-        ),
+      tag: path!,
+      child: CachedNetworkImage(
+        imageUrl: path.toString(),
       ),
-    )
+    ))
         .toList();
 
     return Scaffold(
-      appBar: GreenFieldAppBar(backgGroundColor: Theme.of(context).appColors.gfWhiteColor, title: ''),
       backgroundColor: Theme.of(context).appColors.gfWhiteColor,
       body: SafeArea(
-        child: DetailScreenPageView(
-          widgets: heroWidgets,
-          initialIndex: initialIndex,
+        child: Stack(
+          children: [
+            DetailScreenPageView(
+              widgets: heroWidgets,
+              initialIndex: widget.initialIndex,
+              onPageChanged: _updateTitle, // 페이지 변경 시 호출
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: GreenFieldAppBar(
+                backgGroundColor: Theme.of(context).appColors.gfWhiteColor.withOpacity(0.5),
+                title: '${currentIndex + 1}/${heroWidgets.length}',
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -47,10 +80,12 @@ class DetailScreenPageView extends StatefulWidget {
     super.key,
     required this.widgets,
     required this.initialIndex,
+    required this.onPageChanged,
   });
 
   final List<Widget> widgets;
   final int initialIndex;
+  final ValueChanged<int> onPageChanged;
 
   @override
   State<DetailScreenPageView> createState() => _DetailScreenPageView();
@@ -119,7 +154,12 @@ class _DetailScreenPageView extends State<DetailScreenPageView>
         Expanded(
           child: PageView.builder(
             controller: _pageViewController,
-            onPageChanged: _handlePageViewChanged,
+            onPageChanged: (index) {
+              widget.onPageChanged(index); // 페이지 변경 시 호출
+              setState(() {
+                _tabController.index = index;
+              });
+            },
             itemCount: widget.widgets.length,
             itemBuilder: (context, index) {
               return GestureDetector(
@@ -136,45 +176,7 @@ class _DetailScreenPageView extends State<DetailScreenPageView>
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 40),
-          child: PageIndicator(
-            tabController: _tabController,
-          ),
-        ),
       ],
-    );
-  }
-
-  void _handlePageViewChanged(int currentPageIndex) {
-    _tabController.index = currentPageIndex;
-  }
-}
-
-class PageIndicator extends StatelessWidget {
-  const PageIndicator({
-    super.key,
-    required this.tabController,
-  });
-
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TabPageSelector(
-            controller: tabController,
-            color: Theme.of(context).appColors.gfBackGroundColor,
-            selectedColor: Theme.of(context).appColors.gfMainColor,
-          ),
-        ],
-      ),
     );
   }
 }

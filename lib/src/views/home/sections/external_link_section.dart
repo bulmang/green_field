@@ -19,13 +19,13 @@ class ExternalLinkSection extends StatelessWidget {
             _launchURL('https://sesac.seoul.kr/');
           }),
           iconText(AppIcons.restaurant, '식당 안내', () {
-            _launchURL('https://sesac.seoul.kr/');
+            _launchURL('http://docs.google.com/spreadsheets/d/1cQGLdiNgArwWoY50ROpJgYw4XCNihhvpJscOityRRUo/edit');
           }),
           iconText(AppIcons.file, '강의 자료', () {
-            _launchURL('https://sesac.seoul.kr/');
+            _launchURL('https://healthyclass.kr/home');
           }),
           iconText(AppIcons.discord, '디스코드', () {
-            _launchURL('https://sesac.seoul.kr/');
+            _launchURL('https://discord.gg/7K96dDVs');
           }),
         ],
       ),
