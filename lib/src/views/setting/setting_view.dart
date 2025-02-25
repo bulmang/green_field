@@ -154,8 +154,30 @@ class _SettingViewState extends ConsumerState<SettingView> {
                           context: context,
                           title: "회원 탈퇴",
                           body: '정말 탈퇴할까요?',
-                          onConfirm: () {
+                          onConfirm: () async {
+                            final result = await ref
+                                .read(settingViewModelProvider.notifier)
+                                .deleteUser(userState.value?.id ?? '');
 
+                            switch (result) {
+                              case Success():
+                                context.go('/signIn');
+
+                              case Failure(exception: final e):
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text('로그인 실패'),
+                                    content: Text('에러 발생: $e'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text('확인'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                            }
                           },
                         );
                       },

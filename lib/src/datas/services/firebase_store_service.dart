@@ -13,7 +13,7 @@ class FirebaseStoreService {
   Future<Result<GFUser.User, Exception>> createUserDB(GFUser.User user) async {
     try {
       // User 컬렉션에 사용자 데이터 추가
-      await _store.collection('user').doc(user.id).set(user.toMap());
+      await _store.collection('User').doc(user.id).set(user.toMap());
 
       return Success(user);
     } catch (e) {
@@ -28,7 +28,7 @@ class FirebaseStoreService {
 
       // simple_login_id가 userId와 일치하는 문서 쿼리
       final querySnapshot = await _store
-          .collection('user')
+          .collection('User')
           .where('simple_login_id', isEqualTo: providerUID)
           .get();
 
@@ -47,7 +47,7 @@ class FirebaseStoreService {
   /// Firestore에서 UserId로 사용자 데이터 가져오기
   Future<Result<GFUser.User, Exception>> getUserById(String userId) async {
     try {
-      final docSnapshot = await _store.collection('user').doc(userId).get();
+      final docSnapshot = await _store.collection('User').doc(userId).get();
 
       if (docSnapshot.exists) {
         final userData = GFUser.User.fromMap(docSnapshot.data()!);
@@ -61,6 +61,18 @@ class FirebaseStoreService {
       return Failure(Exception('사용자 데이터 가져오기 실패: $e'));
     }
   }
+
+  /// UserDB 삭제 함수
+  Future<Result<void, Exception>> deleteUserDB(String userId) async {
+    try {
+      // Firestore에서 사용자 문서 삭제
+      await _store.collection('User').doc(userId).delete();
+      return Success(null); // 성공적으로 삭제되었음을 나타냄
+    } catch (e) {
+      return Failure(Exception('사용자 데이터 삭제 실패: $e'));
+    }
+  }
+
 
 
   /// Notice Collection 생성 및 Notice 데이터 추가

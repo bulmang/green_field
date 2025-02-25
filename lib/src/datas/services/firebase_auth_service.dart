@@ -33,6 +33,15 @@ class FirebaseAuthService {
     }
   }
 
+  Future<Result<void, Exception>> resetCurrentUser() async {
+    try {
+      await _auth.signOut();
+      return Success(null);
+    } catch (e) {
+      return Failure(Exception('사용자 초기화 실패: $e'));
+    }
+  }
+
   /// 카카오 로그인 - Token 전달
   Future<Result<Token, Exception>> signInWithKakao() async {
     try {

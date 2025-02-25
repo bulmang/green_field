@@ -1,3 +1,4 @@
+import 'package:green_field/src/datas/repositories/setting_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../cores/error_handler/result.dart';
@@ -15,7 +16,7 @@ class SettingViewModel extends _$SettingViewModel {
   Future<Result<void, Exception>> signOut() async {
     state = AsyncLoading();
     try {
-      final result = await ref.read(loginRepositoryProvider).signOut();
+      final result = await ref.read(settingRepositoryProvider).signOut();
 
       switch (result) {
         case Success():
@@ -32,10 +33,10 @@ class SettingViewModel extends _$SettingViewModel {
     }
   }
 
-  Future<Result<void, Exception>> deleteUser() async {
+  Future<Result<void, Exception>> deleteUser(String userId) async {
     state = AsyncLoading();
     try {
-      final result = await ref.read(loginRepositoryProvider).deleteUser();
+      final result = await ref.read(settingRepositoryProvider).deleteUser(userId);
 
       switch (result) {
         case Success():
@@ -43,6 +44,7 @@ class SettingViewModel extends _$SettingViewModel {
           return Success(null);
 
         case Failure(exception: final e):
+          print(e);
           state = AsyncError(e, StackTrace.current);
           return Failure(Exception('회원 탈퇴 실패: $e'));
       }
