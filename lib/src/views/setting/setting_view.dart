@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/components/greenfield_app_bar.dart';
+import 'package:green_field/src/utilities/enums/user_type.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/setting/setting_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,6 +31,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
   Widget build(BuildContext context) {
     final userState = ref.watch(onboardingViewModelProvider);
     final settingState = ref.watch(settingViewModelProvider);
+    final settingNotifier = ref.watch(settingViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfBackGroundColor, // 배경색 설정
@@ -46,183 +49,215 @@ class _SettingViewState extends ConsumerState<SettingView> {
       body: Stack(
         children: [
           SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                CupertinoListSection.insetGrouped(
-                  children: [
-                    CupertinoListTile(
-                      leading: Icon(CupertinoIcons.person_crop_rectangle),
-                      title: Text('닉네임'),
-                      trailing: Text(userState.value?.name ?? ('익명')),
-                    ),
-                    CupertinoListTile(
-                      leading: Image.asset(
-                        color: Theme.of(context).appColors.gfMainColor,
-                        AppIcons.sesac,
-                        width: 24,
-                        height: 24,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: Icon(CupertinoIcons.person_crop_rectangle),
+                        title: Text('닉네임'),
+                        trailing: Text(userState.value?.name ?? ('익명')),
                       ),
-                      title: Text('캠퍼스'),
-                      trailing: Text(userState.value?.campus ?? ('익명')),
-                    ),
-                    CupertinoListTile(
-                      leading: Icon(CupertinoIcons.tag),
-                      title: Text('유형'),
-                      trailing: Text(userState.value?.userType ?? ('익명')),
-                    ),
-                  ],
-                ),
-                CupertinoListSection.insetGrouped(
-                  children: [
-                    CupertinoListTile(
-                      leading: Icon(CupertinoIcons.doc_plaintext),
-                      title: Text('사용약관'),
-                      trailing: Icon(CupertinoIcons.chevron_forward, color: CupertinoColors.inactiveGray),
-                      onTap: () {
-                        _launchURL('https://bulmang.notion.site/1a0d2c07070480638ee3f48aff0adae3?pvs=73');
-                      },
-                    ),
-                    CupertinoListTile(
-                      leading: Icon(CupertinoIcons.doc_person),
-                      title: Text('개인정보처리방침'),
-                      trailing: Icon(CupertinoIcons.chevron_forward, color: CupertinoColors.inactiveGray),
-                      onTap: () {
-                        _launchURL('https://bulmang.notion.site/1a0d2c07070480329802f0ec3b59a76e');
-                      },
-                    ),
-                  ],
-                ),
-                CupertinoListSection.insetGrouped(
-                  children: [
-                    CupertinoListTile(
-                      leading: Icon(CupertinoIcons.exclamationmark_bubble),
-                      title: Text('고객센터'),
-                      trailing: Icon(CupertinoIcons.chevron_forward, color: CupertinoColors.inactiveGray),
-                      onTap: () {
-                        _launchURL('https://open.kakao.com/o/sv8nyahh');
-                      },
-                    ),
-                  ],
-                ),
-                CupertinoListSection.insetGrouped(
-                  children: [
-                    userState.value != null
-                      ? CupertinoListTile(
-                        leading: Icon(CupertinoIcons.square_arrow_left),
-                      title: Text('로그아웃'),
-                      onTap: () {
-                        _showIOSDialog(
-                          context: context,
-                          title: "로그아웃",
-                          body: '정말 로그아웃할까요?',
-                          onConfirm: () async {
-                            final reset = await ref
-                                .read(onboardingViewModelProvider.notifier)
-                                .resetUserState();
-
-                            switch (reset) {
-                              case Success():
+                      CupertinoListTile(
+                        leading: Image.asset(
+                          color: Theme.of(context).appColors.gfMainColor,
+                          AppIcons.sesac,
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: Text('캠퍼스'),
+                        trailing: Text(userState.value?.campus ?? ('익명')),
+                      ),
+                      CupertinoListTile(
+                        leading: Icon(CupertinoIcons.tag),
+                        title: Text('유형'),
+                        trailing: Text(userState.value?.userType ?? ('익명')),
+                      ),
+                    ],
+                  ),
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: Icon(CupertinoIcons.doc_plaintext),
+                        title: Text('사용약관'),
+                        trailing: Icon(CupertinoIcons.chevron_forward, color: CupertinoColors.inactiveGray),
+                        onTap: () {
+                          _launchURL('https://bulmang.notion.site/1a0d2c07070480638ee3f48aff0adae3?pvs=73');
+                        },
+                      ),
+                      CupertinoListTile(
+                        leading: Icon(CupertinoIcons.doc_person),
+                        title: Text('개인정보처리방침'),
+                        trailing: Icon(CupertinoIcons.chevron_forward, color: CupertinoColors.inactiveGray),
+                        onTap: () {
+                          _launchURL('https://bulmang.notion.site/1a0d2c07070480329802f0ec3b59a76e');
+                        },
+                      ),
+                    ],
+                  ),
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: Icon(CupertinoIcons.exclamationmark_bubble),
+                        title: Text('고객센터'),
+                        trailing: Icon(CupertinoIcons.chevron_forward, color: CupertinoColors.inactiveGray),
+                        onTap: () {
+                          _launchURL('https://open.kakao.com/o/sv8nyahh');
+                        },
+                      ),
+                    ],
+                  ),
+                  userState.value?.userType == getUserTypeName(UserType.manager) || userState.value?.userType == getUserTypeName(UserType.master)
+                      ? CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: Image.asset(
+                          AppIcons.restaurant,
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: Text('식당 안내 주소'),
+                        trailing: Icon(CupertinoIcons.square_pencil),
+                        onTap: () async {
+                          _showInputDialog(
+                            context: context,
+                            title: '식당 안내 주소 변경',
+                            body: '인터넷 도메인 주소를 입력해주세요.\n예시) https://oursesac.seoul.kr',
+                            onConfirm: (inputText) async {
+                              if (inputText.isNotEmpty) {
                                 final result = await ref
                                     .read(settingViewModelProvider.notifier)
-                                    .signOut();
+                                    .createExternalLink(userState.value!, '식당안내주소', inputText);
 
                                 switch (result) {
                                   case Success():
-                                    context.go('/signIn');
+                                    settingNotifier.showToast(
+                                      '주소 변경 성공',
+                                      backGroundColor: Theme.of(context).appColors.gfMainColor,
+                                    );
 
                                   case Failure(exception: final e):
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Text('로그아웃 실패'),
-                                        content: Text('에러 발생: $e'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.of(context).pop(),
-                                            child: Text('확인'),
-                                          ),
-                                        ],
-                                      ),
+                                    settingNotifier.showToast(
+                                      '주소 변경 실패',
                                     );
                                 }
-
-                              case Failure(exception: final e):
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('로그아웃 실패'),
-                                    content: Text('에러 발생: $e'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.of(context).pop(),
-                                        child: Text('확인'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                break;
-                            }
-                          },
-                        );
-                      }
-                    )
-                      : CupertinoListTile(
-                        leading: Icon(CupertinoIcons.square_arrow_right),
-                        title: Text('로그인 하러 가기'),
+                              }
+                            },
+                          );
+                        },
+                      ),
+                      CupertinoListTile(
+                        leading: Image.asset(
+                          AppIcons.file,
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: Text('강의 자료 주소'),
+                        trailing: Icon(CupertinoIcons.square_pencil),
                         onTap: () async {
-                              final reset = await ref
-                                  .read(settingViewModelProvider.notifier)
-                                  .resetUser();
+                          _showInputDialog(
+                            context: context,
+                            title: '강의 자료 주소 변경',
+                            body: '인터넷 도메인 주소를 입력해주세요.\n예시) https://oursesac.seoul.kr',
+                            onConfirm: (inputText) async {
+                              if (inputText.isNotEmpty) {
+                                final result = await ref
+                                    .read(settingViewModelProvider.notifier)
+                                    .createExternalLink(
+                                    userState.value!, '강의자료주소', inputText);
 
+                                switch (result) {
+                                  case Success():
+                                    settingNotifier.showToast(
+                                      '주소 변경 성공',
+                                      backGroundColor: Theme.of(context).appColors.gfMainColor,
+                                    );
+
+                                  case Failure(exception: final e):
+                                    settingNotifier.showToast(
+                                      '주소 변경 실패',
+                                    );
+                                }
+                              }
+                            },
+                          );
+                        },
+                      ),
+
+                      CupertinoListTile(
+                        leading: Image.asset(
+                          AppIcons.discord,
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: Text('디스코드 주소'),
+                        trailing: Icon(CupertinoIcons.square_pencil),
+                        onTap: () async {
+                          _showInputDialog(
+                            context: context,
+                            title: '디스코드 주소 변경',
+                            body: '인터넷 도메인 주소를 입력해주세요.\n예시) https://discord.gg/example',
+                            onConfirm: (inputText) async {
+                              if (inputText.isNotEmpty) {
+                                final result = await ref
+                                    .read(settingViewModelProvider.notifier)
+                                    .createExternalLink(userState.value!, '디스코드주소', inputText);
+
+                                switch (result) {
+                                  case Success():
+                                    settingNotifier.showToast(
+                                      '주소 변경 성공',
+                                      backGroundColor: Theme.of(context).appColors.gfMainColor,
+                                    );
+
+                                  case Failure(exception: final e):
+                                    settingNotifier.showToast(
+                                      '주소 변경 실패',
+                                    );
+                                }
+                              }
+                            },
+                          );
+                        },
+                      ),
+
+                    ],
+                  )
+                      : SizedBox.shrink(),
+
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      userState.value != null
+                        ? CupertinoListTile(
+                          leading: Icon(CupertinoIcons.square_arrow_left),
+                        title: Text('로그아웃'),
+                        onTap: () {
+                          _showIOSDialog(
+                            context: context,
+                            title: "로그아웃",
+                            body: '정말 로그아웃할까요?',
+                            onConfirm: () async {
+                              final reset = await ref
+                                  .read(onboardingViewModelProvider.notifier)
+                                  .resetUserState();
+              
                               switch (reset) {
                                 case Success():
-                                  context.go('/signIn');
-
-                                case Failure(exception: final e):
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text('익명 로그인 초기화 실패'),
-                                      content: Text('에러 발생: $e'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.of(context).pop(),
-                                          child: Text('확인'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                              }
-
-                        }
-                    ),
-                    userState.value != null
-                        ? CupertinoListTile(
-                            leading: Icon(CupertinoIcons.person_crop_circle_badge_xmark),
-                            title: Text(
-                              '탈퇴하기',
-                              style: TextStyle(color: CupertinoColors.systemRed),
-                            ),
-                            onTap: () {
-                              _showIOSDialog(
-                                context: context,
-                                title: "회원 탈퇴",
-                                body: '정말 탈퇴할까요?',
-                                onConfirm: () async {
                                   final result = await ref
                                       .read(settingViewModelProvider.notifier)
-                                      .deleteUser(userState.value?.id ?? '');
-
+                                      .signOut();
+              
                                   switch (result) {
                                     case Success():
                                       context.go('/signIn');
-
+              
                                     case Failure(exception: final e):
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
-                                          title: Text('로그인 실패'),
+                                          title: Text('로그아웃 실패'),
                                           content: Text('에러 발생: $e'),
                                           actions: [
                                             TextButton(
@@ -233,14 +268,103 @@ class _SettingViewState extends ConsumerState<SettingView> {
                                         ),
                                       );
                                   }
-                                },
-                              );
+              
+                                case Failure(exception: final e):
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('로그아웃 실패'),
+                                      content: Text('에러 발생: $e'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: Text('확인'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                  break;
+                              }
                             },
-                          )
-                        : SizedBox.shrink()
-                  ],
-                ),
-              ],
+                          );
+                        }
+                      )
+                        : CupertinoListTile(
+                          leading: Icon(CupertinoIcons.square_arrow_right),
+                          title: Text('로그인 하러 가기'),
+                          onTap: () async {
+                                final reset = await ref
+                                    .read(settingViewModelProvider.notifier)
+                                    .resetUser();
+              
+                                switch (reset) {
+                                  case Success():
+                                    context.go('/signIn');
+              
+                                  case Failure(exception: final e):
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text('익명 로그인 초기화 실패'),
+                                        content: Text('에러 발생: $e'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            child: Text('확인'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                }
+              
+                          }
+                      ),
+                      userState.value != null
+                          ? CupertinoListTile(
+                              leading: Icon(CupertinoIcons.person_crop_circle_badge_xmark),
+                              title: Text(
+                                '탈퇴하기',
+                                style: TextStyle(color: CupertinoColors.systemRed),
+                              ),
+                              onTap: () {
+                                _showIOSDialog(
+                                  context: context,
+                                  title: "회원 탈퇴",
+                                  body: '정말 탈퇴할까요?',
+                                  onConfirm: () async {
+                                    final result = await ref
+                                        .read(settingViewModelProvider.notifier)
+                                        .deleteUser(userState.value?.id ?? '');
+              
+                                    switch (result) {
+                                      case Success():
+                                        context.go('/signIn');
+              
+                                      case Failure(exception: final e):
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text('로그인 실패'),
+                                            content: Text('에러 발생: $e'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.of(context).pop(),
+                                                child: Text('확인'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                    }
+                                  },
+                                );
+                              },
+                            )
+                          : SizedBox.shrink()
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
           settingState.isLoading
@@ -286,6 +410,46 @@ class _SettingViewState extends ConsumerState<SettingView> {
       ),
     );
   }
+
+  void _showInputDialog({
+    required BuildContext context,
+    required String title,
+    required String body,
+    required Function(String) onConfirm,
+  }) {
+    final TextEditingController textController = TextEditingController();
+
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Column(
+          children: [
+            Text(body),
+            SizedBox(height: 10),
+            CupertinoTextField(
+              controller: textController,
+              placeholder: 'Enter text',
+            ),
+          ],
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("취소", style: TextStyle(color: CupertinoColors.activeBlue)),
+            onPressed: () => Navigator.pop(context),
+          ),
+          CupertinoDialogAction(
+            child: Text("확인", style: TextStyle(color: CupertinoColors.systemRed)),
+            onPressed: () {
+              Navigator.pop(context); // 먼저 다이얼로그 닫기
+              onConfirm(textController.text); // 입력된 텍스트 전달
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 }
 
 
