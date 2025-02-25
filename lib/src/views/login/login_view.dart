@@ -7,6 +7,7 @@ import 'package:green_field/src/utilities/components/greenfield_loading_widget.d
 import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:lottie/lottie.dart';
 import 'package:green_field/src/viewmodels/login/login_view_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../cores/error_handler/result.dart';
 import '../../utilities/design_system/app_colors.dart';
 import '../../utilities/design_system/app_icons.dart';
@@ -127,8 +128,31 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CupertinoButton(
-                          onPressed: () {
-                            context.go('/home');
+                          onPressed: () async {
+                            final result = await ref
+                                .read(loginViewModelProvider.notifier)
+                                .signInWithAnonymously();
+
+                            switch (result) {
+                              case Success():
+                              // context.go('/home');
+
+                              case Failure(exception: final e):
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text('로그인 실패'),
+                                    content: Text('에러 발생'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: Text('확인'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                            }
+
                           },
                           child: Text(
                             '로그인 없이 둘러보기',
@@ -138,7 +162,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         ),
                         SizedBox(width: 10),
                         CupertinoButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                              if (await canLaunch('https://open.kakao.com/o/sv8nyahh')) {
+                                await launch('https://open.kakao.com/o/sv8nyahh');
+                              } else {
+                                throw 'Could not launch';
+                              }
+                          },
                           child: Text(
                             '문의하기',
                             style: AppTextsTheme.main().gfCaption1.copyWith(

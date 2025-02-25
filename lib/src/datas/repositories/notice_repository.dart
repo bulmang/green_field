@@ -17,7 +17,7 @@ class NoticeRepository {
   NoticeRepository({required this.firebaseStoreService, required this.firebaseStorageService});
 
   /// Notice 리스트 가져오기
-  Future<Result<List<Notice>, Exception>> getNoticeList(User user) async {
+  Future<Result<List<Notice>, Exception>> getNoticeList(User? user) async {
     try {
       final result = await firebaseStoreService.getNoticeList(user);
 

@@ -54,4 +54,24 @@ class SettingViewModel extends _$SettingViewModel {
     }
   }
 
+
+  Future<Result<void, Exception>> resetUser() async {
+    state = AsyncLoading();
+    try {
+      final result = await ref.read(settingRepositoryProvider).resetUser();
+
+      switch (result) {
+        case Success():
+          state = AsyncData(null); // 탈퇴 후 상태 초기화
+          return Success(null);
+
+        case Failure(exception: final e):
+          state = AsyncError(e, StackTrace.current);
+          return Failure(Exception('익명 로그인 초기화 실패: $e'));
+      }
+    } catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
+      return Failure(Exception('익명 로그인 초기화 중 예외 발생: $e'));
+    }
+  }
 }

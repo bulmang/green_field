@@ -162,6 +162,25 @@ class OnboardingViewModel extends _$OnboardingViewModel {
       return Failure(Exception('사용자가 로그인되어 있지 않거나 제공자 데이터가 없습니다.'));
     }
   }
+
+  /// User State 초기화
+  Future<Result<void, Exception>> resetUserState() async {
+    state = AsyncLoading();
+    try {
+      final authRepository = ref.read(firebaseAuthServiceProvider);
+      final firebaseUser = authRepository.currentUser;
+
+      if (firebaseUser != null) {
+        currentUser = null;
+        state = AsyncData(null);
+        return Success(null);
+      } else {
+        return Failure(Exception('사용자가 로그인되어 있지 않습니다.'));
+      }
+    } catch (e) {
+      return Failure(Exception('User 상태 초기화 실패: $e'));
+    }
+  }
 }
 
 /// courseProvider 생성

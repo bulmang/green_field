@@ -107,7 +107,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
                 ),
                 CupertinoListSection.insetGrouped(
                   children: [
-                    CupertinoListTile(
+                    userState.value != null
+                      ? CupertinoListTile(
                         leading: Icon(CupertinoIcons.square_arrow_left),
                       title: Text('로그아웃'),
                       onTap: () {
@@ -116,19 +117,41 @@ class _SettingViewState extends ConsumerState<SettingView> {
                           title: "로그아웃",
                           body: '정말 로그아웃할까요?',
                           onConfirm: () async {
-                            final result = await ref
-                                .read(settingViewModelProvider.notifier)
-                                .signOut();
+                            final reset = await ref
+                                .read(onboardingViewModelProvider.notifier)
+                                .resetUserState();
 
-                            switch (result) {
+                            switch (reset) {
                               case Success():
-                                context.go('/signIn');
+                                final result = await ref
+                                    .read(settingViewModelProvider.notifier)
+                                    .signOut();
+
+                                switch (result) {
+                                  case Success():
+                                    context.go('/signIn');
+
+                                  case Failure(exception: final e):
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text('로그아웃 실패'),
+                                        content: Text('에러 발생: $e'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            child: Text('확인'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                }
 
                               case Failure(exception: final e):
                                 showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    title: Text('로그인 실패'),
+                                    title: Text('로그아웃 실패'),
                                     content: Text('에러 발생: $e'),
                                     actions: [
                                       TextButton(
@@ -138,50 +161,82 @@ class _SettingViewState extends ConsumerState<SettingView> {
                                     ],
                                   ),
                                 );
+                                break;
                             }
                           },
                         );
                       }
-                    ),
-                    CupertinoListTile(
-                      leading: Icon(CupertinoIcons.person_crop_circle_badge_xmark),
-                      title: Text(
-                        '탈퇴하기',
-                        style: TextStyle(color: CupertinoColors.systemRed),
-                      ),
-                      onTap: () {
-                        _showIOSDialog(
-                          context: context,
-                          title: "회원 탈퇴",
-                          body: '정말 탈퇴할까요?',
-                          onConfirm: () async {
-                            final result = await ref
-                                .read(settingViewModelProvider.notifier)
-                                .deleteUser(userState.value?.id ?? '');
+                    )
+                      : CupertinoListTile(
+                        leading: Icon(CupertinoIcons.square_arrow_right),
+                        title: Text('로그인 하러 가기'),
+                        onTap: () async {
+                          final result = await ref
+                              .read(settingViewModelProvider.notifier)
+                              .resetUser();
 
-                            switch (result) {
-                              case Success():
-                                context.go('/signIn');
+                          switch (result) {
+                            case Success():
+                              context.go('/signIn');
 
-                              case Failure(exception: final e):
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('로그인 실패'),
-                                    content: Text('에러 발생: $e'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.of(context).pop(),
-                                        child: Text('확인'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                            }
-                          },
-                        );
-                      },
+                            case Failure(exception: final e):
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('익명 로그인 초기화 실패'),
+                                  content: Text('에러 발생: $e'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: Text('확인'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                          }
+                        }
                     ),
+                    userState.value != null
+                        ? CupertinoListTile(
+                            leading: Icon(CupertinoIcons.person_crop_circle_badge_xmark),
+                            title: Text(
+                              '탈퇴하기',
+                              style: TextStyle(color: CupertinoColors.systemRed),
+                            ),
+                            onTap: () {
+                              _showIOSDialog(
+                                context: context,
+                                title: "회원 탈퇴",
+                                body: '정말 탈퇴할까요?',
+                                onConfirm: () async {
+                                  final result = await ref
+                                      .read(settingViewModelProvider.notifier)
+                                      .deleteUser(userState.value?.id ?? '');
+
+                                  switch (result) {
+                                    case Success():
+                                      context.go('/signIn');
+
+                                    case Failure(exception: final e):
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text('로그인 실패'),
+                                          content: Text('에러 발생: $e'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(),
+                                              child: Text('확인'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                  }
+                                },
+                              );
+                            },
+                          )
+                        : SizedBox.shrink()
                   ],
                 ),
               ],

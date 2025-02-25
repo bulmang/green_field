@@ -134,6 +134,23 @@ class FirebaseAuthService {
     }
   }
 
+  /// 익명 로그인 함수
+  Future<Result<firebase_auth.User, Exception>> signInAnonymously() async {
+    try {
+      // Firebase에 익명으로 로그인
+      final userCredential = await _auth.signInAnonymously();
+      final user = userCredential.user;
+
+      if (user != null) {
+        return Success(user); // 성공 시 User 객체 반환
+      } else {
+        return Failure(Exception('익명 로그인 실패: 사용자 정보를 가져올 수 없습니다.'));
+      }
+    } catch (e) {
+      return Failure(Exception('익명 로그인 실패: $e'));
+    }
+  }
+
   /// Firebase Auth 생성
   Future<Result<firebase_auth.User, Exception>> connectFirebaseAuth(String provider, String idToken, String accessToken, String providerUID) async {
     try {

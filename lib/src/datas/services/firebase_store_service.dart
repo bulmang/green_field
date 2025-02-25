@@ -120,11 +120,12 @@ class FirebaseStoreService {
   }
 
   /// Notice List 가져오기
-  Future<Result<List<Notice>, Exception>> getNoticeList(GFUser.User user) async {
+  Future<Result<List<Notice>, Exception>> getNoticeList(GFUser.User? user) async {
     try {
+      print("user : $user");
       // 기본 쿼리
       var query = _store
-          .collection('Campus').doc(user.campus == '익명' ? '관악' : user.campus)
+          .collection('Campus').doc(user == null ? '관악' : user.campus)
           .collection('Notice').orderBy('created_at', descending: true)
           .limit(15);
 

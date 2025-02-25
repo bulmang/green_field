@@ -28,13 +28,17 @@ class SettingRepository {
 
     switch (result) {
       case Success(value: final v):
-        final resetUser = await firebaseAuthService.resetCurrentUser();
-        switch (resetUser) {
-          case Success(value: final value):
-            return Success(value);
-          case Failure(exception: final exception):
-            return Failure(exception);
-        }
+        return await resetUser();
+      case Failure(exception: final exception):
+        return Failure(exception);
+    }
+  }
+
+  Future<Result<void, Exception>> resetUser() async {
+    final resetUser = await firebaseAuthService.resetCurrentUser();
+    switch (resetUser) {
+      case Success(value: final value):
+        return Success(value);
       case Failure(exception: final exception):
         return Failure(exception);
     }

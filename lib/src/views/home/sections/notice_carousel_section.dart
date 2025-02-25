@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../cores/error_handler/result.dart';
+import '../../../utilities/components/greefield_login_alert_dialog.dart';
 import '../../../utilities/components/greenfield_cached_network_image.dart';
 import '../../../utilities/design_system/app_icons.dart';
 import '../../../utilities/design_system/app_texts.dart';
 import '../../../utilities/extensions/image_dimension_parser.dart';
 import '../../../viewmodels/notice/notice_view_model.dart';
+import '../../../viewmodels/setting/setting_view_model.dart';
 
 class NoticeCarouselSection extends ConsumerStatefulWidget {
   NoticeCarouselSection({super.key});
@@ -24,6 +28,7 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(onboardingViewModelProvider);
     final noticeState = ref.watch(noticeViewModelProvider);
 
     if (noticeState.value!.isNotEmpty) {
@@ -41,7 +46,16 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
                       child: CupertinoButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          context.go('/home/notice/detail/${notice.id}');
+                          if (userState.value == null) {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return GreenFieldLoginAlertDialog(ref: ref);
+                              },
+                            );
+                          } else {
+                            context.go('/home/notice/detail/${notice.id}');
+                          }
                         },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -9,6 +9,7 @@ import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/home/home_view_model.dart';
 import 'package:green_field/src/views/home/sections/expiring_soon_recruit_section.dart';
 import 'package:green_field/src/views/home/sections/notice_carousel_section.dart';
+import '../../utilities/components/greefield_login_alert_dialog.dart';
 import '../../utilities/design_system/app_icons.dart';
 import '../../utilities/design_system/app_texts.dart';
 import '../../viewmodels/onboarding/onboarding_view_model.dart';
@@ -25,7 +26,7 @@ class HomeView extends ConsumerStatefulWidget {
 class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
-    final onboardingState = ref.watch(onboardingViewModelProvider);
+    final userState = ref.watch(onboardingViewModelProvider);
     final noticeState = ref.watch(noticeViewModelProvider);
 
     return Scaffold(
@@ -41,7 +42,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Skeletonizer(
-                    enabled: onboardingState.isLoading,
+                    enabled: userState.isLoading,
                     effect: ShimmerEffect(
                       baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
                       highlightColor: Theme.of(context).appColors.gfWhiteColor,
@@ -59,17 +60,17 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           height: 40,
                         ),
                         title: Text(
-                          onboardingState.value?.name != null &&
-                              onboardingState.value!.name.isNotEmpty
-                              ? onboardingState.value!.name
+                          userState.value?.name != null &&
+                              userState.value!.name.isNotEmpty
+                              ? userState.value!.name
                               : '(익명)',
                           style: AppTextsTheme.main().gfTitle1.copyWith(
                             color: Theme.of(context).appColors.gfBlackColor,
                           ),
                         ),
                         subtitle: Text(
-                          onboardingState.value != null
-                              ? '${onboardingState.value!.campus} 캠퍼스 ${onboardingState.value!.course}'
+                          userState.value != null
+                              ? '${userState.value!.campus} 캠퍼스 ${userState.value!.course}'
                               : '서비스를 이용하려면 로그인해주세요.', // 실패 시 기본 메시지
                           style: AppTextsTheme.main().gfBody5.copyWith(
                             color: Theme.of(context).appColors.gfGray400Color,
@@ -98,7 +99,16 @@ class _HomeViewState extends ConsumerState<HomeView> {
                             Spacer(),
                             GestureDetector(
                               onTap: () {
-                                context.go('/home/notice');
+                                if (userState.value == null) {
+                                  showCupertinoDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return GreenFieldLoginAlertDialog(ref: ref);
+                                    },
+                                  );
+                                } else {
+                                  context.go('/home/notice');
+                                }
                               },
                               child: Text(
                                 "더보기 >",
@@ -112,7 +122,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           ],
                         ),
                         SizedBox(height: 5),
-                        noticeState.isLoading || onboardingState.isLoading
+                        noticeState.isLoading || userState.isLoading
                             ? Skeletonizer.zone(
                                 effect: ShimmerEffect(
                                   baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
