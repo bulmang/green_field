@@ -206,4 +206,49 @@ class FirebaseStoreService {
     }
   }
 
+
+  /// 외부 링크 추가
+  Future<Result<String, Exception>> createExternalLink(GFUser.User user, String linkID, String linkDomainName) async {
+    try {
+      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
+        return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      }
+
+      var campusDocRef = _store.collection('Campus').doc(user.campus);
+
+      // 링크를 단일 필드로 저장
+      await campusDocRef.collection('ExternalLink').doc(linkID).set({'link': linkDomainName});
+
+      return Success(linkDomainName);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('외부 링크 생성 실패: $e'));
+    }
+  }
+
+  /// 외부 링크 가져오기
+  Future<Result<String, Exception>> getExternalLink(GFUser.User user, String linkID) async {
+    try {
+      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
+        return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      }
+
+      var campusDocRef = _store.collection('Campus').doc(user.campus);
+
+      // 링크 문서 가져오기
+      final docSnapshot = await campusDocRef.collection('ExternalLink').doc(linkID).get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && data.containsKey('link')) {
+          return Success(data['link']);
+        }
+      }
+      return Failure(Exception('링크를 찾을 수 없습니다.'));
+    } catch (e) {
+      print(e);
+      return Failure(Exception('외부 링크 가져오기 실패: $e'));
+    }
+  }
+
 }
