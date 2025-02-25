@@ -171,15 +171,9 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         leading: Icon(CupertinoIcons.square_arrow_right),
                         title: Text('로그인 하러 가기'),
                         onTap: () async {
-                          final result = await ref
-                              .read(settingViewModelProvider.notifier)
-                              .resetUser();
-
-                          switch (result) {
-                            case Success():
                               final reset = await ref
-                                  .read(onboardingViewModelProvider.notifier)
-                                  .resetUserState();
+                                  .read(settingViewModelProvider.notifier)
+                                  .resetUser();
 
                               switch (reset) {
                                 case Success():
@@ -201,21 +195,6 @@ class _SettingViewState extends ConsumerState<SettingView> {
                                   );
                               }
 
-                            case Failure(exception: final e):
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text('익명 로그인 초기화 실패'),
-                                  content: Text('에러 발생: $e'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(),
-                                      child: Text('확인'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                          }
                         }
                     ),
                     userState.value != null
