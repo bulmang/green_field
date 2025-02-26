@@ -99,7 +99,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                             Spacer(),
                             GestureDetector(
                               onTap: () {
-                                if (userState.value == null) {
+                                if (userState.value == null && !userState.isLoading) {
                                   showCupertinoDialog(
                                     context: context,
                                     builder: (BuildContext context) {

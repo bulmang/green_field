@@ -11,12 +11,10 @@ import '../extensions/image_dimension_parser.dart';
 
 class GreenFieldImageWidget extends ConsumerStatefulWidget {
   final List<ImageType> tempImages;
-  final FeatureType type;
 
   const GreenFieldImageWidget({
     super.key,
     required this.tempImages,
-    required this.type,
   });
   @override
   GreenFieldImageWidgetState createState() => GreenFieldImageWidgetState();
@@ -45,7 +43,6 @@ class GreenFieldImageWidgetState extends ConsumerState<GreenFieldImageWidget> {
                       borderRadius: BorderRadius.circular(8),
                       child: GreenFieldCachedNetworkImage(imageUrl: value, width: 120, height: 120, scaleEffect: ImageDimensionParser().parseDimensions(value))
                     ),
-                    if(widget.type != FeatureType.campus)
                       CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -84,7 +81,6 @@ class GreenFieldImageWidgetState extends ConsumerState<GreenFieldImageWidget> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    if(widget.type != FeatureType.campus)
                       CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {

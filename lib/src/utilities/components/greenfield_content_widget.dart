@@ -63,15 +63,15 @@ class GreenFieldContentWidget extends StatelessWidget {
                 height: MediaQuery.of(context).size.width,
                 child: GestureDetector(
                   onTap: () {
-                    if(router != null) {
-                      context.go(
-                        '/home/notice/detail/${router}/image', // 지정한 경로로 이동
-                        extra: {
-                          'imageAssets': imageAssets,
-                          'initialIndex': 0,
-                        },
-                      );
-                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => GreenFieldImagesDetail(
+                          tags: imageAssets,
+                          initialIndex: 0,
+                        ),
+                      ),
+                    );
                   },
                   child: Hero(
                     tag: imageAssets.first!,
@@ -94,15 +94,15 @@ class GreenFieldContentWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 10.0),
                         child: GestureDetector(
                           onTap: () {
-                            if(router != null) {
-                              context.go(
-                                '/home/notice/detail/${router}/image', // 지정한 경로로 이동
-                                extra: {
-                                  'imageAssets': imageAssets,
-                                  'initialIndex': index,
-                                },
-                              );
-                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => GreenFieldImagesDetail(
+                                  tags: imageAssets,
+                                  initialIndex: index,
+                                ),
+                              ),
+                            );
                           },
                           child: Hero(
                             tag: imageUrl,
@@ -126,13 +126,13 @@ class GreenFieldContentWidget extends StatelessWidget {
                   children: [
                     Image.asset(
                       AppIcons.thumbnailUp,
-                      width: 14,
-                      height: 12,
+                      width: 20,
+                      height: 20,
                     ),
-                    SizedBox(width: 1),
+                    SizedBox(width: 3),
                     Text(
                       likes.toString(),
-                      style: AppTextsTheme.main().gfCaption5.copyWith(
+                      style: AppTextsTheme.main().gfCaption2.copyWith(
                         color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),
@@ -144,13 +144,13 @@ class GreenFieldContentWidget extends StatelessWidget {
                   children: [
                     Image.asset(
                       AppIcons.messageCircle,
-                      width: 14,
-                      height: 12,
+                      width: 20,
+                      height: 20,
                     ),
-                    SizedBox(width: 1),
+                    SizedBox(width: 3),
                     Text(
                       commentCount.toString(),
-                      style: AppTextsTheme.main().gfCaption5.copyWith(
+                      style: AppTextsTheme.main().gfCaption2.copyWith(
                         color: Theme.of(context).appColors.gfMainColor,
                       ),
                     ),

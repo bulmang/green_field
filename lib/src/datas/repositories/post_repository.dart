@@ -5,25 +5,25 @@ import 'package:green_field/src/cores/image_type/image_type.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../cores/error_handler/result.dart';
-import '../../model/notice.dart';
+import '../../model/post.dart'; // Update model import
 import '../../model/user.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firebase_store_service.dart';
 
-class NoticeRepository {
+class PostRepository { // Update class name
   final FirebaseStoreService firebaseStoreService;
   final FirebaseStorageService firebaseStorageService;
 
-  NoticeRepository({required this.firebaseStoreService, required this.firebaseStorageService});
+  PostRepository({required this.firebaseStoreService, required this.firebaseStorageService});
 
-  /// Notice 리스트 가져오기
-  Future<Result<List<Notice>, Exception>> getNoticeList(User? user) async {
+  /// Post 리스트 가져오기
+  Future<Result<List<Post>, Exception>> getPostList() async {
     try {
-      final result = await firebaseStoreService.getNoticeList(user);
+      final result = await firebaseStoreService.getPostList();
 
       switch(result) {
-        case Success(value: final noticeList):
-          return Success(noticeList);
+        case Success(value: final postList):
+          return Success(postList);
         case Failure(exception: final exception):
           return Failure(exception);
       }
@@ -32,14 +32,14 @@ class NoticeRepository {
     }
   }
 
-  /// 다음 Notice 리스트 가져오기
-  Future<Result<List<Notice>, Exception>> getNextNoticeList(List<Notice>? lastNotice, User user) async {
+  /// 다음 Post 리스트 가져오기
+  Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost) async {
     try {
-      final result = await firebaseStoreService.getNextNoticeList(lastNotice, user);
+      final result = await firebaseStoreService.getNextPostList(lastPost);
 
       switch(result) {
-        case Success(value: final noticeList):
-          return Success(noticeList);
+        case Success(value: final postList):
+          return Success(postList);
         case Failure(exception: final exception):
           return Failure(exception);
       }
@@ -48,19 +48,19 @@ class NoticeRepository {
     }
   }
 
-  /// Notice DB 생성
-  Future<Result<Notice, Exception>> createNoticeDB(User user, Notice notice, List<ImageType>? images) async {
+  /// Post DB 생성
+  Future<Result<Post, Exception>> createPostDB(User user, Post post, List<ImageType>? images) async {
     try {
       final uploadImageResult = await uploadImage(user, images);
 
       switch(uploadImageResult) {
         case Success(value: final imageUrls):
-          notice.images = imageUrls;
-          final result = await firebaseStoreService.createNoticeDB(notice, user);
+          post.images = imageUrls;
+          final result = await firebaseStoreService.createPostDB(post, user);
 
           switch (result) {
-            case Success(value: final notice):
-              return Success(notice);
+            case Success(value: final post):
+              return Success(post);
             case Failure(exception: final exception):
               return Failure(exception);
           }
@@ -72,14 +72,14 @@ class NoticeRepository {
     }
   }
 
-  /// 특정 Notice 가져오기
-  Future<Result<Notice, Exception>> getNotice(String noticeId, User user) async {
+  /// 특정 Post 가져오기
+  Future<Result<Post, Exception>> getPost(String postId, User user) async {
     try {
-      final result = await firebaseStoreService.getNotice(noticeId, user);
+      final result = await firebaseStoreService.getPost(postId, user);
 
       switch(result) {
-        case Success(value: final noticeId):
-          return Success(noticeId);
+        case Success(value: final postId):
+          return Success(postId);
         case Failure(exception: final exception):
           return Failure(exception);
       }
@@ -88,10 +88,10 @@ class NoticeRepository {
     }
   }
 
-  /// Notice 문서 삭제
-  Future<Result<void, Exception>> deleteNoticeDB(String noticeId, User user) async {
+  /// Post 문서 삭제
+  Future<Result<void, Exception>> deletePostDB(String postId, User user) async {
     try {
-      final result = await firebaseStoreService.deleteNoticeDB(noticeId, user);
+      final result = await firebaseStoreService.deletePostDB(postId, user);
 
       switch (result) {
         case Success():
@@ -100,10 +100,9 @@ class NoticeRepository {
           return Failure(exception);
       }
     } catch (error) {
-      return Failure(Exception('공지사항 삭제 실패: $error'));
+      return Failure(Exception('포스트 삭제 실패: $error'));
     }
   }
-
 
   /// Image 업로드 후 ImageURL 가져오기
   Future<Result<List<String>?, Exception>> uploadImage(User user, List<ImageType>? images) async {
@@ -122,7 +121,7 @@ class NoticeRepository {
         }
       }
 
-      final result = await firebaseStorageService.uploadImages(user, xFileImages, 'notices');
+      final result = await firebaseStorageService.uploadImages(user, xFileImages, 'posts');
 
       switch (result) {
         case Success(value: final value):
@@ -137,9 +136,9 @@ class NoticeRepository {
   }
 }
 
-/// NoticeRepositoryProvider 생성
-final noticeRepositoryProvider = Provider<NoticeRepository>((ref) {
-  return NoticeRepository(
+/// PostRepositoryProvider 생성
+final postRepositoryProvider = Provider<PostRepository>((ref) {
+  return PostRepository(
     firebaseStoreService: FirebaseStoreService(FirebaseFirestore.instance),
     firebaseStorageService: FirebaseStorageService(FirebaseStorage.instance),
   );

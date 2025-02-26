@@ -3,6 +3,7 @@ import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
 import 'package:green_field/src/utilities/enums/user_type.dart';
 import '../../model/notice.dart';
+import '../../model/post.dart';
 import '../../model/user.dart' as GFUser;
 
 class FirebaseStoreService {
@@ -205,6 +206,129 @@ class FirebaseStoreService {
       return Failure(Exception('공지사항 데이터 가져오기 실패: $e'));
     }
   }
+
+  /// Post Collection 생성 및 Post 데이터 추가
+  Future<Result<Post, Exception>> createPostDB(Post post, GFUser.User user) async {
+    try {
+      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
+        return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      }
+      await _store.collection('Post').doc(post.id).set(post.toMap());
+
+      return Success(post);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('post 데이터 생성 실패: $e'));
+    }
+  }
+
+  /// Post Collection에서 Post 데이터 삭제
+  Future<Result<void, Exception>> deletePostDB(String postId, GFUser.User user) async {
+    try {
+      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
+        return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      }
+      await _store.collection('Post').doc(postId).delete();
+
+      return Success(null);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('post 데이터 삭제 실패: $e'));
+    }
+  }
+
+  /// Post Collection의 특정 Post 데이터 업데이트
+  Future<Result<Post, Exception>> updatePostDB(Post post, GFUser.User user) async {
+    try {
+      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
+        return Failure(Exception('인증 되지 않은 사용자입니다.'));
+      }
+      // Firestore에서 해당 문서 업데이트
+      await _store.collection('Campus').doc(user.campus).collection('Post').doc(post.id).update(post.toMap());
+
+      return Success(post);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('post 데이터 업데이트 실패: $e'));
+    }
+  }
+
+  /// Post List 가져오기
+  Future<Result<List<Post>, Exception>> getPostList() async {
+    try {
+      var query = _store
+          .collection('Post').orderBy('created_at', descending: true)
+          .limit(15);
+
+      // 첫 번째 페이지 또는 페이징 데이터를 가져오기
+      var querySnapshot = await query.get();
+
+      // 데이터를 Notice 객체로 매핑
+      List<Post> postList = querySnapshot.docs
+          .map((doc) => Post.fromMap(doc.data()))
+          .toList();
+
+      if (postList.isEmpty) {
+        return Success([]);
+      } else {
+        return Success(postList);
+      }
+    } catch (e) {
+      return Failure(Exception('모든 포스트 가져오기 실패: $e'));
+    }
+  }
+
+
+  /// Post List 추가로 가져오기
+  Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost) async {
+    try {
+      var query = _store.collection('Post').orderBy('created_at', descending: true).limit(15);
+
+      if (lastPost != [] && lastPost != null) {
+        final lastDoc = await _store.collection('Post').doc(lastPost.last.id).get();
+        query = query.startAfterDocument(lastDoc);
+      }
+
+      var querySnapshot = await query.get();
+
+      List<Post> postList = querySnapshot.docs.map((doc) => Post.fromMap(doc.data())).toList();
+
+      if (postList.isEmpty) {
+        return Success([]);
+      } else {
+        if (lastPost != null) lastPost!.addAll(postList);
+
+        return Success(lastPost ?? postList);
+      }
+    } catch (e) {
+      return Failure(Exception('getNextPostList 함수 에러: $e'));
+    }
+  }
+
+  /// 특정 Post 가져오기
+  Future<Result<Post, Exception>> getPost(String postId, GFUser.User user) async {
+    try {
+      print('postId $postId');
+      // Firestore에서 특정 문서 가져오기
+      final documentSnapshot = await _store.collection('Post').doc(postId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          // Firestore 데이터를 Post 객체로 변환
+          final post = Post.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(post);
+        }
+      }
+      return Failure(Exception('데이터가 존재 하지 않습니다.'));
+    } catch (e) {
+      return Failure(Exception('포스트 데이터 가져오기 실패: $e'));
+    }
+  }
+
 
 
   /// 외부 링크 추가

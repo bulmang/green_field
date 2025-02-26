@@ -15,7 +15,7 @@ class FirebaseStorageService {
   final FirebaseStorage _storage;
 
   /// 이미지 리스트를 Firebase Storage에 업로드
-  Future<Result<List<String>?, Exception>> uploadImages(User user, List<XFile>? images) async {
+  Future<Result<List<String>?, Exception>> uploadImages(User user, List<XFile>? images, String saveImagePath) async {
     print('이미지 업로드 서비스 실행');
     try {
       List<String>? downloadURLS = [];
@@ -34,7 +34,7 @@ class FirebaseStorageService {
 
         if (compressedBytes != null) {
           String fileName = '${DateTime.now().millisecondsSinceEpoch}_width=${width}_height=${height}.jpg';
-          Reference storageRef = _storage.ref().child("images/notices/${user.campus}/$fileName");
+          Reference storageRef = _storage.ref().child("images/$saveImagePath/${user.campus}/$fileName");
           UploadTask uploadTask = storageRef.putData(Uint8List.fromList(compressedBytes), SettableMetadata(contentType: 'image/jpeg'));
 
           TaskSnapshot snapshot = await uploadTask;

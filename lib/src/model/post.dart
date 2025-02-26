@@ -8,7 +8,7 @@ class Post {
   String title;
   String body;
   List<String> like;
-  List<String> images;
+  List<String>? images;
   List<Comment> comment;
 
   Post({
@@ -19,9 +19,9 @@ class Post {
     required this.title,
     required this.body,
     required this.like,
-    images,
+    this.images,
     comment,
-  }): images = List.from(images ?? []), comment = List.from(comment ?? []);
+  }): comment = List.from(comment ?? []);
 
   Map<String, dynamic> toMap() {
     return {

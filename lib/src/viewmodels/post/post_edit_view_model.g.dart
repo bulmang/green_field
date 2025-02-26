@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notice_view_model.dart';
+part of 'post_edit_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$noticeViewModelHash() => r'1a4ed384e68bf78d2ab82fd17703d23f8f5a6b94';
+String _$postEditViewModelHash() => r'22e1ed3038a01a72548cc36923226725dca36c1b';
 
-/// See also [NoticeViewModel].
-@ProviderFor(NoticeViewModel)
-final noticeViewModelProvider =
-    AsyncNotifierProvider<NoticeViewModel, List<Notice>?>.internal(
-  NoticeViewModel.new,
-  name: r'noticeViewModelProvider',
+/// See also [PostEditViewModel].
+@ProviderFor(PostEditViewModel)
+final postEditViewModelProvider =
+    AsyncNotifierProvider<PostEditViewModel, Post?>.internal(
+  PostEditViewModel.new,
+  name: r'postEditViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$noticeViewModelHash,
+      : _$postEditViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$NoticeViewModel = AsyncNotifier<List<Notice>?>;
+typedef _$PostEditViewModel = AsyncNotifier<Post?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

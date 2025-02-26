@@ -46,7 +46,7 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
                       child: CupertinoButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          if (userState.value == null) {
+                          if (userState.value == null && !userState.isLoading) {
                             showCupertinoDialog(
                               context: context,
                               builder: (BuildContext context) {
