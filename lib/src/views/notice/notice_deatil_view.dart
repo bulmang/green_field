@@ -77,7 +77,6 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
                   : [],
               likes: notice.like.length,
               commentCount: 0,
-              router: notice.id,
             ),
           ],
         ),

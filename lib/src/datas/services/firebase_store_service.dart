@@ -210,9 +210,6 @@ class FirebaseStoreService {
   /// Post Collection 생성 및 Post 데이터 추가
   Future<Result<Post, Exception>> createPostDB(Post post, GFUser.User user) async {
     try {
-      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
-        return Failure(Exception('인증 되지 않은 사용자입니다.'));
-      }
       await _store.collection('Post').doc(post.id).set(post.toMap());
 
       return Success(post);
@@ -225,9 +222,6 @@ class FirebaseStoreService {
   /// Post Collection에서 Post 데이터 삭제
   Future<Result<void, Exception>> deletePostDB(String postId, GFUser.User user) async {
     try {
-      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
-        return Failure(Exception('인증 되지 않은 사용자입니다.'));
-      }
       await _store.collection('Post').doc(postId).delete();
 
       return Success(null);
@@ -240,9 +234,7 @@ class FirebaseStoreService {
   /// Post Collection의 특정 Post 데이터 업데이트
   Future<Result<Post, Exception>> updatePostDB(Post post, GFUser.User user) async {
     try {
-      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
-        return Failure(Exception('인증 되지 않은 사용자입니다.'));
-      }
+
       // Firestore에서 해당 문서 업데이트
       await _store.collection('Campus').doc(user.campus).collection('Post').doc(post.id).update(post.toMap());
 
@@ -329,6 +321,35 @@ class FirebaseStoreService {
     }
   }
 
+  /// 특정 Post에 like 추가
+  Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async {
+    try {
+      // Firestore에서 해당 Post 문서 업데이트
+      await _store.collection('Post').doc(postId).update({
+        'like': firebase_store.FieldValue.arrayUnion([userId]),
+        'like_count': firebase_store.FieldValue.increment(1)
+      });
+
+      // 업데이트된 Post 문서 가져오기
+      final documentSnapshot = await _store.collection('Post').doc(postId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          // Firestore 데이터를 Post 객체로 변환
+          final post = Post.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(post);
+        }
+      }
+      return Failure(Exception('업데이트된 포스트를 찾을 수 없습니다.'));
+    } catch (e) {
+      print(e);
+      return Failure(Exception('좋아요 추가 실패: $e'));
+    }
+  }
 
 
   /// 외부 링크 추가

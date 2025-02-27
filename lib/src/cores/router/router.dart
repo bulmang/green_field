@@ -280,7 +280,7 @@ GoRouter goRouter(Ref ref) {
                     name: 'post_detail',
                     path: 'detail/:id',
                     builder: (context, state) => PostDetailView(
-                        post: postState.getPostById(state.pathParameters['id'] ?? ''),
+                      postId: (state.pathParameters['id'] ?? ''),
                     ),
                   ),
                   GoRoute(

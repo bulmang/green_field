@@ -4,10 +4,12 @@ import '../design_system/app_icons.dart';
 import '../design_system/app_texts.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
+import '../enums/feature_type.dart';
 import '../extensions/image_dimension_parser.dart';
 import 'greenfield_cached_network_image.dart';
 
 class GreenFieldList extends StatelessWidget {
+  final FeatureType? featureType;
   final String title;
   final String content;
   final String date;
@@ -19,16 +21,19 @@ class GreenFieldList extends StatelessWidget {
   final bool? last;
 
   const GreenFieldList(
-      {super.key,
-      required this.title,
-      required this.content,
-      required this.date,
-      required this.campus,
-      required this.imageUrl,
-      required this.likes,
-      required this.commentCount,
-      required this.onTap,
-      this.last});
+      {
+        super.key,
+        this.featureType,
+        required this.title,
+        required this.content,
+        required this.date,
+        required this.campus,
+        required this.imageUrl,
+        required this.likes,
+        required this.commentCount,
+        required this.onTap,
+        this.last,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -85,41 +90,46 @@ class GreenFieldList extends StatelessWidget {
                                     ),
                               ),
                               SizedBox(width: 5),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              featureType == FeatureType.post
+                                  ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Image.asset(
-                                    AppIcons.thumbnailUp,
-                                    width: 14,
-                                    height: 12,
-                                  ),
-                                  SizedBox(width: 1),
-                                  Text(
-                                    likes.toString(),
-                                    style: AppTextsTheme.main().gfCaption5.copyWith(
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.hand_thumbsup,
+                                        color: Theme.of(context).appColors.gfWarningColor,
+                                        size: 14,
+                                      ),
+                                      SizedBox(width: 1.5),
+                                      Text(
+                                        likes.toString(),
+                                        style: AppTextsTheme.main().gfCaption5.copyWith(
                                           color: Theme.of(context).appColors.gfMainColor,
                                         ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        AppIcons.messageCircle,
+                                        width: 14,
+                                        height: 12,
+                                      ),
+                                      SizedBox(width: 1),
+                                      Text(
+                                        commentCount.toString(),
+                                        style: AppTextsTheme.main().gfCaption5.copyWith(
+                                          color: Theme.of(context).appColors.gfMainColor,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
-                              ),
-                              SizedBox(width: 5),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Image.asset(
-                                    AppIcons.messageCircle,
-                                    width: 14,
-                                    height: 12,
-                                  ),
-                                  SizedBox(width: 1),
-                                  Text(
-                                    commentCount.toString(),
-                                    style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: Theme.of(context).appColors.gfMainColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              )
+                                  : SizedBox.shrink(),
                             ],
                           ),
                         ],

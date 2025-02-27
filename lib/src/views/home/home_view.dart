@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/router/router.dart';
 import 'package:green_field/src/viewmodels/notice/notice_view_model.dart';
+import 'package:green_field/src/viewmodels/post/post_view_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/home/home_view_model.dart';
@@ -28,6 +29,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     final userState = ref.watch(onboardingViewModelProvider);
     final noticeState = ref.watch(noticeViewModelProvider);
+    final postState = ref.watch(postViewModelProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
@@ -123,23 +125,26 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         ),
                         SizedBox(height: 5),
                         noticeState.isLoading || userState.isLoading
-                            ? Skeletonizer.zone(
-                                effect: ShimmerEffect(
-                                  baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
-                                  highlightColor:
-                                      Theme.of(context).appColors.gfWhiteColor,
-                                  duration: const Duration(seconds: 2),
-                                ),
-                                child: Card(
-                                  shadowColor: Colors.transparent,
-                                  color: Theme.of(context).appColors.gfWhiteColor,
-                                  child: ListTile(
-                                    trailing: Bone.square(size: 50),
-                                    title: Bone.text(words: 2),
-                                    subtitle: Bone.text(),
+                            ? SizedBox(
+                              height: 86,
+                              child: Skeletonizer.zone(
+                                  effect: ShimmerEffect(
+                                    baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                                    highlightColor:
+                                        Theme.of(context).appColors.gfWhiteColor,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                  child: Card(
+                                    shadowColor: Colors.transparent,
+                                    color: Theme.of(context).appColors.gfWhiteColor,
+                                    child: ListTile(
+                                      trailing: Bone.square(size: 50),
+                                      title: Bone.text(words: 2),
+                                      subtitle: Bone.text(),
+                                    ),
                                   ),
                                 ),
-                              )
+                            )
                             : NoticeCarouselSection(),
                       ],
                     ),
@@ -160,7 +165,30 @@ class _HomeViewState extends ConsumerState<HomeView> {
                               ),
                         ),
                         SizedBox(height: 5),
-                        ClipRRect(
+                        postState.isLoading
+                          ?
+                            SizedBox(
+                          height: 185,
+                          child: Skeletonizer.zone(
+                            effect: ShimmerEffect(
+                              baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                              highlightColor: Theme.of(context).appColors.gfWhiteColor,
+                              duration: const Duration(seconds: 2),
+                            ),
+                            child: Skeleton.leaf(
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                shadowColor: Colors.transparent,
+                                color: Theme.of(context).appColors.gfWhiteColor,
+                                child: ListTile(
+                                  title: Bone.text(words: 3),
+                                  subtitle: Bone.text(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                          : ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: TopLikedPostsSection(),
                         ),

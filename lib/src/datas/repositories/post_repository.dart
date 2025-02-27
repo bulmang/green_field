@@ -104,6 +104,23 @@ class PostRepository { // Update class name
     }
   }
 
+  /// /// 특정 Post에 like 추가
+  Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async {
+    try {
+      final result = await firebaseStoreService.addLikeToPost(postId, userId);
+
+      switch (result) {
+        case Success(value: final v):
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('좋아요 업데이트 실패: $error'));
+    }
+  }
+
+
   /// Image 업로드 후 ImageURL 가져오기
   Future<Result<List<String>?, Exception>> uploadImage(User user, List<ImageType>? images) async {
     try {

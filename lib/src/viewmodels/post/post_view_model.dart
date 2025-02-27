@@ -86,7 +86,6 @@ class PostViewModel extends _$PostViewModel {
   void _updatePostInList(String postId, Post updatedPost) {
     if (state.value!.isNotEmpty) {
       final index = state.value!.indexWhere((post) => post.id == postId);
-
       if (index != -1) {
         state.value![index] = updatedPost;
       } else {
@@ -96,13 +95,61 @@ class PostViewModel extends _$PostViewModel {
   }
 
   /// 특정 Post 제거
-  void deletePostInList(String postId) {
+  Future<Result<List<Post>, Exception>> deletePostInList(String postId) async {
     if (state.value!.isNotEmpty) {
       final currentList = state.value ?? [];
 
       final updatedList = currentList.where((post) => post.id != postId).toList();
-
       state = AsyncData(updatedList);
+      return Success(updatedList);
+    }
+    return Failure(Exception('에러 발생'));
+  }
+
+  Result<Post, Exception> getCurrentPost(String postId, List<Post>? postList) {
+    if (postList == null || postList.isEmpty) {
+      return Failure(Exception('Post list is empty'));
+    }
+
+    try {
+      final currentPost = postList.firstWhere((post) => post.id == postId);
+      return Success(currentPost);
+    } catch (e) {
+      return Failure(Exception('Post not found'));
+    }
+  }
+
+
+  /// 특정 Post 좋아요 업데이트 함수
+  Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async { // Update method name
+    try {
+      state = AsyncLoading();
+      final result = await ref
+          .read(postRepositoryProvider) // Update repository
+          .addLikeToPost(postId, userId);
+
+      switch (result) {
+        case Success(value: final post):
+          if (state.value!.isNotEmpty) {
+            final currentList = state.value ?? [];
+            final index = state.value!.indexWhere((post) => post.id == postId);
+            if (index != -1) {
+              currentList[index] = post;
+              state = AsyncData(currentList);
+            } else {
+              state = AsyncData([]);
+            }
+          }
+          return Success(post);
+        case Failure(exception: final exception):
+          print('exception: $exception');
+          state = AsyncError(exception, StackTrace.current);
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      print('exception: $error');
+      state = AsyncError(error, StackTrace.current);
+      return Failure(Exception('좋아요 업데이트 실패: $error')); // Update message
     }
   }
 

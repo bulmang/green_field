@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
 import 'package:green_field/src/utilities/design_system/app_icons.dart';
+import 'package:green_field/src/utilities/enums/feature_type.dart';
 import 'package:lottie/lottie.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../utilities/components/greefield_login_alert_dialog.dart';
@@ -152,6 +153,7 @@ class _PostViewState extends ConsumerState<PostView> {
                                 ),
                               )
                             : GreenFieldList(
+                                featureType: FeatureType.post,
                                 title: post.title,
                                 content: post.body,
                                 date: '${post.createdAt.year}-${post.createdAt.month}-${post.createdAt.day}',
@@ -200,7 +202,7 @@ class _PostViewState extends ConsumerState<PostView> {
                                       height: 60,
                                     )
                               : GreenFieldList(
-                                  title: '해당 캠퍼스의 게시물이 없습니다.',
+                                  title: '게시물이 없습니다.',
                                   content: '모든 게시물을 보셨어요!',
                                   date: '9999-01-17',
                                   campus: '개발자 생일',

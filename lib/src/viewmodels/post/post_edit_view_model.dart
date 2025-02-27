@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:green_field/src/cores/image_type/image_type.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
@@ -42,7 +43,7 @@ class PostEditViewModel extends _$PostEditViewModel {
       creatorCampus: user.campus ?? '',
       title: title,
       body: body,
-      like: [],
+      like: pastPost?.like ?? [],
       createdAt: date,
     );
 
@@ -63,6 +64,7 @@ class PostEditViewModel extends _$PostEditViewModel {
   /// Post 객체 삭제
   Future<Result<void, Exception>> deletePostModel(String postId) async { // Update method name
     try {
+      state = AsyncLoading();
       final userState = ref.watch(onboardingViewModelProvider);
       if(userState.value == null) return Failure(Exception('유저가 없습니다.'));
 
@@ -72,8 +74,10 @@ class PostEditViewModel extends _$PostEditViewModel {
 
       switch (result) {
         case Success():
+          state = AsyncData(null);
           return Success(null);
         case Failure(exception: final exception):
+          state = AsyncError(exception, StackTrace.current);
           return Failure(Exception(exception));
       }
     } catch (error) {
@@ -150,5 +154,21 @@ class PostEditViewModel extends _$PostEditViewModel {
           break;
       }
     }
+  }
+}
+
+final likeProvider = StateNotifierProvider<LikeNotifier, bool>(
+      (ref) => LikeNotifier(),
+);
+
+class LikeNotifier extends StateNotifier<bool> {
+  LikeNotifier() : super(false); // 초기 상태 설정
+
+  void toggleLike() {
+    state = true; // 현재 상태를 반전시킴
+  }
+
+  void setLike(bool isLiked) {
+    state = isLiked; // 상태를 특정 값으로 설정
   }
 }
