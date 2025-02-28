@@ -48,22 +48,46 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
             backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
             title: _getLimitedTitle(currentPost.title, 20),
             actions: [
-              if (postNotifier.checkAuth(userState.value?.userType, userState.value?.id ?? '', currentPost.creatorId))
-                CupertinoButton(
-                    child: ImageIcon(
-                      AssetImage(AppIcons.menu),
-                      size: 24,
-                      color: Theme.of(context).appColors.gfGray400Color,
-                    ),
+              (postNotifier.checkAuth(userState.value?.userType, userState.value?.id ?? '', currentPost.creatorId))
+                  ? CupertinoButton(
+                      child: ImageIcon(
+                        AssetImage(AppIcons.menu),
+                        size: 24,
+                        color: Theme.of(context).appColors.gfGray400Color,
+                      ),
+                      onPressed: () {
+                        _showCupertinoActionSheet(
+                          context,
+                          currentPost, // 현재 공지사항 객체
+                          ref.read(postEditViewModelProvider.notifier),
+                          ref.read(postViewModelProvider.notifier),
+                        );
+                      },
+                  )
+                  : CupertinoButton(
+                    child: Icon(CupertinoIcons.exclamationmark_shield,color: Theme.of(context).appColors.gfGray400Color),
                     onPressed: () {
-                      _showCupertinoActionSheet(
-                        context,
-                        currentPost, // 현재 공지사항 객체
-                        ref.read(postEditViewModelProvider.notifier),
-                        ref.read(postViewModelProvider.notifier),
+                      _showIOSDialog(
+                          context: context,
+                          title: '이 게시글을 신고하시겠어요?',
+                          body: '신고 사유를 정확히 선택해주세요. 잘못된 신고는 처리가 어려울 수 있어요.',
+                          onConfirm: () async {
+                            _showReportPicker(context, (String selectedReason) async {
+                              final result = await ref
+                                  .read(postViewModelProvider.notifier)
+                                  .reportPost(currentPost.id, userState.value?.id ?? '', selectedReason);
+
+                              switch (result) {
+                                case Success(value: final v):
+                                  postNotifier.showToast('신고가 정상적으로 접수되었습니다.\n운영팀이 확인 후 조치할 예정입니다.', ToastGravity.TOP, Theme.of(context).appColors.gfMainColor, Theme.of(context).appColors.gfWhiteColor);
+                                case Failure(exception: final e):
+                                  postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                              }
+                            });
+                          },
                       );
                     },
-                )
+                  )
             ],
           ),
           body: GestureDetector(
@@ -213,6 +237,88 @@ void _showCupertinoActionSheet(
           onPressed: () {
             Navigator.pop(context); // Close the action sheet
           },
+        ),
+      );
+    },
+  );
+}
+
+void _showIOSDialog({
+  required BuildContext context,
+  required String title,
+  required String body,
+  required VoidCallback onConfirm,
+}) {
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text(title),
+      content: Text(body),
+      actions: [
+        CupertinoDialogAction(
+          child: Text("취소", style: TextStyle(color: CupertinoColors.activeBlue),),
+          onPressed: () => Navigator.pop(context),
+        ),
+        CupertinoDialogAction(
+          child: Text("확인", style: TextStyle(color: CupertinoColors.systemRed),),
+          onPressed: () {
+            Navigator.pop(context); // 먼저 다이얼로그 닫기
+            onConfirm(); // 콜백 실행
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+void _showReportPicker(BuildContext context, Function(String) onConfirm)  {
+  int _selectedReasonIndex = 0;
+  const List<String> _reportReasons = [
+    '불법촬영물등의 유통',
+    '음란물/불건전한 만남 및 대화',
+    '유출/사칭/사기',
+    '게시판 성격에 부적절함',
+    '욕설/비하',
+    '정당/정치인 비하 및 선거운동',
+    '상업적 광고 및 판매',
+    '낚시/놀람/도배',
+  ];
+
+  showCupertinoModalPopup(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        height: 250,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Expanded(
+                child: CupertinoPicker(
+                  magnification: 1.2,
+                  squeeze: 1.2,
+                  useMagnifier: true,
+                  itemExtent: 32.0,
+                  scrollController: FixedExtentScrollController(initialItem: _selectedReasonIndex),
+                  onSelectedItemChanged: (int index) {
+                    _selectedReasonIndex = index;
+                  },
+                  children: _reportReasons.map((reason) => Center(child: Text(reason))).toList(),
+                ),
+              ),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Text('확인', style: TextStyle(fontSize: 18, color: CupertinoColors.systemRed)),
+                onPressed: () {
+                  Navigator.pop(context); // Picker 닫기
+                  onConfirm(_reportReasons[_selectedReasonIndex]); // 신고 사유 전달
+                },
+              ),
+            ],
+          ),
         ),
       );
     },

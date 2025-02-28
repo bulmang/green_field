@@ -3,9 +3,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/cores/image_type/image_type.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../cores/error_handler/result.dart';
 import '../../model/post.dart'; // Update model import
+import '../../model/report.dart';
 import '../../model/user.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firebase_store_service.dart';
@@ -117,6 +119,45 @@ class PostRepository { // Update class name
       }
     } catch (error) {
       return Failure(Exception('좋아요 업데이트 실패: $error'));
+    }
+  }
+
+  /// /// 특정 Post에 like 추가
+  Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
+    try {
+      final result = await firebaseStoreService.reportPost(postId, userId, reason);
+
+      switch (result) {
+        case Success(value: final v):
+          await _createReport(postId, userId, reason);
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('신고 기능 실패: $error'));
+    }
+  }
+
+  /// Report 생성
+  Future<Result<void, Exception>> _createReport(String postId, String userId, String reason) async {
+    try {
+      final Uuid uuid = Uuid();
+      String reportID = uuid.v4();
+
+      final report = Report(id: reportID, type: reason, reportedTargetID: postId, reporterId: userId, createdAt: DateTime.now());
+
+
+      final result = await firebaseStoreService.createReportDB(report);
+
+      switch (result) {
+        case Success(value: final v):
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('신고 기능 실패: $error'));
     }
   }
 

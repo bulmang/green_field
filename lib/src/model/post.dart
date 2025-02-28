@@ -10,6 +10,7 @@ class Post {
   List<String> like;
   List<String>? images;
   List<Comment> comment;
+  List<String> reportedUsers;
 
   Post({
     required this.id,
@@ -21,7 +22,8 @@ class Post {
     required this.like,
     this.images,
     comment,
-  }): comment = List.from(comment ?? []);
+    this.reportedUsers = const [],
+  }) : comment = List.from(comment ?? []);
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,6 +36,7 @@ class Post {
       'like': like,
       'images': images,
       'comment': comment,
+      'reported_users': reportedUsers,
     };
   }
 
@@ -46,8 +49,9 @@ class Post {
       title: map['title'],
       body: map['body'],
       like: List<String>.from(map['like'] ?? []),
-      images: List<String>.from(map['images']),
-      comment: List<Comment>.from(map['comment']),
+      images: List<String>.from(map['images'] ?? []),
+      comment: List<Comment>.from(map['comment'] ?? []),
+      reportedUsers: List<String>.from(map['reported_users'] ?? []),
     );
   }
 }

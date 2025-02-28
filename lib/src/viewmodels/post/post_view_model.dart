@@ -153,6 +153,39 @@ class PostViewModel extends _$PostViewModel {
     }
   }
 
+  /// 특정 Post 신고하기
+  Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
+    try {
+      state = AsyncLoading();
+      final result = await ref
+          .read(postRepositoryProvider) // 신고 API 호출
+          .reportPost(postId, userId, reason);
+
+      switch (result) {
+        case Success(value: final post):
+          if (state.value!.isNotEmpty) {
+            final currentList = state.value ?? [];
+            final index = state.value!.indexWhere((post) => post.id == postId);
+            if (index != -1) {
+              currentList[index] = post;
+              state = AsyncData(currentList);
+            } else {
+              state = AsyncData([]);
+            }
+          }
+          return Success(post);
+        case Failure(exception: final exception):
+          print('exception: $exception');
+          state = AsyncError(exception, StackTrace.current);
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      print('exception: $error');
+      state = AsyncError(error, StackTrace.current);
+      return Failure(Exception('게시글 신고 실패: $error'));
+    }
+  }
+
   /// 권한 확인
   bool checkAuth(String? userType, String userId, String postId) {
     print(userId);

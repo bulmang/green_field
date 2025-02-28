@@ -4,9 +4,10 @@ import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
 import 'package:green_field/src/utilities/enums/user_type.dart';
 import '../../model/notice.dart';
 import '../../model/post.dart';
+import '../../model/report.dart';
 import '../../model/user.dart' as GFUser;
 
-class FirebaseStoreService {
+class   FirebaseStoreService {
   FirebaseStoreService(this._store);
   final firebase_store.FirebaseFirestore _store;
 
@@ -250,7 +251,7 @@ class FirebaseStoreService {
     try {
       var query = _store
           .collection('Post').orderBy('created_at', descending: true)
-          .limit(15);
+          .limit(100);
 
       // 첫 번째 페이지 또는 페이징 데이터를 가져오기
       var querySnapshot = await query.get();
@@ -327,7 +328,6 @@ class FirebaseStoreService {
       // Firestore에서 해당 Post 문서 업데이트
       await _store.collection('Post').doc(postId).update({
         'like': firebase_store.FieldValue.arrayUnion([userId]),
-        'like_count': firebase_store.FieldValue.increment(1)
       });
 
       // 업데이트된 Post 문서 가져오기
@@ -351,6 +351,45 @@ class FirebaseStoreService {
     }
   }
 
+  /// 특정 Post에 신고 추가
+  Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
+    try {
+      await _store.collection('Post').doc(postId).update({
+        'reported_users': firebase_store.FieldValue.arrayUnion([userId]),
+      });
+
+      // 업데이트된 Post 문서 가져오기
+      final documentSnapshot = await _store.collection('Post').doc(postId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          // Firestore 데이터를 Post 객체로 변환
+          final post = Post.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(post);
+        }
+      }
+      return Failure(Exception('업데이트된 포스트를 찾을 수 없습니다.'));
+    } catch (e) {
+      print(e);
+      return Failure(Exception('신고 기능 실패: $e'));
+    }
+  }
+
+  /// Post Collection 생성 및 Post 데이터 추가
+  Future<Result<void, Exception>> createReportDB(Report report) async {
+    try {
+      await _store.collection('Report').doc(report.id).set(report.toMap());
+
+      return Success(null);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('post 데이터 생성 실패: $e'));
+    }
+  }
 
   /// 외부 링크 추가
   Future<Result<String, Exception>> createExternalLink(GFUser.User user, String linkID, String linkDomainName) async {
