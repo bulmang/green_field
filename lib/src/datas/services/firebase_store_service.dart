@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
 import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
+import 'package:green_field/src/model/comment.dart';
 import 'package:green_field/src/utilities/enums/user_type.dart';
 import '../../model/notice.dart';
 import '../../model/post.dart';
@@ -250,16 +251,23 @@ class   FirebaseStoreService {
   Future<Result<List<Post>, Exception>> getPostList() async {
     try {
       var query = _store
-          .collection('Post').orderBy('created_at', descending: true)
+          .collection('Post')
+          .orderBy('created_at', descending: true)
           .limit(100);
 
       // 첫 번째 페이지 또는 페이징 데이터를 가져오기
       var querySnapshot = await query.get();
 
-      // 데이터를 Notice 객체로 매핑
-      List<Post> postList = querySnapshot.docs
-          .map((doc) => Post.fromMap(doc.data()))
-          .toList();
+      // 데이터를 Post 객체로 매핑
+      List<Post> postList = await Future.wait(querySnapshot.docs.map((doc) async {
+        final data = doc.data();
+        final commentCount = await _getCommentCount(doc.id);
+        return Post.fromMap({
+          ...data,
+          'id': doc.id,
+          'commentCount': commentCount,
+        });
+      }));
 
       if (postList.isEmpty) {
         return Success([]);
@@ -271,25 +279,54 @@ class   FirebaseStoreService {
     }
   }
 
+  /// 특정 Post의 Comment 개수 가져오기
+  Future<int?> _getCommentCount(String postId) async {
+    try {
+      final countSnapshot = await _store
+          .collection('Post')
+          .doc(postId)
+          .collection('Comment')
+          .count()
+          .get();
 
-  /// Post List 추가로 가져오기
+      print('Comment 개수 가져오기: ${countSnapshot.count}');
+      return countSnapshot.count;
+    } catch (e) {
+      print('Comment 개수 가져오기 실패: $e');
+      return 0;
+    }
+  }
+
+
+  /// 다음 Post List 가져오기
   Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost) async {
     try {
-      var query = _store.collection('Post').orderBy('created_at', descending: true).limit(15);
+      var query = _store
+          .collection('Post')
+          .orderBy('created_at', descending: true)
+          .limit(15);
 
-      if (lastPost != [] && lastPost != null) {
+      if (lastPost != null && lastPost.isNotEmpty) {
         final lastDoc = await _store.collection('Post').doc(lastPost.last.id).get();
         query = query.startAfterDocument(lastDoc);
       }
 
       var querySnapshot = await query.get();
 
-      List<Post> postList = querySnapshot.docs.map((doc) => Post.fromMap(doc.data())).toList();
+      List<Post> postList = await Future.wait(querySnapshot.docs.map((doc) async {
+        final data = doc.data();
+        final commentCount = await _getCommentCount(doc.id);
+        return Post.fromMap({
+          ...data,
+          'id': doc.id,
+          'commentCount': commentCount,
+        });
+      }));
 
       if (postList.isEmpty) {
         return Success([]);
       } else {
-        if (lastPost != null) lastPost!.addAll(postList);
+        if (lastPost != null) lastPost.addAll(postList);
 
         return Success(lastPost ?? postList);
       }
@@ -322,6 +359,34 @@ class   FirebaseStoreService {
     }
   }
 
+  /// 특정 Post에 신고 추가
+  Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
+    try {
+      await _store.collection('Post').doc(postId).update({
+        'reported_users': firebase_store.FieldValue.arrayUnion([userId]),
+      });
+
+      // 업데이트된 Post 문서 가져오기
+      final documentSnapshot = await _store.collection('Post').doc(postId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          // Firestore 데이터를 Post 객체로 변환
+          final post = Post.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(post);
+        }
+      }
+      return Failure(Exception('업데이트된 포스트를 찾을 수 없습니다.'));
+    } catch (e) {
+      print(e);
+      return Failure(Exception('신고 기능 실패: $e'));
+    }
+  }
+
   /// 특정 Post에 like 추가
   Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async {
     try {
@@ -351,11 +416,110 @@ class   FirebaseStoreService {
     }
   }
 
-  /// 특정 Post에 신고 추가
-  Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
+  /// Post Collection 생성 및 Post 데이터 추가
+  Future<Result<void, Exception>> createReportDB(String? commentId, Report report) async {
     try {
+      if(commentId != null) {
+        await _store.collection('Report').doc('Comment').collection(report.id).doc(report.type).set(report.toMap());
+      } else {
+        await _store.collection('Report').doc('Post').collection(report.id).doc(report.type).set(report.toMap());
+      }
+      return Success(null);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('post 데이터 생성 실패: $e'));
+    }
+  }
+
+  /// Comment List 가져오기
+  Future<Result<List<Comment>, Exception>> getCommentList(String postId) async {
+    try {
+      final querySnapshot = await _store
+          .collection('Post')
+          .doc(postId)
+          .collection('Comment')
+          .orderBy('created_at')
+          .get();
+
+      final comments = querySnapshot.docs.map((doc) {
+        return Comment.fromMap({
+          ...doc.data(),
+          'id': doc.id,
+        });
+      }).toList();
+
+      return Success(comments);
+    } catch (e) {
+      print('err: $e');
+      return Failure(Exception('댓글 목록 가져오기 실패: $e'));
+    }
+  }
+
+  /// Comment 생성
+  Future<Result<Comment, Exception>> createCommentDB(Post post, Comment comment) async {
+    try {
+      await _store
+          .collection('Post')
+          .doc(post.id)
+          .collection('Comment')
+          .doc(comment.id)
+          .set(comment.toMap());
+
+      if (post.creatorId != comment.creatorId) {
+      await _store.collection('Post').doc(post.id).update({
+        'comment_id': firebase_store.FieldValue.arrayUnion([comment.creatorId]),
+      });
+      }
+
+      return Success(comment);
+    } catch (e) {
+      print('err: $e');
+      return Failure(Exception('댓글 생성 실패: $e'));
+    }
+  }
+
+  /// Comment 데이터 삭제
+  Future<Result<List<Comment>, Exception>> deleteCommentDB(String postId, String commentId) async {
+    try {
+      await _store.collection('Post').doc(postId).collection('Comment').doc(commentId).delete();
+
+      final querySnapshot = await _store
+          .collection('Post')
+          .doc(postId)
+          .collection('Comment')
+          .orderBy('created_at')
+          .get();
+
+      final comments = querySnapshot.docs.map((doc) {
+        return Comment.fromMap({
+          ...doc.data(),
+          'id': doc.id,
+        });
+      }).toList();
+
+      return Success(comments);
+    } catch (e) {
+      return Failure(Exception('댓글 데이터 삭제 실패: $e'));
+    }
+  }
+
+
+  /// 특정 Post의 commentCount 업데이트하기
+  Future<Result<Post, Exception>> updateCommentCount(String postId) async {
+    try {
+      // Comment 서브컬렉션의 문서 개수 가져오기
+      final countSnapshot = await _store
+          .collection('Post')
+          .doc(postId)
+          .collection('Comment')
+          .count()
+          .get();
+
+      final commentCount = countSnapshot.count;
+
+      // Firestore에서 해당 Post 문서 업데이트
       await _store.collection('Post').doc(postId).update({
-        'reported_users': firebase_store.FieldValue.arrayUnion([userId]),
+        'commentCount': commentCount,
       });
 
       // 업데이트된 Post 문서 가져오기
@@ -375,21 +539,10 @@ class   FirebaseStoreService {
       return Failure(Exception('업데이트된 포스트를 찾을 수 없습니다.'));
     } catch (e) {
       print(e);
-      return Failure(Exception('신고 기능 실패: $e'));
+      return Failure(Exception('댓글 개수 업데이트에 실패했습니다: $e'));
     }
   }
 
-  /// Post Collection 생성 및 Post 데이터 추가
-  Future<Result<void, Exception>> createReportDB(Report report) async {
-    try {
-      await _store.collection('Report').doc(report.id).set(report.toMap());
-
-      return Success(null);
-    } catch (e) {
-      print(e);
-      return Failure(Exception('post 데이터 생성 실패: $e'));
-    }
-  }
 
   /// 외부 링크 추가
   Future<Result<String, Exception>> createExternalLink(GFUser.User user, String linkID, String linkDomainName) async {

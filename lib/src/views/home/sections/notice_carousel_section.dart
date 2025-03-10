@@ -143,13 +143,14 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
       return ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Container(
+          height: 86,
           color: Theme.of(context).appColors.gfWhiteColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -174,7 +175,7 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 7, bottom: 7, right: 12),
+                padding: EdgeInsets.only(top: 14, bottom: 7, right: 12),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(

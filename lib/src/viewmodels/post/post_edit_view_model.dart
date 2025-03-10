@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../cores/error_handler/result.dart';
 import '../../datas/repositories/post_repository.dart'; // Update repository
+import '../../model/comment.dart';
 import '../../model/post.dart'; // Update model
 import '../../model/user.dart';
 
@@ -44,6 +45,7 @@ class PostEditViewModel extends _$PostEditViewModel {
       title: title,
       body: body,
       like: pastPost?.like ?? [],
+      commentCount: pastPost?.commentCount ?? 0,
       createdAt: date,
     );
 

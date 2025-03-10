@@ -16,6 +16,7 @@ import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../utilities/design_system/app_texts.dart';
 import '../../utilities/enums/user_type.dart';
+import '../../viewmodels/post/post_detail_view_model.dart';
 import '../../viewmodels/post/post_view_model.dart'; // Update to PostViewModel
 import '../../viewmodels/onboarding/onboarding_view_model.dart';
 
@@ -163,8 +164,8 @@ class _PostViewState extends ConsumerState<PostView> {
                                         ? post.images![0]
                                         : "",
                                 likes: post.like.length,
-                                commentCount: post.comment.length,
-                                onTap: () {
+                                commentCount: post.commentCount,
+                                onTap: () async {
                                   if (userState.value == null && !userState.isLoading) {
                                     showCupertinoDialog(
                                       context: context,
@@ -173,6 +174,23 @@ class _PostViewState extends ConsumerState<PostView> {
                                       },
                                     );
                                   } else {
+                                    final postNotifier = ref.watch(postViewModelProvider.notifier);
+                                    final result = await ref
+                                        .read(postDetailViewModelProvider.notifier)
+                                        .getCommentList(post.id);
+
+                                    switch (result) {
+                                      case Success(value: final v):
+                                        print('성공 v: $v');
+                                      case Failure(exception: final e):
+                                        print('실패 v: $e');
+                                        postNotifier.showToast(
+                                          '에러가 발생했어요!',
+                                          ToastGravity.TOP,
+                                          Theme.of(context).appColors.gfWarningColor,
+                                          Theme.of(context).appColors.gfWhiteColor,
+                                        );
+                                    }
                                     context.go('/post/detail/${post.id}');
                                   }
                                 },

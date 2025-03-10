@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:green_field/src/model/comment.dart';
+import 'package:green_field/src/viewmodels/post/post_detail_view_model.dart';
 import 'package:green_field/src/viewmodels/post/post_edit_view_model.dart';
 import 'package:green_field/src/viewmodels/post/post_view_model.dart';
 import '../../cores/error_handler/result.dart';
@@ -30,14 +32,22 @@ import '../../viewmodels/onboarding/onboarding_view_model.dart';
   }
 
 class _PostDetailViewState extends ConsumerState<PostDetailView> {
+  final ScrollController _scrollController = ScrollController();
 
-    @override
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
     Widget build(BuildContext context) {
       final userState = ref.watch(onboardingViewModelProvider);
       final postNotifier = ref.watch(postViewModelProvider.notifier);
       final postEditState = ref.watch(postEditViewModelProvider);
       final postState = ref.watch(postViewModelProvider);
-      final currentPost = postState.value?.firstWhere((post) => post.id == widget.postId, orElse: () => Post(id: 'id', creatorId: 'creatorId', creatorCampus: 'creatorCampus', createdAt: DateTime.now(), title: 'title', body: 'body', like: []));
+      final postDetailState = ref.watch(postDetailViewModelProvider);
+      final currentPost = postState.value?.firstWhere((post) => post.id == widget.postId, orElse: () => Post(id: 'id', creatorId: 'creatorId', creatorCampus: 'creatorCampus', createdAt: DateTime.now(), title: 'title', body: 'body', like: [],commentCount: 0));
 
       return Stack(
       children: [
@@ -96,6 +106,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -116,7 +127,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                               : [],
                           likes: currentPost.like.length,
                           likesExist: currentPost.like.contains(userState.value?.id),
-                          commentCount: currentPost.comment?.length ?? 0, // Assuming you have comments in your model
+                          commentCount: currentPost.commentCount,
                           onTap: () async {
                             if (currentPost.like.contains(userState.value?.id)) {
                               postNotifier.showToast('이 글에 이미 좋아요를 눌렀어요!', ToastGravity.TOP, Theme.of(context).appColors.gfMainColor, Theme.of(context).appColors.gfWhiteColor);
@@ -135,25 +146,68 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
                             }
                           },
                         ),
-                        ...currentPost.comment!.map((comment) {
-                          // Assuming each comment has properties like campus, dateTime, and content
+                        ...postDetailState.value?.map((comment) {
                           return GreenFieldCommentWidget(
-                            campus: comment
-                                .creatorCampus, // Assuming comment has a campus property
-                            dateTime: comment
-                                .createdAt, // Assuming comment has a dateTime property
-                            comment: comment
-                                .body, // Assuming comment has a content property
+                            commetId: comment.id,
+                            campus: comment.creatorCampus,
+                            dateTime: comment.createdAt,
+                            commentText: comment.body,
+                            commentCreatId: comment.creatorId,
+                            post: currentPost,
                           );
-                        }),
+                        }) ?? []
                       ],
                     ),
                   ),
                 ),
                 GreenFieldTextField(
                   type: FeatureType.post,
-                  onAction: (String text) {
-                    // TODO: Implement onAction
+                  onAction: (String text) async {
+
+                    final result = await ref
+                        .read(postDetailViewModelProvider.notifier)
+                        .createComment(currentPost, userState.value!, text);
+
+                    switch (result) {
+                      case Success(value: final v):
+                        final result = await ref
+                            .read(postDetailViewModelProvider.notifier)
+                            .getCommentList(currentPost.id);
+
+                        switch (result) {
+                          case Success(value: final v):
+                            final result = await ref
+                                .read(postViewModelProvider.notifier)
+                                .updateCommentCount(currentPost.id);
+
+                            switch (result) {
+                              case Success(value: final v):
+                                print(v);
+                              case Failure(exception: final e):
+                                postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                            }
+
+                            FocusScope.of(context).unfocus();
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+
+                          case Failure(exception: final e):
+                            print('실패 v: $e');
+                            FocusScope.of(context).unfocus();
+                            postNotifier.showToast(
+                              '에러가 발생했어요!',
+                              ToastGravity.TOP,
+                              Theme.of(context).appColors.gfWarningColor,
+                              Theme.of(context).appColors.gfWhiteColor,
+                            );
+                        }
+                      case Failure(exception: final e):
+                        print('e:$e');
+                        postNotifier.showToast('에러가 발생했어요! $e', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                    }
                   },
                 ),
               ],
@@ -161,7 +215,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
           ),
         )
           : SizedBox.shrink(),
-        postEditState.isLoading || postState.isLoading
+        postEditState.isLoading || postState.isLoading || postDetailState.isLoading
             ? GreenFieldLoadingWidget()
             : SizedBox.shrink(),
       ],

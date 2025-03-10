@@ -122,7 +122,7 @@ class GreenFieldEditSectionState extends ConsumerState<GreenFieldEditSection> {
 
                     TextField(
                       controller: _bodyController,
-                      maxLength: 500,
+                      maxLength: 1500,
                       minLines: 8,
                       maxLines: null,
                       style: AppTextsTheme.main().gfBody1.copyWith(

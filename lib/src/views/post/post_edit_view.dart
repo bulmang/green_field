@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/image_type/image_type.dart';
 import 'package:green_field/src/utilities/components/greenfield_loading_widget.dart';
+import 'package:green_field/src/viewmodels/post/post_detail_view_model.dart';
 import 'package:green_field/src/viewmodels/post/post_edit_view_model.dart';
 import 'package:green_field/src/viewmodels/post/post_view_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,6 +32,7 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
   Widget build(BuildContext context) {
     final userState = ref.watch(onboardingViewModelProvider);
     final postEditState = ref.watch(postEditViewModelProvider);
+    final postDetailNotifier = ref.watch(postDetailViewModelProvider.notifier);
 
     return Stack(
       children: [
@@ -51,6 +53,9 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
                   isCompleteActive.value = !isCompleteActive.value;
+                  // ref
+                  //     .read(postEditViewModelProvider.notifier)
+                  //     .createMultiplePosts(userState.value!);
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -107,9 +112,9 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
 
                           switch (getPostList) {
                             case Success():
+                              postDetailNotifier.resetCommentList();
                               context.go('/post/detail/${value.id}');
                             case Failure(exception: final e):
-                              print('getPostList:$e');
                               ref
                                   .read(postEditViewModelProvider.notifier)
                                   .flutterToast('게시글을 가져오기 실패하였습니다.');

@@ -2,11 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:green_field/src/model/comment.dart';
 import 'package:green_field/src/model/post.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../cores/error_handler/result.dart';
 import '../../datas/repositories/post_repository.dart';
+import '../../model/user.dart';
 import '../../utilities/enums/user_type.dart';
 import '../onboarding/onboarding_view_model.dart';
 
@@ -45,6 +48,7 @@ class PostViewModel extends _$PostViewModel {
         state = AsyncData(postList);
         return Success(postList);
       case Failure(exception: final exception):
+        print('exception: $exception');
         state = AsyncError(exception, StackTrace.current);
         return Failure(Exception(exception));
     }
@@ -186,11 +190,50 @@ class PostViewModel extends _$PostViewModel {
     }
   }
 
+
+  /// 특정 Post 댓글 개수 업데이트 함수
+  Future<Result<Post, Exception>> updateCommentCount(String postId) async {
+    try {
+      state = AsyncLoading();
+      final result = await ref
+          .read(postRepositoryProvider)
+          .updateCommentCount(postId);
+
+      switch (result) {
+        case Success(value: final post):
+          if (state.value!.isNotEmpty) {
+            final currentList = state.value ?? [];
+            final index = state.value!.indexWhere((post) => post.id == postId);
+            if (index != -1) {
+              currentList[index] = post;
+              state = AsyncData(currentList);
+            } else {
+              state = AsyncData([]);
+            }
+          }
+          return Success(post);
+        case Failure(exception: final exception):
+          print('exception: $exception');
+          state = AsyncError(exception, StackTrace.current);
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      print('exception: $error');
+      state = AsyncError(error, StackTrace.current);
+      return Failure(Exception('좋아요 업데이트 실패: $error')); // Update message
+    }
+  }
+
   /// 권한 확인
   bool checkAuth(String? userType, String userId, String postId) {
-    print(userId);
-    print(postId);
-    return userType == getUserTypeName(UserType.master) || userId == postId;
+    if (userType == null) return false;
+    if (userType ==  getUserTypeName(UserType.master)) {
+      return true;
+    } else if (userId == postId) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Post getPostById(String id) {

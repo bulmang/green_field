@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/cores/image_type/image_type.dart';
+import 'package:green_field/src/model/comment.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -106,7 +107,7 @@ class PostRepository { // Update class name
     }
   }
 
-  /// /// 특정 Post에 like 추가
+  /// 특정 Post에 like 추가
   Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async {
     try {
       final result = await firebaseStoreService.addLikeToPost(postId, userId);
@@ -122,14 +123,14 @@ class PostRepository { // Update class name
     }
   }
 
-  /// /// 특정 Post에 like 추가
+  /// 특정 Post에 report 추가
   Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
     try {
       final result = await firebaseStoreService.reportPost(postId, userId, reason);
 
       switch (result) {
         case Success(value: final v):
-          await _createReport(postId, userId, reason);
+          await _createReport(postId, null, userId, reason);
           return Success(v);
         case Failure(exception: final exception):
           return Failure(exception);
@@ -140,15 +141,27 @@ class PostRepository { // Update class name
   }
 
   /// Report 생성
-  Future<Result<void, Exception>> _createReport(String postId, String userId, String reason) async {
+  Future<Result<void, Exception>> _createReport(String postId, String? commentId, String userId, String reason) async {
     try {
       final Uuid uuid = Uuid();
       String reportID = uuid.v4();
+      Report report;
 
-      final report = Report(id: reportID, type: reason, reportedTargetID: postId, reporterId: userId, createdAt: DateTime.now());
+      if (commentId != null) {
+        report = Report(id: reportID,
+            type: reason,
+            reportedTargetID: commentId,
+            reporterId: userId,
+            createdAt: DateTime.now());
+      } else {
+        report = Report(id: reportID,
+            type: reason,
+            reportedTargetID: postId,
+            reporterId: userId,
+            createdAt: DateTime.now());
+      }
 
-
-      final result = await firebaseStoreService.createReportDB(report);
+      final result = await firebaseStoreService.createReportDB(commentId, report);
 
       switch (result) {
         case Success(value: final v):
@@ -161,6 +174,80 @@ class PostRepository { // Update class name
     }
   }
 
+  /// Comment 리스트 가져오기
+  Future<Result<List<Comment>, Exception>> getCommentList(String postId) async {
+    try {
+      final result = await firebaseStoreService.getCommentList(postId);
+
+      switch(result) {
+        case Success(value: final commentList):
+          return Success(commentList);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } on Exception catch (error) {
+      return Failure(error); // 예외 발생 시 실패 반환
+    }
+  }
+
+
+  /// Comment 생성
+  Future<Result<Comment, Exception>> createCommentDB(Post post, Comment comment) async {
+    try {
+      final result = await firebaseStoreService.createCommentDB(post, comment);
+
+      switch (result) {
+        case Success(value: final v):
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('신고 기능 실패: $error'));
+    }
+  }
+
+  /// Comment 신고
+  Future<Result<void, Exception>> reportComment(String postId, String commentId, String userId, String reason) async {
+    try {
+      final result = await _createReport(postId, commentId, userId, reason);
+      return result;
+    } catch (error) {
+      return Failure(Exception('신고 기능 실패: $error'));
+    }
+  }
+
+  /// Comment 삭제
+  Future<Result<List<Comment>, Exception>> deleteCommentDB(String postId, String commentId) async {
+    try {
+      final result = await firebaseStoreService.deleteCommentDB(postId, commentId);
+
+      switch (result) {
+        case Success(value: final commentList):
+          return Success(commentList);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('포스트 삭제 실패: $error'));
+    }
+  }
+
+  /// 특정 Post에 commentCount 업데이트
+  Future<Result<Post, Exception>> updateCommentCount(String postId) async {
+    try {
+      final result = await firebaseStoreService.updateCommentCount(postId);
+
+      switch (result) {
+        case Success(value: final v):
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('좋아요 업데이트 실패: $error'));
+    }
+  }
 
   /// Image 업로드 후 ImageURL 가져오기
   Future<Result<List<String>?, Exception>> uploadImage(User user, List<ImageType>? images) async {
