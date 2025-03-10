@@ -157,8 +157,8 @@ class AppTextsTheme extends ThemeExtension<AppTextsTheme> {
     gfCaption5: TextStyle(
       fontFamily: _baseFamily,
       fontWeight: FontWeight.bold,
-      fontSize: 7,
-      height: 9 / 7,
+      fontSize: 9,
+      height: 10 / 7,
     ),
   );
 

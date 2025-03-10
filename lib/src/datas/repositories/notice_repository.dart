@@ -122,7 +122,7 @@ class NoticeRepository {
         }
       }
 
-      final result = await firebaseStorageService.uploadImages(user, xFileImages);
+      final result = await firebaseStorageService.uploadImages(user, xFileImages, 'notices');
 
       switch (result) {
         case Success(value: final value):

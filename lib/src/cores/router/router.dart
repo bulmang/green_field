@@ -6,7 +6,7 @@ import 'package:green_field/src/cores/router/go_router_refresh_stream.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
 import 'package:green_field/src/utilities/extensions/image_dimension_parser.dart';
 import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
-import 'package:green_field/src/viewmodels/post_view_model.dart';
+import 'package:green_field/src/viewmodels/post/post_view_model.dart';
 import 'package:green_field/src/views/campus/campus_view.dart';
 import 'package:green_field/src/views/home/home_view.dart';
 import 'package:green_field/src/views/login/login_view.dart';
@@ -30,9 +30,7 @@ import '../../views/setting/setting_view.dart';
 
 part 'router.g.dart';
 
-final noticeVM = NoticeViewModel();
 final recruitVM = RecruitViewModel();
-final postVM = PostViewModel();
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -49,6 +47,8 @@ final GlobalKey<NavigatorState> _campusTabNavigatorKey =
 GoRouter goRouter(Ref ref) {
   final authState = ref.watch(firebaseAuthServiceProvider);
   final noticeState = ref.watch(noticeViewModelProvider.notifier);
+  final postState = ref.watch(postViewModelProvider.notifier);
+
   return GoRouter(
     initialLocation: '/signIn',
     navigatorKey: _rootNavigatorKey,
@@ -272,15 +272,16 @@ GoRouter goRouter(Ref ref) {
             routes: [
               GoRoute(
                 path: '/post',
-                builder: (BuildContext context, GoRouterState state) {
-                  return PostView();
-                },
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: PostView(),
+                ),
                 routes: <RouteBase>[
                   GoRoute(
                     name: 'post_detail',
                     path: 'detail/:id',
                     builder: (context, state) => PostDetailView(
-                        post: postVM.getPostById(state.pathParameters['id']!)),
+                      postId: (state.pathParameters['id'] ?? ''),
+                    ),
                   ),
                   GoRoute(
                     name: "post_edit",
@@ -289,6 +290,32 @@ GoRouter goRouter(Ref ref) {
                       return CustomTransitionPage(
                         key: state.pageKey,
                         child: PostEditView(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0); // 아래에서 시작
+                          const end = Offset.zero; // 현재 위치
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: "post_edit_modify",
+                    path: 'edit/modify/:id',
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: PostEditView(post: postState.getPostById(state.pathParameters['id'] ?? '')
+                        ),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
                           const begin = Offset(0.0, 1.0); // 아래에서 시작

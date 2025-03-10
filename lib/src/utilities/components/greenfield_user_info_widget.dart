@@ -44,7 +44,7 @@ class GreenfieldUserInfoWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    featureType  == FeatureType.notice ? campus :'익명($campus)',
+                    featureType  == FeatureType.notice ? campus :'익명($campus캠퍼스)',
                     style: AppTextsTheme.main().gfHeading3.copyWith(
                       color: featureType  == FeatureType.notice ? AppColorsTheme.main().gfMainColor : AppColorsTheme.main().gfGray800Color,
                     ),

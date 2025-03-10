@@ -1,28 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:intl/intl.dart';
 
+import '../../../cores/error_handler/result.dart';
 import '../../../utilities/design_system/app_texts.dart';
 import '../../../utilities/design_system/app_icons.dart';
 import '../../../model/post.dart';
-import '../../../viewmodels/post_view_model.dart';
+import '../../../viewmodels/post/post_detail_view_model.dart';
+import '../../../viewmodels/post/post_view_model.dart';
 
-class TopLikedPostsSection extends StatelessWidget {
+class TopLikedPostsSection extends ConsumerStatefulWidget {
 
   const TopLikedPostsSection({super.key});
 
   @override
+  _TopLikedPostsSection createState() => _TopLikedPostsSection();
+}
+class _TopLikedPostsSection extends ConsumerState<TopLikedPostsSection> {
+  @override
   Widget build(BuildContext context) {
-    final postVM = PostViewModel();
+    final postState = ref.watch(postViewModelProvider);
+    final postNotifier = ref.watch(postViewModelProvider.notifier);
+
     bool isIPhoneSE = MediaQuery.of(context).size.width <= 375;
-    List<Post> topPosts = postVM.getTopLikedPosts(3);
+    final topList = (postState.value ?? [])
+        .toList() // 리스트 복사 (원본 유지)
+      ..sort((a, b) => b.like.length.compareTo(a.like.length)); // 내림차순 정렬
+
+    final top3List = topList.take(3).toList(); // 상위 3개 가져오기
+
+    for(var t in topList) {
+      print(t.title);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...topPosts.take(isIPhoneSE ? 2 : 3).toList().asMap().entries.map((entry) {
+        ...top3List.take(isIPhoneSE ? 2 : 3).toList().asMap().entries.map((entry) {
           int index = entry.key;
           Post post = entry.value;
           String formattedDate = DateFormat('MM/dd').format(post.createdAt);
@@ -34,7 +52,23 @@ class TopLikedPostsSection extends StatelessWidget {
                 color: Theme.of(context).appColors.gfWhiteColor,
                 child: CupertinoButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () {
+                  onPressed: () async {
+                    final result = await ref
+                        .read(postDetailViewModelProvider.notifier)
+                        .getCommentList(post.id);
+
+                    switch (result) {
+                      case Success(value: final v):
+                        print('성공 v: $v');
+                      case Failure(exception: final e):
+                        print('실패 v: $e');
+                        postNotifier.showToast(
+                          '에러가 발생했어요!',
+                          ToastGravity.TOP,
+                          Theme.of(context).appColors.gfWarningColor,
+                          Theme.of(context).appColors.gfWhiteColor,
+                        );
+                    }
                     context.go('/post/detail/${post.id}');
                   },
                   child: Row(
@@ -100,7 +134,7 @@ class TopLikedPostsSection extends StatelessWidget {
                                       ),
                                       SizedBox(width: 1),
                                       Text(
-                                        '0',
+                                        '${post.commentCount}',
                                         style: AppTextsTheme.main().gfCaption5.copyWith(
                                           color: Theme.of(context).appColors.gfMainColor,
                                         ),

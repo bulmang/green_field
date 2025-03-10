@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notice_view_model.dart';
+part of 'post_detail_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$noticeViewModelHash() => r'1a4ed384e68bf78d2ab82fd17703d23f8f5a6b94';
+String _$postDetailViewModelHash() =>
+    r'cd6eeecc25452ebe2e495b0448eedd3b93324f01';
 
-/// See also [NoticeViewModel].
-@ProviderFor(NoticeViewModel)
-final noticeViewModelProvider =
-    AsyncNotifierProvider<NoticeViewModel, List<Notice>?>.internal(
-  NoticeViewModel.new,
-  name: r'noticeViewModelProvider',
+/// See also [PostDetailViewModel].
+@ProviderFor(PostDetailViewModel)
+final postDetailViewModelProvider =
+    AsyncNotifierProvider<PostDetailViewModel, List<Comment>>.internal(
+  PostDetailViewModel.new,
+  name: r'postDetailViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$noticeViewModelHash,
+      : _$postDetailViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$NoticeViewModel = AsyncNotifier<List<Notice>?>;
+typedef _$PostDetailViewModel = AsyncNotifier<List<Comment>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:green_field/src/model/notice.dart';
 import 'package:green_field/src/utilities/components/greenfield_image_widget.dart';
+import 'package:green_field/src/viewmodels/post/post_edit_view_model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import '../../cores/image_type/image_type.dart';
 
+import '../../model/post.dart';
 import '../../viewmodels/notice/notice_edit_view_model.dart';
 import '../../views/recruitment/recruit_setting_section.dart';
 import '../design_system/app_icons.dart';
@@ -45,9 +48,16 @@ class GreenFieldEditSectionState extends ConsumerState<GreenFieldEditSection> {
     _titleController = TextEditingController();
     _bodyController = TextEditingController();
 
-    tempImages = ref
+    print('instance Model: ${widget.instanceModel}');
+    if (widget.instanceModel is Notice) {
+      tempImages = ref
         .read(noticeEditViewModelProvider.notifier)
         .loadPostForEditing(_titleController, _bodyController, tempImages, widget.instanceModel);
+    } else if(widget.instanceModel is Post) {
+      tempImages = ref
+          .read(postEditViewModelProvider.notifier)
+          .loadPostForEditing(_titleController, _bodyController, tempImages, widget.instanceModel);
+    }
 
     widget.isCompleteActive.addListener(_checkAndSubmit);
   }
@@ -112,7 +122,7 @@ class GreenFieldEditSectionState extends ConsumerState<GreenFieldEditSection> {
 
                     TextField(
                       controller: _bodyController,
-                      maxLength: 500,
+                      maxLength: 1500,
                       minLines: 8,
                       maxLines: null,
                       style: AppTextsTheme.main().gfBody1.copyWith(
@@ -140,7 +150,7 @@ class GreenFieldEditSectionState extends ConsumerState<GreenFieldEditSection> {
                       RecruitSettingSection(),
                     SizedBox(height: 17),
                     if (tempImages != [])
-                      GreenFieldImageWidget(tempImages: tempImages, type: FeatureType.notice),
+                      GreenFieldImageWidget(tempImages: tempImages),
                     SizedBox(height: 17),
                     GreenFieldComunityRulesText(),
                   ],
