@@ -1,20 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:green_field/src/views/campus/camus_floor_section.dart';
 import 'package:green_field/src/views/campus/camus_map_section.dart';
 import 'package:green_field/src/views/campus/campus_operating_section.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../cores/error_handler/result.dart';
+import '../../model/campus.dart';
 import '../../utilities/design_system/app_texts.dart';
+import '../../viewmodels/campus/campus_view_model.dart';
 
-class CampusView extends StatefulWidget {
+class CampusView extends ConsumerStatefulWidget {
   const CampusView({super.key});
 
   @override
   _CampusViewState createState() => _CampusViewState();
 }
 
-class _CampusViewState extends State<CampusView> {
+class _CampusViewState extends ConsumerState<CampusView> {
   /// Categories keys
   final List<GlobalKey> campusCategories = [
     GlobalKey(),
@@ -73,13 +79,16 @@ class _CampusViewState extends State<CampusView> {
 
   @override
   Widget build(BuildContext context) {
+    final campusState = ref.watch(campusViewModelProvider);
+
     return DefaultTabController(
       length: 3,
       child: Builder(
         builder: (BuildContext context) {
           tabContext = context;
           return Scaffold(
-            appBar: _buildAppBar(),
+            backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
+            appBar: _buildAppBar(campusState),
             body: SingleChildScrollView(
               controller: scrollController,
               child: Padding(
@@ -87,13 +96,63 @@ class _CampusViewState extends State<CampusView> {
                 child: Column(
                   children: [
                     _buildCategoryTitle('위치 / 교통', 0),
-                    CampusMapSection(),
+                    campusState.isLoading
+                        ?  SizedBox(
+                      height: 223,
+                      child: Skeletonizer.zone(
+                        effect: ShimmerEffect(
+                          baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                          highlightColor: Theme.of(context).appColors.gfWhiteColor,
+                          duration: const Duration(seconds: 2),
+                        ),
+                        child: Skeleton.leaf(
+                          child: Card(
+                            margin: EdgeInsets.zero,
+                            shadowColor: Colors.transparent,
+                            color: Theme.of(context).appColors.gfWhiteColor,
+                            child: ListTile(
+                              title: Bone.text(words: 3),
+                              subtitle: Bone.text(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                        : CampusMapSection(),
                     SizedBox(height: 10),
                     _buildCategoryTitle('운영시간', 1),
-                    CampusOperatingSection(),
+                    campusState.isLoading
+                        ? Skeletonizer.zone(
+                        effect: ShimmerEffect(
+                          baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                          highlightColor:
+                          Theme.of(context).appColors.gfWhiteColor,
+                          duration: const Duration(seconds: 2),
+                        ),
+                        child: Column(
+                          children: List.generate(3, (_) => ListTile(
+                            title: Bone.text(words: 5),
+                          )),
+                        ),
+                    )
+                        : CampusOperatingSection(),
                     SizedBox(height: 10),
                     _buildCategoryTitle('공간 소개', 2),
-                    CampusFloorSection(),
+                    campusState.isLoading
+                        ? Skeletonizer.zone(
+                      effect: ShimmerEffect(
+                        baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                        highlightColor:
+                        Theme.of(context).appColors.gfWhiteColor,
+                        duration: const Duration(seconds: 2),
+                      ),
+                      child: Column(
+                        children: List.generate(3, (_) => ListTile(
+                          title: Bone.text(words: 5),
+                        )),
+                      ),
+                    )
+                    : CampusFloorSection(),
                     SizedBox(height: 10),
                     // Empty Bottom Space
                     const SizedBox(
@@ -110,7 +169,9 @@ class _CampusViewState extends State<CampusView> {
   }
 
   /// AppBar
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(
+      AsyncValue<Campus?> campusState,
+      ) {
     List<String> titles = [
       '위치',
       '운영시간',
@@ -123,7 +184,20 @@ class _CampusViewState extends State<CampusView> {
           Spacer(),
           CupertinoButton(
             onPressed: () {
+              _showCampusPicker(context, (String selectedCampus) async {
+                final result = await ref
+                    .read(campusViewModelProvider.notifier)
+                    .getCampus(selectedCampus);
 
+                switch (result) {
+                  case Success(value: final v):
+                    print('t성공: $v');
+                  case Failure(exception: final e):
+                    ref
+                        .read(campusViewModelProvider.notifier)
+                        .showToast('에러가 발생했습니다');
+                }
+              });
             },
             child: Container(
               decoration: BoxDecoration(
@@ -142,7 +216,7 @@ class _CampusViewState extends State<CampusView> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3.0),
                       child: Text(
-                        '관악 캠퍼스',
+                        '${campusState.value?.name ?? ''} 캠퍼스',
                         style: AppTextsTheme.main().gfHeading3.copyWith(
                               color: Theme.of(context).appColors.gfMainColor,
                             ),
@@ -206,4 +280,72 @@ class _CampusViewState extends State<CampusView> {
       ),
     );
   }
+}
+
+
+void _showCampusPicker(BuildContext context, Function(String) onConfirm)  {
+  int _selectedCampusIndex = 0;
+  const List<String> _campusNames = [
+    '관악',
+    '영등포',
+    '금천',
+    '마포',
+    '용산',
+    '강동',
+    '강서',
+    '동작',
+    '서대문',
+    '광진',
+    '중구',
+    '종로',
+    '성동',
+    '성북',
+    '동대문',
+    '도봉',
+    '강북1',
+    '강북2',
+    '노원',
+    '은평',
+  ];
+
+
+  showCupertinoModalPopup(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        height: 250,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Expanded(
+                child: CupertinoPicker(
+                  magnification: 1.2,
+                  squeeze: 1.2,
+                  useMagnifier: true,
+                  itemExtent: 32.0,
+                  scrollController: FixedExtentScrollController(initialItem: _selectedCampusIndex),
+                  onSelectedItemChanged: (int index) {
+                    _selectedCampusIndex = index;
+                  },
+                  children: _campusNames.map((reason) => Center(child: Text(reason))).toList(),
+                ),
+              ),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Text('확인', style: TextStyle(fontSize: 18, color: CupertinoColors.systemRed)),
+                onPressed: () {
+                  Navigator.pop(context); // Picker 닫기
+                  onConfirm(_campusNames[_selectedCampusIndex]); // 신고 사유 전달
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

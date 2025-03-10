@@ -3,6 +3,7 @@ import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
 import 'package:green_field/src/model/comment.dart';
 import 'package:green_field/src/utilities/enums/user_type.dart';
+import '../../model/campus.dart';
 import '../../model/notice.dart';
 import '../../model/post.dart';
 import '../../model/report.dart';
@@ -587,5 +588,63 @@ class   FirebaseStoreService {
       return Failure(Exception('외부 링크 가져오기 실패: $e'));
     }
   }
+
+  /// Campus 생성
+  Future<Result<Campus, Exception>> createCampusDB(Campus campus) async {
+    try {
+      await _store
+          .collection('Campus')
+          .doc(campus.name)
+          .collection('Information')
+          .doc(campus.name)
+          .set(campus.toMap());
+
+      // 저장된 데이터를 다시 가져와 반환
+      final documentSnapshot = await _store
+          .collection('Campus')
+          .doc(campus.name)
+          .collection('Information')
+          .doc(campus.id)
+          .get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          final savedCampus = Campus.fromMap(data);
+          return Success(savedCampus);
+        }
+      }
+
+      return Failure(Exception('저장된 캠퍼스 데이터를 찾을 수 없습니다.'));
+    } catch (e) {
+      print('err: $e');
+      return Failure(Exception('캠퍼스 생성 실패: $e'));
+    }
+  }
+
+  Future<Result<Campus, Exception>> getCampus(String campusName) async {
+    try {
+      final documentSnapshot = await _store
+          .collection('Campus')
+          .doc(campusName)
+          .collection('Information')
+          .doc(campusName)
+          .get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          final savedCampus = Campus.fromMap(data);
+          return Success(savedCampus);
+        }
+      }
+
+      return Failure(Exception('저장된 캠퍼스 데이터를 찾을 수 없습니다.'));
+    } catch (e) {
+      print('err: $e');
+      return Failure(Exception('캠퍼스 데이터 가져오기 실패: $e'));
+    }
+  }
+
 
 }

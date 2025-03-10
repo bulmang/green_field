@@ -35,4 +35,5 @@ class AppIcons {
   static const String loginSesac = 'assets/images/login_sesac.png';
   static const String seatingSesac = 'assets/images/sitting_sesac.png';
   static const String notebookSesac = 'assets/images/notebook_sesac.png';
+  static const String networkSesac = 'assets/images/networkerror_sesac.png';
 }
