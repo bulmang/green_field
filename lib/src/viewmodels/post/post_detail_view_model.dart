@@ -66,7 +66,7 @@ class PostDetailViewModel extends _$PostDetailViewModel {
     }
   }
 
-  /// Post 객체 삭제
+  /// 댓글 삭제하기
   Future<Result<List<Comment>, Exception>> deleteCommentModel(String postId, String commentID) async { // Update method name
     try {
       state = AsyncLoading();
@@ -87,32 +87,6 @@ class PostDetailViewModel extends _$PostDetailViewModel {
       return Failure(Exception('포스트 삭제 실패: $error')); // Update message
     }
   }
-
-  /// 특정 Comment 제거
-  Future<Result<List<Comment>, Exception>> deleteCommentInList(String commentId) async {
-    if (state.value!.isNotEmpty) {
-      final currentList = state.value ?? [];
-
-      final updatedList = currentList.where((comment) => comment.id != commentId).toList();
-      state = AsyncData(updatedList);
-      return Success(updatedList);
-    }
-    return Failure(Exception('에러 발생'));
-  }
-
-  Result<Post, Exception> getCurrentPost(String postId, List<Post>? postList) {
-    if (postList == null || postList.isEmpty) {
-      return Failure(Exception('Post list is empty'));
-    }
-
-    try {
-      final currentPost = postList.firstWhere((post) => post.id == postId);
-      return Success(currentPost);
-    } catch (e) {
-      return Failure(Exception('Post not found'));
-    }
-  }
-
 
   /// 댓글 초기화
   void resetCommentList() async {
