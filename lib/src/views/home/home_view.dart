@@ -206,7 +206,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       ),
                 ),
               ),
-              ExpiringSoonRecruitSection()
+              // ExpiringSoonRecruitSection()
             ],
           ),
         ),

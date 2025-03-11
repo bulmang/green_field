@@ -6,7 +6,7 @@ part of 'campus_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$campusViewModelHash() => r'182db0ac9b1722d9217e2eeeadcf3fe376731a58';
+String _$campusViewModelHash() => r'1e17248e483b612a3ad7aed0ea4fd4d44e612b03';
 
 /// See also [CampusViewModel].
 @ProviderFor(CampusViewModel)

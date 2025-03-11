@@ -11,7 +11,7 @@ import '../../model/post.dart'; // Update model import
 import '../../model/report.dart';
 import '../../model/user.dart';
 import '../services/firebase_storage_service.dart';
-import '../services/firebase_store_service.dart';
+import '../services/firebase_stores/firebase_store_service.dart';
 
 class PostRepository { // Update class name
   final FirebaseStoreService firebaseStoreService;

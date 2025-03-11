@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../cores/error_handler/result.dart';
 import '../../model/campus.dart';
-import '../services/firebase_store_service.dart';
+import '../services/firebase_stores/firebase_store_service.dart';
 
 class CampusRepository {
   final FirebaseStoreService firebaseStoreService;

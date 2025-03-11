@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import '../../cores/error_handler/result.dart';
 import '../../model/token.dart';
 import '../../model/user.dart' as myUser;
-import '../services/firebase_store_service.dart';
+import '../services/firebase_stores/firebase_store_service.dart';
 
 class OnboardingRepository {
   final FirebaseAuthService firebaseAuthService;

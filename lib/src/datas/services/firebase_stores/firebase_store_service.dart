@@ -3,11 +3,11 @@ import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/datas/repositories/onboarding_repository.dart';
 import 'package:green_field/src/model/comment.dart';
 import 'package:green_field/src/utilities/enums/user_type.dart';
-import '../../model/campus.dart';
-import '../../model/notice.dart';
-import '../../model/post.dart';
-import '../../model/report.dart';
-import '../../model/user.dart' as GFUser;
+import '../../../model/campus.dart';
+import '../../../model/notice.dart';
+import '../../../model/post.dart';
+import '../../../model/report.dart';
+import '../../../model/user.dart' as GFUser;
 
 class   FirebaseStoreService {
   FirebaseStoreService(this._store);

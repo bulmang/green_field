@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
 
 import '../../cores/error_handler/result.dart';
-import '../services/firebase_store_service.dart';
+import '../services/firebase_stores/firebase_store_service.dart';
 import '../../model/user.dart' as GFUser;
 
 class SettingRepository {
