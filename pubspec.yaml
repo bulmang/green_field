@@ -58,6 +58,7 @@ dependencies:
   fluttertoast: ^8.2.10
   cached_network_image: ^3.4.1
   flutter_image_compress: ^2.4.0
+  flutter_web_frame: ^1.0.0
 
 dev_dependencies:
   flutter_test:

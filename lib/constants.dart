@@ -1,2 +1,2 @@
-const double kMaxScreenWidth = 1000;
+const double kMaxScreenWidth = 800;
 const double kMinScreenHeight = 600;

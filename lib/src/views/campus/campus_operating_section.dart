@@ -1,17 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/campus.dart';
 import '../../utilities/design_system/app_icons.dart';
 import '../../utilities/design_system/app_texts.dart';
+import '../../viewmodels/campus/campus_view_model.dart';
 
-class CampusOperatingSection extends StatelessWidget {
+class CampusOperatingSection extends ConsumerStatefulWidget {
   const CampusOperatingSection({super.key});
 
   @override
+  ConsumerState<CampusOperatingSection> createState() => _CampusOperatingSectionState();
+}
+
+class _CampusOperatingSectionState extends ConsumerState<CampusOperatingSection> {
+  @override
   Widget build(BuildContext context) {
+    final campusState = ref.watch(campusViewModelProvider);
+
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -19,8 +28,7 @@ class CampusOperatingSection extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-            CampusExample().gwanack.operatingHours!.map((hour) {
+            children: (campusState.value?.operatingHours ?? []).map((hour) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
@@ -41,7 +49,7 @@ class CampusOperatingSection extends StatelessWidget {
               ),
               SizedBox(width: 8),
               Text(
-                CampusExample().gwanack.contactNumber,
+                campusState.value?.contactNumber ?? '',
                 style: AppTextsTheme.main().gfCaption2Light.copyWith(
                   color: Theme.of(context).appColors.gfBlackColor,
                 ),
@@ -51,7 +59,7 @@ class CampusOperatingSection extends StatelessWidget {
                 padding: EdgeInsets.zero, // 패딩을 제로로 설정
                 onPressed: () async {
                   // 전화 걸기 URL 생성
-                  var url = Uri(scheme: 'tel', path: CampusExample().gwanack.contactNumber);
+                  var url = Uri(scheme: 'tel', path: campusState.value?.contactNumber ?? '');
 
                   // 전화 앱이 열 수 있는지 확인
                   if (await canLaunchUrl(url)) {
@@ -75,3 +83,4 @@ class CampusOperatingSection extends StatelessWidget {
     );
   }
 }
+

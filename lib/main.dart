@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:green_field/src/cores/router/router.dart';
 import 'package:green_field/constants.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
@@ -27,8 +28,6 @@ void main() async {
     nativeAppKey: dotenv.env['kakaoNativeAppKey'],
     javaScriptAppKey: dotenv.env['kakaoJavaScriptAppKey'],
   );
-
-
 
   if(kIsWeb) {
     usePathUrlStrategy();
@@ -70,35 +69,31 @@ class MyAppForWeb extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-        routerConfig: ref.watch(goRouterProvider),
-        title: '풀밭',
-        debugShowCheckedModeBanner: false,
-        theme: Theme.of(context).copyWith(
+    return FlutterWebFrame(
+      builder: (context) {
+        return MaterialApp.router(
+          routerConfig: ref.watch(goRouterProvider),
+          title: '풀밭',
+          debugShowCheckedModeBanner: false,
+          theme: Theme.of(context).copyWith(
             extensions: [
               AppColorsTheme.main(),
               AppTextsTheme.main(),
-            ]
-        ),
-        builder: (context, child) {
-          return LayoutBuilder(builder: (context, constraints) {
-            double width = (constraints.maxWidth > kMaxScreenWidth) ? kMaxScreenWidth : constraints.maxWidth;
-            double height = (constraints.maxHeight < kMinScreenHeight) ? kMinScreenHeight : constraints.maxHeight;
-            return Center(
-              child: SingleChildScrollView(
-                child : Column(
-                  children: [
-                    SizedBox(
-                        width: width,
-                        height: height,
-                        child: child
-                    ),
-                  ],
-                )
-              ),
-            );
-          });
-    },
+            ],
+          ),
+          builder: (context, child) {
+            return LayoutBuilder(builder: (context, constraints) {
+              return Center(
+                child: child,
+              );
+            });
+          },
+        );
+      },
+      maximumSize: Size(kMaxScreenWidth, kMinScreenHeight), // Maximum size
+      enabled: kIsWeb, // default is enable, when disable content is full size
+      backgroundColor: Colors.white, // Background color/white space
     );
   }
 }
+
