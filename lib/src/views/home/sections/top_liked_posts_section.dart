@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
+import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:intl/intl.dart';
 
 import '../../../cores/error_handler/result.dart';
+import '../../../utilities/components/greefield_login_alert_dialog.dart';
 import '../../../utilities/design_system/app_texts.dart';
 import '../../../utilities/design_system/app_icons.dart';
 import '../../../model/post.dart';
@@ -23,6 +25,7 @@ class TopLikedPostsSection extends ConsumerStatefulWidget {
 class _TopLikedPostsSection extends ConsumerState<TopLikedPostsSection> {
   @override
   Widget build(BuildContext context) {
+    final userState = ref.read(onboardingViewModelProvider);
     final postState = ref.watch(postViewModelProvider);
     final postNotifier = ref.watch(postViewModelProvider.notifier);
 
@@ -53,23 +56,32 @@ class _TopLikedPostsSection extends ConsumerState<TopLikedPostsSection> {
                 child: CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: () async {
-                    final result = await ref
-                        .read(postDetailViewModelProvider.notifier)
-                        .getCommentList(post.id);
+                    if (userState.value == null && !userState.isLoading) {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return GreenFieldLoginAlertDialog(ref: ref);
+                        },
+                      );
+                    } else {
+                      final result = await ref
+                          .read(postDetailViewModelProvider.notifier)
+                          .getCommentList(post.id);
 
-                    switch (result) {
-                      case Success(value: final v):
-                        print('성공 v: $v');
-                      case Failure(exception: final e):
-                        print('실패 v: $e');
-                        postNotifier.showToast(
-                          '에러가 발생했어요!',
-                          ToastGravity.TOP,
-                          Theme.of(context).appColors.gfWarningColor,
-                          Theme.of(context).appColors.gfWhiteColor,
-                        );
+                      switch (result) {
+                        case Success(value: final v):
+                          context.go('/post/detail/${post.id}');
+                          print('성공 v: $v');
+                        case Failure(exception: final e):
+                          print('실패 v: $e');
+                          postNotifier.showToast(
+                            '에러가 발생했어요!',
+                            ToastGravity.TOP,
+                            Theme.of(context).appColors.gfWarningColor,
+                            Theme.of(context).appColors.gfWhiteColor,
+                          );
+                      }
                     }
-                    context.go('/post/detail/${post.id}');
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,

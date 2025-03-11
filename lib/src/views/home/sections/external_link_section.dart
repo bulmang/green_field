@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/viewmodels/setting/setting_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../utilities/components/greefield_login_alert_dialog.dart';
 import '../../../utilities/design_system/app_colors.dart';
 import '../../../utilities/design_system/app_texts.dart';
 import '../../../utilities/design_system/app_icons.dart';
@@ -40,6 +41,13 @@ class ExternalLinkSectionState extends ConsumerState<ExternalLinkSection> {
                 case Failure(exception: final e):
                   settingNotifier.showToast('주소를 가져오지 못했습니다.\n캠퍼스 메니저님께 문의해주세요.');
               }
+            } else {
+              showCupertinoDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return GreenFieldLoginAlertDialog(ref: ref);
+                },
+              );
             }
 
           }),
@@ -54,6 +62,13 @@ class ExternalLinkSectionState extends ConsumerState<ExternalLinkSection> {
                 case Failure(exception: final e):
                   settingNotifier.showToast('주소를 가져오지 못했습니다.\n캠퍼스 메니저님께 문의해주세요.');
               }
+            } else {
+              showCupertinoDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return GreenFieldLoginAlertDialog(ref: ref);
+                },
+              );
             }
           }),
           iconText(AppIcons.discord, '디스코드', () async {
@@ -67,6 +82,13 @@ class ExternalLinkSectionState extends ConsumerState<ExternalLinkSection> {
                 case Failure(exception: final e):
                   settingNotifier.showToast('주소를 가져오지 못했습니다.\n캠퍼스 메니저님께 문의해주세요.');
               }
+            }  else {
+              showCupertinoDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return GreenFieldLoginAlertDialog(ref: ref);
+                },
+              );
             }
           }),
         ],
