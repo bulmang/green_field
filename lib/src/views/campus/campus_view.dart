@@ -339,6 +339,7 @@ void _showCampusPicker(BuildContext context,CampusViewModel campusState, Functio
                 padding: EdgeInsets.zero,
                 child: const Text('확인', style: TextStyle(fontSize: 18, color: CupertinoColors.activeBlue)),
                 onPressed: () {
+                  Navigator.pop(context);
                   onConfirm(_campusNames[_selectedIndex], _selectedIndex); // 선택된 캠퍼스와 인덱스 전달전달
                 },
               ),
