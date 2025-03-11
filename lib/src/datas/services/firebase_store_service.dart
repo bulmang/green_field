@@ -567,10 +567,6 @@ class   FirebaseStoreService {
   /// 외부 링크 가져오기
   Future<Result<String, Exception>> getExternalLink(GFUser.User user, String linkID) async {
     try {
-      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
-        return Failure(Exception('인증 되지 않은 사용자입니다.'));
-      }
-
       var campusDocRef = _store.collection('Campus').doc(user.campus);
 
       // 링크 문서 가져오기

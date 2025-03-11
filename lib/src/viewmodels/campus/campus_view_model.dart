@@ -22,6 +22,14 @@ class CampusViewModel extends _$CampusViewModel {
     }
   }
 
+  int _selectedIndex = 0;
+
+  int get selectedIndex => _selectedIndex;
+
+  void updateSelectedIndex(int index) {
+    _selectedIndex = index;
+  }
+
   Future<Result<Campus, Exception>> getCampus(String campusName) async {
     state = AsyncLoading();
     try {

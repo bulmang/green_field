@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
-import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:green_field/src/views/campus/camus_floor_section.dart';
 import 'package:green_field/src/views/campus/camus_map_section.dart';
 import 'package:green_field/src/views/campus/campus_operating_section.dart';
@@ -184,14 +183,16 @@ class _CampusViewState extends ConsumerState<CampusView> {
           Spacer(),
           CupertinoButton(
             onPressed: () {
-              _showCampusPicker(context, (String selectedCampus) async {
+              _showCampusPicker(context, ref.read(campusViewModelProvider.notifier),(campusName, selectedIndex) async {
                 final result = await ref
                     .read(campusViewModelProvider.notifier)
-                    .getCampus(selectedCampus);
+                    .getCampus(campusName);
 
                 switch (result) {
-                  case Success(value: final v):
-                    print('t성공: $v');
+                  case Success():
+                    ref
+                        .read(campusViewModelProvider.notifier)
+                        .updateSelectedIndex(selectedIndex);
                   case Failure(exception: final e):
                     ref
                         .read(campusViewModelProvider.notifier)
@@ -283,8 +284,9 @@ class _CampusViewState extends ConsumerState<CampusView> {
 }
 
 
-void _showCampusPicker(BuildContext context, Function(String) onConfirm)  {
-  int _selectedCampusIndex = 0;
+void _showCampusPicker(BuildContext context,CampusViewModel campusState, Function(String, int) onConfirm) {
+  int _selectedIndex = 0;
+
   const List<String> _campusNames = [
     '관악',
     '영등포',
@@ -308,7 +310,6 @@ void _showCampusPicker(BuildContext context, Function(String) onConfirm)  {
     '은평',
   ];
 
-
   showCupertinoModalPopup(
     context: context,
     builder: (BuildContext context) {
@@ -327,19 +328,18 @@ void _showCampusPicker(BuildContext context, Function(String) onConfirm)  {
                   squeeze: 1.2,
                   useMagnifier: true,
                   itemExtent: 32.0,
-                  scrollController: FixedExtentScrollController(initialItem: _selectedCampusIndex),
+                  scrollController: FixedExtentScrollController(initialItem: campusState.selectedIndex),
                   onSelectedItemChanged: (int index) {
-                    _selectedCampusIndex = index;
+                    _selectedIndex = index;
                   },
                   children: _campusNames.map((reason) => Center(child: Text(reason))).toList(),
                 ),
               ),
               CupertinoButton(
                 padding: EdgeInsets.zero,
-                child: const Text('확인', style: TextStyle(fontSize: 18, color: CupertinoColors.systemRed)),
+                child: const Text('확인', style: TextStyle(fontSize: 18, color: CupertinoColors.activeBlue)),
                 onPressed: () {
-                  Navigator.pop(context); // Picker 닫기
-                  onConfirm(_campusNames[_selectedCampusIndex]); // 신고 사유 전달
+                  onConfirm(_campusNames[_selectedIndex], _selectedIndex); // 선택된 캠퍼스와 인덱스 전달전달
                 },
               ),
             ],

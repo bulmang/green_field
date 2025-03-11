@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/campus/campus_view_model.dart';
+import 'package:lottie/lottie.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,6 +57,18 @@ class _CampusMapSectionState extends ConsumerState<CampusMapSection> {
                 imageUrl: campusState.value!.address['MapImageURL'],
                 height: 200,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Lottie.asset(
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                      'assets/lotties/box_loading.json',
+                      repeat: true,
+                      animate: true,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
