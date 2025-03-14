@@ -48,6 +48,7 @@ GoRouter goRouter(Ref ref) {
   final authState = ref.watch(firebaseAuthServiceProvider);
   final noticeState = ref.watch(noticeViewModelProvider.notifier);
   final postState = ref.watch(postViewModelProvider.notifier);
+  final recruitState = ref.watch(recruitViewModelProvider.notifier);
 
   return GoRouter(
     initialLocation: '/signIn',
@@ -202,71 +203,95 @@ GoRouter goRouter(Ref ref) {
               ),
             ],
           ),
-          // StatefulShellBranch(
-          //   navigatorKey: _recruitTabNavigatorKey,
-          //   routes: [
-          //     GoRoute(
-          //       path: '/recruit',
-          //       builder: (BuildContext context, GoRouterState state) {
-          //         return RecruitView();
-          //       },
-          //       routes: <RouteBase>[
-          //         GoRoute(
-          //           name: 'recruit_detial',
-          //           path: 'detail/:id',
-          //           pageBuilder: (context, state) {
-          //             return CustomTransitionPage(
-          //               key: state.pageKey,
-          //               child: RecruitDetailView(
-          //                   recruit: recruitVM
-          //                       .getRecruitById(state.pathParameters['id']!)),
-          //               transitionsBuilder:
-          //                   (context, animation, secondaryAnimation, child) {
-          //                 const begin = Offset(0.0, 1.0); // 아래에서 시작
-          //                 const end = Offset.zero; // 현재 위치
-          //                 const curve = Curves.easeInOut;
-          //
-          //                 var tween = Tween(begin: begin, end: end)
-          //                     .chain(CurveTween(curve: curve));
-          //                 var offsetAnimation = animation.drive(tween);
-          //
-          //                 return SlideTransition(
-          //                   position: offsetAnimation,
-          //                   child: child,
-          //                 );
-          //               },
-          //             );
-          //           },
-          //         ),
-          //         GoRoute(
-          //           name: 'recruit_edit',
-          //           path: 'edit',
-          //           pageBuilder: (context, state) {
-          //             return CustomTransitionPage(
-          //               key: state.pageKey,
-          //               child: RecruitEditView(),
-          //               transitionsBuilder:
-          //                   (context, animation, secondaryAnimation, child) {
-          //                 const begin = Offset(0.0, 1.0); // 아래에서 시작
-          //                 const end = Offset.zero; // 현재 위치
-          //                 const curve = Curves.easeInOut;
-          //
-          //                 var tween = Tween(begin: begin, end: end)
-          //                     .chain(CurveTween(curve: curve));
-          //                 var offsetAnimation = animation.drive(tween);
-          //
-          //                 return SlideTransition(
-          //                   position: offsetAnimation,
-          //                   child: child,
-          //                 );
-          //               },
-          //             );
-          //           },
-          //         ),
-          //       ],
-          //     )
-          //   ],
-          // ),
+          StatefulShellBranch(
+            navigatorKey: _recruitTabNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/recruit',
+                builder: (BuildContext context, GoRouterState state) {
+                  return RecruitView();
+                },
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'recruit_detial',
+                    path: 'detail/:id',
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: RecruitDetailView(recruitId: state.pathParameters['id'] ?? ''),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0); // 아래에서 시작
+                          const end = Offset.zero; // 현재 위치
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: 'recruit_edit',
+                    path: 'edit',
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: RecruitEditView(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0); // 아래에서 시작
+                          const end = Offset.zero; // 현재 위치
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: "recruit_edit_modify",
+                    path: 'edit/modify/:id',
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: RecruitEditView(recruit: recruitState.getRecruitById(state.pathParameters['id'] ?? '')
+                        ),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0); // 아래에서 시작
+                          const end = Offset.zero; // 현재 위치
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
           StatefulShellBranch(
             navigatorKey: _postTabNavigatorKey,
             routes: [

@@ -290,7 +290,6 @@ class   FirebaseStoreService {
           .count()
           .get();
 
-      print('Comment 개수 가져오기: ${countSnapshot.count}');
       return countSnapshot.count;
     } catch (e) {
       print('Comment 개수 가져오기 실패: $e');

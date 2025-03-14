@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/model/notice.dart';
 import 'package:green_field/src/utilities/components/greenfield_image_widget.dart';
 import 'package:green_field/src/viewmodels/post/post_edit_view_model.dart';
+import 'package:green_field/src/viewmodels/recruit/recruit_edit_view_model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import '../../cores/image_type/image_type.dart';
 
 import '../../model/post.dart';
+import '../../model/recruit.dart';
 import '../../viewmodels/notice/notice_edit_view_model.dart';
 import '../../views/recruitment/recruit_setting_section.dart';
 import '../design_system/app_icons.dart';
@@ -48,7 +50,6 @@ class GreenFieldEditSectionState extends ConsumerState<GreenFieldEditSection> {
     _titleController = TextEditingController();
     _bodyController = TextEditingController();
 
-    print('instance Model: ${widget.instanceModel}');
     if (widget.instanceModel is Notice) {
       tempImages = ref
         .read(noticeEditViewModelProvider.notifier)
@@ -56,6 +57,10 @@ class GreenFieldEditSectionState extends ConsumerState<GreenFieldEditSection> {
     } else if(widget.instanceModel is Post) {
       tempImages = ref
           .read(postEditViewModelProvider.notifier)
+          .loadPostForEditing(_titleController, _bodyController, tempImages, widget.instanceModel);
+    } else if(widget.instanceModel is Recruit) {
+      tempImages = ref
+          .read(recruitEditViewModelProvider.notifier)
           .loadPostForEditing(_titleController, _bodyController, tempImages, widget.instanceModel);
     }
 

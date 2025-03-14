@@ -86,7 +86,7 @@ class _GreenFieldCommentWidgetState extends ConsumerState<GreenFieldCommentWidge
                   (userState.value!.id == widget.commentCreatId)
                       ? CupertinoButton(
                     child: Icon(
-                      CupertinoIcons.delete_left,
+                      CupertinoIcons.delete,
                       size: 20,
                       color: Theme.of(context).appColors.gfGray400Color,
                     ),
@@ -121,10 +121,11 @@ class _GreenFieldCommentWidgetState extends ConsumerState<GreenFieldCommentWidge
                     },
                   )
                       : CupertinoButton(
-                    child: Icon(
-                        CupertinoIcons.exclamationmark_circle,
-                        size: 20,
-                        color: Theme.of(context).appColors.gfGray400Color,
+                    child: Text(
+                      '신고',
+                      style: AppTextsTheme.main().gfCaption2.copyWith(
+                        color: Theme.of(context).appColors.gfWarningColor,
+                      ),
                     ),
                     onPressed: () {
                       _showIOSDialog(

@@ -75,7 +75,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                                 ),
                                 SizedBox(width: 3),
                                 Text(
-                                  recruits.creatorCampus,
+                                  '${recruits.creatorCampus}캠퍼스',
                                   style: AppTextsTheme.main()
                                       .gfCaption5
                                       .copyWith(
@@ -89,7 +89,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                         SizedBox(width: 5),
                         Container(
                           decoration: BoxDecoration(
-                            color: recruits.isEntryAvailable
+                            color: recruits.currentParticipants.length != recruits.maxParticipants
                                 ? Theme.of(context).appColors.gfMainBackGroundColor
                                 : Theme.of(context).appColors.gfWarningBackGroundColor,
                             borderRadius: BorderRadius.circular(8),
@@ -100,7 +100,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Image.asset(
-                                  recruits.isEntryAvailable
+                                  recruits.currentParticipants.length != recruits.maxParticipants
                                       ? AppIcons.checkCircle
                                       : AppIcons.xCircle,
                                   width: 9,
@@ -108,13 +108,13 @@ class GreenFieldRecruitList extends StatelessWidget {
                                 ),
                                 SizedBox(width: 3),
                                 Text(
-                                  recruits.isEntryAvailable
+                                  recruits.currentParticipants.length != recruits.maxParticipants
                                       ? "채팅입장 가능"
                                       : "입장 불가능",
                                   style: AppTextsTheme.main()
                                       .gfCaption5
                                       .copyWith(
-                                        color: recruits.isEntryAvailable
+                                        color: recruits.currentParticipants.length != recruits.maxParticipants
                                             ? Theme.of(context).appColors.gfMainColor
                                             : Theme.of(context).appColors.gfWarningColor,
                                       ),
@@ -124,7 +124,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 5),
-                        if (recruits.isTimeExpired)
+                        if (DateTime.now().difference(recruits.remainTime).inMinutes.abs() <= 30)
                           Container(
                             decoration: BoxDecoration(
                               color: Theme.of(context).appColors
@@ -166,7 +166,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                             ),
                             SizedBox(width: 3),
                             Text(
-                              '${recruits.remainTime.toString()} min',
+                              '${DateTime.now().difference(recruits.remainTime).inMinutes.abs()} min',
                               style: AppTextsTheme.main().gfCaption2Light.copyWith(
                                     color: Theme.of(context).appColors.gfMainColor,
                                   ),

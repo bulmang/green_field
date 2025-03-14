@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/router/router.dart';
 import 'package:green_field/src/viewmodels/notice/notice_view_model.dart';
 import 'package:green_field/src/viewmodels/post/post_view_model.dart';
+import 'package:green_field/src/viewmodels/recruit/recruit_view_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import 'package:green_field/src/viewmodels/home/home_view_model.dart';
@@ -30,6 +31,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final userState = ref.watch(onboardingViewModelProvider);
     final noticeState = ref.watch(noticeViewModelProvider);
     final postState = ref.watch(postViewModelProvider);
+    final recruitState = ref.watch(recruitViewModelProvider);
+    bool isIPhoneSE = MediaQuery.of(context).size.width <= 375;
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
@@ -166,28 +169,27 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         ),
                         SizedBox(height: 5),
                         postState.isLoading
-                          ?
-                            SizedBox(
-                          height: 185,
-                          child: Skeletonizer.zone(
-                            effect: ShimmerEffect(
-                              baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
-                              highlightColor: Theme.of(context).appColors.gfWhiteColor,
-                              duration: const Duration(seconds: 2),
-                            ),
-                            child: Skeleton.leaf(
-                              child: Card(
-                                margin: EdgeInsets.zero,
-                                shadowColor: Colors.transparent,
-                                color: Theme.of(context).appColors.gfWhiteColor,
-                                child: ListTile(
-                                  title: Bone.text(words: 3),
-                                  subtitle: Bone.text(),
+                          ? SizedBox(
+                            height: isIPhoneSE ? 122.5 : 185,
+                            child: Skeletonizer.zone(
+                              effect: ShimmerEffect(
+                                baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                                highlightColor: Theme.of(context).appColors.gfWhiteColor,
+                                duration: const Duration(seconds: 2),
+                              ),
+                              child: Skeleton.leaf(
+                                child: Card(
+                                  margin: EdgeInsets.zero,
+                                  shadowColor: Colors.transparent,
+                                  color: Theme.of(context).appColors.gfWhiteColor,
+                                  child: ListTile(
+                                    title: Bone.text(words: 3),
+                                    subtitle: Bone.text(),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
+                          )
                           : ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: TopLikedPostsSection(),
@@ -206,7 +208,40 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       ),
                 ),
               ),
-              // ExpiringSoonRecruitSection()
+              recruitState.isLoading
+              ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    3,
+                        (index) => Container(
+                      padding: EdgeInsets.only(right: 12),
+                      width: MediaQuery.of(context).size.width / 1.3,
+                      height: 120,
+                      child: Skeletonizer.zone(
+                        effect: ShimmerEffect(
+                          baseColor: Theme.of(context).appColors.gfMainBackGroundColor,
+                          highlightColor: Theme.of(context).appColors.gfWhiteColor,
+                          duration: const Duration(seconds: 2),
+                        ),
+                        child: Skeleton.leaf(
+                          child: Card(
+                            margin: EdgeInsets.zero,
+                            shadowColor: Colors.transparent,
+                            color: Theme.of(context).appColors.gfWhiteColor,
+                            child: ListTile(
+                              title: Bone.text(words: 3),
+                              subtitle: Bone.text(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+
+              )
+                  : ExpiringSoonRecruitSection()
             ],
           ),
         ),

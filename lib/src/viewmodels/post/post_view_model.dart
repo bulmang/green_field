@@ -25,9 +25,6 @@ class PostViewModel extends _$PostViewModel {
     switch (result) {
 
       case Success(value: final postList):
-        for(var post in postList)
-          print(post.id);
-
         return postList;
       case Failure(exception: final e):
         return [];
