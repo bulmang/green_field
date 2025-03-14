@@ -53,13 +53,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     // 카카오 로그인 버튼
                     signInButton(
                       onPressed: () async {
-
                         final result = await ref
                             .read(loginViewModelProvider.notifier)
                             .signInWithKakao();
 
                         switch (result) {
                           case Success(value: final token):
+                            print('hsdfshdkfsdhfksdjf');
                             final getUser = await ref
                                 .read(onboardingViewModelProvider.notifier)
                                 .isUserExistGetUser(token.providerUID);

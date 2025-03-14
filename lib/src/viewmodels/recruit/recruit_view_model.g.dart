@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'campus_view_model.dart';
+part of 'recruit_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$campusViewModelHash() => r'1e17248e483b612a3ad7aed0ea4fd4d44e612b03';
+String _$recruitViewModelHash() => r'e743718b14c324091f3d1a67c82016fe8a38a22e';
 
-/// See also [CampusViewModel].
-@ProviderFor(CampusViewModel)
-final campusViewModelProvider =
-    AsyncNotifierProvider<CampusViewModel, Campus?>.internal(
-  CampusViewModel.new,
-  name: r'campusViewModelProvider',
+/// See also [RecruitViewModel].
+@ProviderFor(RecruitViewModel)
+final recruitViewModelProvider =
+    AsyncNotifierProvider<RecruitViewModel, List<Recruit>>.internal(
+  RecruitViewModel.new,
+  name: r'recruitViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$campusViewModelHash,
+      : _$recruitViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CampusViewModel = AsyncNotifier<Campus?>;
+typedef _$RecruitViewModel = AsyncNotifier<List<Recruit>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

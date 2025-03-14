@@ -8,7 +8,7 @@ import '../../cores/error_handler/result.dart';
 import '../../model/notice.dart';
 import '../../model/user.dart';
 import '../services/firebase_storage_service.dart';
-import '../services/firebase_store_service.dart';
+import '../services/firebase_stores/firebase_store_service.dart';
 
 class NoticeRepository {
   final FirebaseStoreService firebaseStoreService;

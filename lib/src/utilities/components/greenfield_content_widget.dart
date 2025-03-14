@@ -139,9 +139,9 @@ class GreenFieldContentWidget extends StatelessWidget {
                 ),
               ),
             if (imageAssets.isNotEmpty) SizedBox(height: 17),
-            featureType != FeatureType.recruit
+            (featureType != FeatureType.recruit)
                 ? featureType == FeatureType.post
-                ? Row(
+                  ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
@@ -189,7 +189,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                 ),
               ],
             )
-                : SizedBox.shrink()
+                  : SizedBox.shrink()
                 : Row(
               children: [
                 Container(
@@ -211,7 +211,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                         ),
                         SizedBox(width: 3),
                         Text(
-                          recruit!.creatorCampus,
+                          '${recruit!.creatorCampus}캠퍼스',
                           style: AppTextsTheme.main().gfCaption5.copyWith(
                             color: Theme.of(context).appColors.gfGray800Color,
                           ),
@@ -221,7 +221,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 5),
-                if (recruit!.remainTime <= 30)
+                if (DateTime.now().difference(recruit!.remainTime).inMinutes.abs() <= 30)
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).appColors
@@ -260,7 +260,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                     ),
                     SizedBox(width: 3),
                     Text(
-                      '${recruit!.remainTime.toString()} min',
+                      '${DateTime.now().difference(recruit!.remainTime).inMinutes.abs()} min',
                       style: AppTextsTheme.main().gfCaption2Light.copyWith(
                         color: Theme.of(context).appColors.gfMainColor,
                       ),

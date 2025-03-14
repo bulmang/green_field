@@ -25,7 +25,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../utilities/components/greenfield_images_detail.dart';
 import '../../viewmodels/notice/notice_view_model.dart';
-import '../../viewmodels/recruit_view_model.dart';
+import '../../viewmodels/recruit/recruit_view_model.dart';
 import '../../views/setting/setting_view.dart';
 
 part 'router.g.dart';
@@ -48,6 +48,7 @@ GoRouter goRouter(Ref ref) {
   final authState = ref.watch(firebaseAuthServiceProvider);
   final noticeState = ref.watch(noticeViewModelProvider.notifier);
   final postState = ref.watch(postViewModelProvider.notifier);
+  final recruitState = ref.watch(recruitViewModelProvider.notifier);
 
   return GoRouter(
     initialLocation: '/signIn',
@@ -217,9 +218,7 @@ GoRouter goRouter(Ref ref) {
                     pageBuilder: (context, state) {
                       return CustomTransitionPage(
                         key: state.pageKey,
-                        child: RecruitDetailView(
-                            recruit: recruitVM
-                                .getRecruitById(state.pathParameters['id']!)),
+                        child: RecruitDetailView(recruitId: state.pathParameters['id'] ?? ''),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
                           const begin = Offset(0.0, 1.0); // 아래에서 시작
@@ -245,6 +244,32 @@ GoRouter goRouter(Ref ref) {
                       return CustomTransitionPage(
                         key: state.pageKey,
                         child: RecruitEditView(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0); // 아래에서 시작
+                          const end = Offset.zero; // 현재 위치
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: "recruit_edit_modify",
+                    path: 'edit/modify/:id',
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: RecruitEditView(recruit: recruitState.getRecruitById(state.pathParameters['id'] ?? '')
+                        ),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
                           const begin = Offset(0.0, 1.0); // 아래에서 시작
