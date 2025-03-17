@@ -8,6 +8,7 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
   final Color gfWarningYellowBackGroundColor; // FFC35A with 10% opacity
   final Color gfWarningColor; // FF6A69
   final Color gfBlueColor; // 007AFF
+  final Color gfBlueBackGroundColor; // 007AFF
   final Color gfWhiteColor; // FBFDFD
   final Color gfBackGroundColor; // F4F4F9
   final Color gfGray100Color; // F3F4F6
@@ -25,6 +26,7 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
     required this.gfWarningYellowBackGroundColor,
     required this.gfWarningColor,
     required this.gfBlueColor,
+    required this.gfBlueBackGroundColor,
     required this.gfWhiteColor,
     required this.gfBackGroundColor,
     required this.gfGray100Color,
@@ -43,6 +45,7 @@ class AppColorsTheme extends ThemeExtension<AppColorsTheme> {
       gfWarningYellowBackGroundColor: const Color(0xFFFBF2E4),
       gfWarningColor: const Color(0xFFFF6A69),
       gfBlueColor: const Color(0xFF007AFF),
+      gfBlueBackGroundColor: const Color(0xFFE5F2FF),
       gfWhiteColor: const Color(0xFFFBFBFD),
       gfBackGroundColor: const Color(0xFFF4F4F9),
       gfGray100Color: const Color(0xFFF3F4F6),

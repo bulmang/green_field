@@ -6,7 +6,7 @@ part of 'recruit_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recruitViewModelHash() => r'e743718b14c324091f3d1a67c82016fe8a38a22e';
+String _$recruitViewModelHash() => r'24e919c4bbd60961e9284074a6c06c8887b7544c';
 
 /// See also [RecruitViewModel].
 @ProviderFor(RecruitViewModel)

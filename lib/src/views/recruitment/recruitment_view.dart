@@ -45,6 +45,7 @@ class _RecruitViewState extends ConsumerState<RecruitView> {
   @override
   void initState() {
     super.initState();
+    refresh;
     controller.addListener(() {
       if ((controller.position.maxScrollExtent * 0.8 <= controller.offset) &&
           !loading) {
@@ -159,6 +160,7 @@ class _RecruitViewState extends ConsumerState<RecruitView> {
                   final recruit = recruitState.value?[index];
                   return GreenFieldRecruitList(
                     recruits: recruit!,
+                    userId: userState.value?.id ?? '',
                     onTap: () async {
                       if (userState.value == null && !userState.isLoading) {
                         showCupertinoDialog(
@@ -168,20 +170,32 @@ class _RecruitViewState extends ConsumerState<RecruitView> {
                           },
                         );
                       } else {
-                        final result = await ref.read(recruitViewModelProvider.notifier).getRecruit(recruit.id);
+                        final getRecruitList = await ref.read(recruitViewModelProvider.notifier).getRecruitList();
 
-                        switch (result) {
+                        switch (getRecruitList) {
                           case Success(value: final v):
-                            if (DateTime.now().isBefore(v.remainTime)) {
-                              context.go('/recruit/detail/${v.id}');
-                            } else {
-                              recruitEditNotifier.flutterToast('시간이 지난 채팅방이에요');
+                            final getRecruitResult = await ref.read(recruitViewModelProvider.notifier).getRecruit(recruit.id);
+
+                            switch (getRecruitResult) {
+                              case Success(value: final recruit):
+                                  if (DateTime.now().isBefore(recruit.remainTime)) {
+                                    if (recruit.currentParticipants.contains(userState.value?.id)) {
+                                      context.go('/recruit/chat/${recruit.id}');
+                                    } else {
+                                      context.go('/recruit/detail/${recruit.id}');
+                                    }
+                                  } else {
+                                    recruitEditNotifier.flutterToast('시간이 지난 채팅방이에요');
+                                  }
+
+
+                              case Failure(exception: final e):
+                                recruitEditNotifier.flutterToast('시간이 지난 채팅방이에요');
                             }
 
                           case Failure(exception: final e):
                             recruitEditNotifier.flutterToast('에러가 발생했어요!');
                         }
-
                       }
                     },
                   );

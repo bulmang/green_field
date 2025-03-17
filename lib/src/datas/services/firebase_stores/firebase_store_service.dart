@@ -70,6 +70,7 @@ class   FirebaseStoreService {
   Future<Result<void, Exception>> deleteUserDB(String userId) async {
     try {
       // Firestore에서 사용자 문서 삭제
+      print('userId: $userId');
       await _store.collection('User').doc(userId).delete();
       return Success(null); // 성공적으로 삭제되었음을 나타냄
     } catch (e) {

@@ -50,7 +50,11 @@ class _ExpiringSoonRecruitSectionState extends ConsumerState<ExpiringSoonRecruit
                                 },
                               );
                             } else {
+                              if (recruit.currentParticipants.contains(userState.value?.id)) {
+                                context.go('/recruit/chat/${recruit.id}');
+                              } else {
                                 context.go('/recruit/detail/${recruit.id}');
+                              }
                             }
                           },
                         )

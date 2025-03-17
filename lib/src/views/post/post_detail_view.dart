@@ -60,11 +60,7 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
             actions: [
               (postNotifier.checkAuth(userState.value?.userType, userState.value?.id ?? '', currentPost.creatorId))
                   ? CupertinoButton(
-                      child: ImageIcon(
-                        AssetImage(AppIcons.menu),
-                        size: 24,
-                        color: Theme.of(context).appColors.gfGray400Color,
-                      ),
+                      child: Icon(CupertinoIcons.ellipsis,color: Theme.of(context).appColors.gfGray400Color),
                       onPressed: () {
                         _showCupertinoActionSheet(
                           context,

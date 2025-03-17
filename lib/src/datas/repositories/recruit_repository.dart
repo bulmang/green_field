@@ -98,6 +98,38 @@ class RecruitRepository {
     }
   }
 
+  /// 특정 Recruit Chat에 입장한 유저 추가
+  Future<Result<Recruit, Exception>> entryChatRoom(String recruitId, String userId) async {
+    try {
+      final result = await firebaseStoreService.entryChatRoom(recruitId, userId);
+
+      switch (result) {
+        case Success(value: final v):
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('채팅방 입장 실패: $error'));
+    }
+  }
+
+  /// 특정 Recruit Chat에 퇴장한 유저 삭제
+  Future<Result<Recruit, Exception>> outChatRoom(String recruitId, String userId) async {
+    try {
+      final result = await firebaseStoreService.outChatRoom(recruitId, userId);
+
+      switch (result) {
+        case Success(value: final v):
+          return Success(v);
+        case Failure(exception: final exception):
+          return Failure(exception);
+      }
+    } catch (error) {
+      return Failure(Exception('채팅방 퇴장 실패: $error'));
+    }
+  }
+
   /// 특정 Recruit에 report 추가
   Future<Result<Recruit, Exception>> reportRecruit(String recruitId, String userId, String reason) async {
     try {
