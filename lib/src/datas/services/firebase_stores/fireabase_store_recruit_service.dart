@@ -214,6 +214,7 @@ class FirebaseStoreRecruitService {
   Future<Result<void, Exception>> deleteRecruitDB(String recruitId, GFUser.User user) async {
     try {
       await _store.collection('Recruit').doc(recruitId).delete();
+      await moveAndDeleteCollection(recruitId);
 
       return Success(null);
     } catch (e) {

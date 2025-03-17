@@ -83,11 +83,11 @@ class RecruitViewModel extends _$RecruitViewModel {
   }
 
   /// 특정 Recruit 제거
-  Future<Result<List<Recruit>, Exception>> deleteRecruitInList(String postId) async {
+  Future<Result<List<Recruit>, Exception>> deleteRecruitInList(String recruitId) async {
     if (state.value!.isNotEmpty) {
       final currentList = state.value ?? [];
 
-      final updatedList = currentList.where((post) => post.id != postId).toList();
+      final updatedList = currentList.where((recruit) => recruit.id != recruitId).toList();
       state = AsyncData(updatedList);
       return Success(updatedList);
     }
