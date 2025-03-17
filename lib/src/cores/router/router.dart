@@ -26,6 +26,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../utilities/components/greenfield_images_detail.dart';
 import '../../viewmodels/notice/notice_view_model.dart';
 import '../../viewmodels/recruit/recruit_view_model.dart';
+import '../../views/recruitment/chat/chat_view.dart';
 import '../../views/setting/setting_view.dart';
 
 part 'router.g.dart';
@@ -213,6 +214,11 @@ GoRouter goRouter(Ref ref) {
                 },
                 routes: <RouteBase>[
                   GoRoute(
+                    name: 'currentParticipants_In_recruit_chat',
+                    path: 'chat/:id',
+                    builder: (context, state) => ChatView(recruitId: state.pathParameters['id'] ?? ''),
+                  ),
+                  GoRoute(
                     name: 'recruit_detial',
                     path: 'detail/:id',
                     pageBuilder: (context, state) {
@@ -236,6 +242,13 @@ GoRouter goRouter(Ref ref) {
                         },
                       );
                     },
+                    routes: <RouteBase>[
+                      GoRoute(
+                        name: 'recruit_chat',
+                        path: 'chat',
+                        builder: (context, state) => ChatView(recruitId: state.pathParameters['id'] ?? ''),
+                      ),
+                    ],
                   ),
                   GoRoute(
                     name: 'recruit_edit',

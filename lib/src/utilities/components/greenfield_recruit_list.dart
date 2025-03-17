@@ -7,12 +7,14 @@ import 'package:green_field/src/model/recruit.dart';
 
 class GreenFieldRecruitList extends StatelessWidget {
   final Recruit recruits;
+  final String userId;
   final VoidCallback onTap;
 
   const GreenFieldRecruitList({
     super.key,
     required this.recruits,
-    required this.onTap
+    required this.userId,
+    required this.onTap,
   });
 
   @override
@@ -35,13 +37,42 @@ class GreenFieldRecruitList extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      recruits.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextsTheme.main().gfTitle1.copyWith(
-                            color: Theme.of(context).appColors.gfBlackColor,
+                    Row(
+                      children: [
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 1.4), // 최대 너비 설정
+                          child: Text(
+                            recruits.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextsTheme.main().gfTitle1.copyWith(color: Theme.of(context).appColors.gfBlackColor),
                           ),
+                        ),
+                        Spacer(),
+                        recruits.currentParticipants.contains(userId)
+                            ? Row(
+                          children: [
+                            Container(
+                              width: 5,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red, // 원의 색상
+                              ),
+                            ),
+                            SizedBox(width: 3),
+                            Text(
+                              '참여중',
+                              style: AppTextsTheme.main()
+                                  .gfCaption5
+                                  .copyWith(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        )
+                            : SizedBox.shrink(),
+                      ],
                     ),
                     SizedBox(height: 5),
                     Text(
@@ -87,7 +118,9 @@ class GreenFieldRecruitList extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 5),
-                        Container(
+                        recruits.currentParticipants.contains(userId)
+                            ? SizedBox.shrink()
+                            : Container(
                           decoration: BoxDecoration(
                             color: recruits.currentParticipants.length != recruits.maxParticipants
                                 ? Theme.of(context).appColors.gfMainBackGroundColor
@@ -110,7 +143,7 @@ class GreenFieldRecruitList extends StatelessWidget {
                                 Text(
                                   recruits.currentParticipants.length != recruits.maxParticipants
                                       ? "채팅입장 가능"
-                                      : "입장 불가능",
+                                      :  "입장 불가능",
                                   style: AppTextsTheme.main()
                                       .gfCaption5
                                       .copyWith(

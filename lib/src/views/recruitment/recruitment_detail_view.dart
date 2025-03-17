@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:green_field/src/viewmodels/chat/chat_view_model.dart';
 import 'package:green_field/src/viewmodels/onboarding/onboarding_view_model.dart';
 import 'package:green_field/src/viewmodels/recruit/recruit_edit_view_model.dart';
 import 'package:green_field/src/viewmodels/recruit/recruit_view_model.dart';
@@ -49,11 +50,7 @@ class _RecruitDetailViewState extends ConsumerState<RecruitDetailView> {
         actions: [
           (recruitNotifier.checkAuth(userState.value?.userType, userState.value?.id ?? '', currentRecruit.creatorId ?? ''))
               ? CupertinoButton(
-            child: ImageIcon(
-              AssetImage(AppIcons.menu),
-              size: 24,
-              color: Theme.of(context).appColors.gfGray400Color,
-            ),
+            child: Icon(CupertinoIcons.ellipsis,color: Theme.of(context).appColors.gfGray400Color),
             onPressed: () {
               _showCupertinoActionSheet(
                 context,
@@ -120,15 +117,54 @@ class _RecruitDetailViewState extends ConsumerState<RecruitDetailView> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
               child: GreenFieldConfirmButton(
-                text: recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants) ? "채팅으로 이야기 해보기" : "채팅방 입장 불가",
+                text: recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants)
+                    ? "채팅으로 이야기 해보기"
+                    : "채팅방 입장 불가",
                 isAble: true,
-                textColor: recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants) ? Theme.of(context).appColors.gfMainColor : Theme.of(context).appColors.gfWarningColor,
-                backGroundColor: recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants) ? Theme.of(context).appColors.gfMainBackGroundColor : Theme.of(context).appColors.gfWarningBackGroundColor,
-                onPressed: () {
+                textColor: recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants)
+                    ? Theme.of(context).appColors.gfMainColor
+                    : Theme.of(context).appColors.gfWarningColor,
+                backGroundColor: recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants)
+                    ? Theme.of(context).appColors.gfMainBackGroundColor
+                    : Theme.of(context).appColors.gfWarningBackGroundColor,
+                onPressed: () async {
                   if (recruitNotifier.isEntryChatRoomActive(currentRecruit.currentParticipants.length, currentRecruit.maxParticipants)) {
+                    final getRecruitList = await ref.read(recruitViewModelProvider.notifier).getRecruitList();
 
+                    switch (getRecruitList) {
+                      case Success():
+                        final getRecruitResult = await ref.read(recruitViewModelProvider.notifier).getRecruit(currentRecruit.id);
+
+                        switch (getRecruitResult) {
+                          case Success(value: final recruit):
+                            if (DateTime.now().isBefore(recruit.remainTime)) {
+                              if (recruitNotifier.isEntryChatRoomActive(recruit.currentParticipants.length, recruit.maxParticipants)) {
+                                final entryResult = await ref.read(recruitViewModelProvider.notifier).entryChatRoom(currentRecruit.id, userState.value?.id ?? '');
+
+                                switch (entryResult) {
+                                  case Success():
+                                    context.go('/recruit/chat/${recruit.id}');
+                                  case Failure(exception: final e):
+                                    recruitEditNotifier.flutterToast('에러가 발생했어요!');
+                                }
+                              } else {
+                                recruitEditNotifier.flutterToast('채팅방에 인원이 모두 찼어요.');
+                              }
+                            } else {
+                              context.go('/recruit');
+                              recruitEditNotifier.flutterToast('시간이 지난 채팅방이에요');
+                            }
+
+                          case Failure(exception: final e):
+                            context.go('/recruit');
+                            recruitEditNotifier.flutterToast('시간이 지난 채팅방이에요');
+                        }
+
+                      case Failure(exception: final e):
+                        recruitEditNotifier.flutterToast('에러가 발생했어요!');
+                    }
                   } else {
-                    recruitEditNotifier.flutterToast('현재 방에 인원이 모두 찼습니다.');
+                    recruitEditNotifier.flutterToast('채팅방에 인원이 모두 찼어요.');
                   }
                 },
               ),

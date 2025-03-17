@@ -10,6 +10,8 @@ class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function()? leadingAction;
   final bool? noLeadingIcon;
   final List<Widget>? actions;
+  final bool? isChatView;
+  final bool? isChatViewTimeLimit;
 
   const GreenFieldAppBar({
     super.key,
@@ -19,6 +21,8 @@ class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leadingIcon,
     this.leadingAction,
     this.noLeadingIcon,
+    this.isChatView,
+    this.isChatViewTimeLimit,
   });
 
   @override
@@ -52,7 +56,31 @@ class GreenFieldAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         leading: leading,
-        title: Text(
+        title: (isChatView != null && isChatView == true)
+        ? Container(
+          width: 250,
+          height: 35,
+          decoration: BoxDecoration(
+            color: (isChatViewTimeLimit == true)
+                ? Theme.of(context).appColors.gfMainBackGroundColor
+                : Theme.of(context).appColors.gfWarningBackGroundColor,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: AppTextsTheme.main().gfTitle2.copyWith(
+                  color: (isChatViewTimeLimit == true)
+                      ? Theme.of(context).appColors.gfMainColor
+                      : Theme.of(context).appColors.gfWarningColor,
+                ),
+              ),
+            ],
+          ),
+        )
+        : Text(
           title,
           style: AppTextsTheme.main().gfHeading2.copyWith(
               color: Theme.of(context).appColors.gfBlackColor

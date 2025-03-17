@@ -56,6 +56,7 @@ class FirebaseStoreRecruitService {
   Future<Result<Recruit, Exception>> createDeadRecruitDB(Recruit recruit) async {
     try {
       await _store.collection('DeadRecruit').doc(recruit.id).set(recruit.toMap());
+      await moveAndDeleteCollection(recruit.id);
       await _store.collection('Recruit').doc(recruit.id).delete();
 
       return Success(recruit);
@@ -63,6 +64,36 @@ class FirebaseStoreRecruitService {
       print(e);
       return Failure(Exception('recruit 데이터 생성 실패: $e'));
     }
+  }
+
+  Future<void> moveAndDeleteCollection(String recruitId) async {
+    // 기존 문서를 가져옵니다.
+    final querySnapshot = await _store
+        .collection('Recruit')
+        .doc(recruitId)
+        .collection('Message')
+        .get();
+
+    final batch = _store.batch();
+
+    querySnapshot.docs.forEach((doc) {
+      batch.set(
+        _store
+            .collection('DeadRecruit')
+            .doc(recruitId)
+            .collection('Message')
+            .doc(doc.id),
+        doc.data(),
+      );
+    });
+
+    await batch.commit();
+
+    final deleteBatch = _store.batch();
+    querySnapshot.docs.forEach((doc) {
+      deleteBatch.delete(doc.reference);
+    });
+    await deleteBatch.commit();
   }
 
   /// 특정 Recruit 가져오기
@@ -86,6 +117,57 @@ class FirebaseStoreRecruitService {
       return Failure(Exception('데이터가 존재 하지 않습니다.'));
     } catch (e) {
       return Failure(Exception('모집 데이터 가져오기 실패: $e'));
+    }
+  }
+
+  /// 특정 Recruit Chat에 입장한 유저 추가
+  Future<Result<Recruit, Exception>> entryChatRoom(String recruitId, String userId) async {
+    try {
+      await _store.collection('Recruit').doc(recruitId).update({
+        'current_participants': firebase_store.FieldValue.arrayUnion([userId]),
+      });
+
+      final documentSnapshot = await _store.collection('Recruit').doc(recruitId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          final recruit = Recruit.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(recruit);
+        }
+      }
+      return Failure(Exception('모집글를 찾을 수 없습니다.'));
+    } catch (e) {
+      print(e);
+      return Failure(Exception('신고 기능 실패: $e'));
+    }
+  }
+
+  /// 특정 Recruit Chat에 퇴장한 유저 추가
+  Future<Result<Recruit, Exception>> outChatRoom(String recruitId, String userId) async {
+    try {
+      await _store.collection('Recruit').doc(recruitId).update({
+        'current_participants': firebase_store.FieldValue.arrayRemove([userId]),
+      });
+
+      final documentSnapshot = await _store.collection('Recruit').doc(recruitId).get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          final recruit = Recruit.fromMap({
+            ...data,
+            'id': documentSnapshot.id, // 문서 ID를 직접 추가
+          });
+          return Success(recruit);
+        }
+      }
+      return Failure(Exception('모집글를 찾을 수 없습니다.'));
+    } catch (e) {
+      return Failure(Exception('채팅방 나가기 실패: $e'));
     }
   }
 
@@ -132,6 +214,7 @@ class FirebaseStoreRecruitService {
   Future<Result<void, Exception>> deleteRecruitDB(String recruitId, GFUser.User user) async {
     try {
       await _store.collection('Recruit').doc(recruitId).delete();
+      await moveAndDeleteCollection(recruitId);
 
       return Success(null);
     } catch (e) {

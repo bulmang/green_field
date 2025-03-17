@@ -83,15 +83,77 @@ class RecruitViewModel extends _$RecruitViewModel {
   }
 
   /// 특정 Recruit 제거
-  Future<Result<List<Recruit>, Exception>> deleteRecruitInList(String postId) async {
+  Future<Result<List<Recruit>, Exception>> deleteRecruitInList(String recruitId) async {
     if (state.value!.isNotEmpty) {
       final currentList = state.value ?? [];
 
-      final updatedList = currentList.where((post) => post.id != postId).toList();
+      final updatedList = currentList.where((recruit) => recruit.id != recruitId).toList();
       state = AsyncData(updatedList);
       return Success(updatedList);
     }
     return Failure(Exception('에러 발생'));
+  }
+
+  /// 특정 Recruit Chat에 입장한 유저 추가
+  Future<Result<Recruit, Exception>> entryChatRoom(String recruitId, String userId) async {
+    try {
+      state = AsyncLoading();
+      final result = await ref
+          .read(recruitRepositoryProvider)
+          .entryChatRoom(recruitId, userId);
+
+      switch (result) {
+        case Success(value: final recruit):
+          if (state.value!.isNotEmpty) {
+            final currentList = state.value ?? [];
+            final index = state.value!.indexWhere((recruit) => recruit.id == recruitId);
+            if (index != -1) {
+              currentList[index] = recruit;
+              state = AsyncData(currentList);
+            } else {
+              state = AsyncData([]);
+            }
+          }
+          return Success(recruit);
+        case Failure(exception: final exception):
+          state = AsyncError(exception, StackTrace.current);
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      state = AsyncError(error, StackTrace.current);
+      return Failure(Exception('모집글 신고 실패: $error'));
+    }
+  }
+
+  /// 특정 Recruit Chat에 퇴장한 유저 삭제
+  Future<Result<Recruit, Exception>> outChatRoom(String recruitId, String userId) async {
+    try {
+      state = AsyncLoading();
+      final result = await ref
+          .read(recruitRepositoryProvider)
+          .outChatRoom(recruitId, userId);
+
+      switch (result) {
+        case Success(value: final recruit):
+          if (state.value!.isNotEmpty) {
+            final currentList = state.value ?? [];
+            final index = state.value!.indexWhere((recruit) => recruit.id == recruitId);
+            if (index != -1) {
+              currentList[index] = recruit;
+              state = AsyncData(currentList);
+            } else {
+              state = AsyncData([]);
+            }
+          }
+          return Success(recruit);
+        case Failure(exception: final exception):
+          state = AsyncError(exception, StackTrace.current);
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      state = AsyncError(error, StackTrace.current);
+      return Failure(Exception('모집글 신고 실패: $error'));
+    }
   }
 
   /// 특정 Recruit 신고하기
@@ -103,18 +165,18 @@ class RecruitViewModel extends _$RecruitViewModel {
           .reportRecruit(recruitId, userId, reason);
 
       switch (result) {
-        case Success(value: final post):
+        case Success(value: final recruit):
           if (state.value!.isNotEmpty) {
             final currentList = state.value ?? [];
             final index = state.value!.indexWhere((recruit) => recruit.id == recruitId);
             if (index != -1) {
-              currentList[index] = post;
+              currentList[index] = recruit;
               state = AsyncData(currentList);
             } else {
               state = AsyncData([]);
             }
           }
-          return Success(post);
+          return Success(recruit);
         case Failure(exception: final exception):
           state = AsyncError(exception, StackTrace.current);
           return Failure(Exception(exception));

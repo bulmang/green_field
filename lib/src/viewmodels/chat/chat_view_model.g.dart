@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'recruit_edit_view_model.dart';
+part of 'chat_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recruitEditViewModelHash() =>
-    r'4d3cf17ee2522a654fcb332163e8855b1e0bfd2b';
+String _$chatViewModelHash() => r'29872808c732509fb898f0c763ff23c67a9a50f0';
 
-/// See also [RecruitEditViewModel].
-@ProviderFor(RecruitEditViewModel)
-final recruitEditViewModelProvider =
-    AsyncNotifierProvider<RecruitEditViewModel, Recruit?>.internal(
-  RecruitEditViewModel.new,
-  name: r'recruitEditViewModelProvider',
+/// See also [ChatViewModel].
+@ProviderFor(ChatViewModel)
+final chatViewModelProvider =
+    AsyncNotifierProvider<ChatViewModel, List<Message>>.internal(
+  ChatViewModel.new,
+  name: r'chatViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$recruitEditViewModelHash,
+      : _$chatViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$RecruitEditViewModel = AsyncNotifier<Recruit?>;
+typedef _$ChatViewModel = AsyncNotifier<List<Message>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

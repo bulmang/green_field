@@ -41,11 +41,7 @@ class _NoticeDetailViewState extends ConsumerState<NoticeDetailView> {
         actions: [
           if (noticeNotifier.checkAuth(userState.value?.userType ?? ''))
             CupertinoButton(
-                child: ImageIcon(
-                  AssetImage(AppIcons.menu),
-                  size: 24,
-                  color: Theme.of(context).appColors.gfGray400Color,
-                ),
+                child: Icon(CupertinoIcons.ellipsis,color: Theme.of(context).appColors.gfGray400Color),
                 onPressed: () {
                   _showCupertinoActionSheet(
                     context,
