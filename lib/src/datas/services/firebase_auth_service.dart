@@ -48,34 +48,13 @@ class FirebaseAuthService {
       // 토큰 발급하기
       kakao.OAuthToken? token;
 
-      // if (kIsWeb) {
-      //       // 카카오 계정 정보 가져오기
-      //       token = await kakao.UserApi.instance.loginWithKakaoAccount();
-      //
-      //       kakao.User user = await kakao.UserApi.instance.me();
-      //       final String userId = user.id.toString(); // 변하지 않는 고유 ID
-      //       final provider = 'oidc.kakaoweb';
-      //       final idToken = token.idToken ?? ''; // idToken 언래핑
-      //       final accessToken = token.accessToken;
-      //
-      //       // Token 객체 생성
-      //       final tokenObject = Token(
-      //           provider: provider,
-      //           idToken: idToken,
-      //           accessToken: accessToken,
-      //           providerUID: userId
-      //       );
-      //
-      //       print('카카오 ID: ${tokenObject.providerUID}');
-      //
-      //       return Success(tokenObject);
-      //
-      //   } else {
-
+      if (kIsWeb) {
+            // 카카오 계정 정보 가져오기
             token = await kakao.UserApi.instance.loginWithKakaoAccount();
-            // kakao.User user = await kakao.UserApi.instance.me();
-            // final String userId = user.id.toString(); // 변하지 않는 고유 ID
-            final provider = 'oidc.kakao';
+
+            kakao.User user = await kakao.UserApi.instance.me();
+            final String userId = user.id.toString(); // 변하지 않는 고유 ID
+            final provider = 'oidc.kakaoweb';
             final idToken = token.idToken ?? ''; // idToken 언래핑
             final accessToken = token.accessToken;
 
@@ -84,11 +63,53 @@ class FirebaseAuthService {
                 provider: provider,
                 idToken: idToken,
                 accessToken: accessToken,
-                providerUID: 'userId'
+                providerUID: userId
             );
 
+            print('카카오 ID: ${tokenObject.providerUID}');
+
             return Success(tokenObject);
-        // }
+
+        } else {
+
+        if (await kakao.isKakaoTalkInstalled()) {
+          token = await kakao.UserApi.instance.loginWithKakaoTalk();
+          print('카카오톡 로그인 성공');
+          kakao.User user = await kakao.UserApi.instance.me();
+          final String userId = user.id.toString(); // 변하지 않는 고유 ID
+          final provider = 'oidc.kakao';
+          final idToken = token.idToken ?? ''; // idToken 언래핑
+          final accessToken = token.accessToken;
+
+          // Token 객체 생성
+          final tokenObject = Token(
+              provider: provider,
+              idToken: idToken,
+              accessToken: accessToken,
+              providerUID: userId
+          );
+
+          return Success(tokenObject);
+        } else {
+          token = await kakao.UserApi.instance.loginWithKakaoAccount();
+          print('카카오톡 로그인 성공');
+          kakao.User user = await kakao.UserApi.instance.me();
+          final String userId = user.id.toString(); // 변하지 않는 고유 ID
+          final provider = 'oidc.kakao';
+          final idToken = token.idToken ?? ''; // idToken 언래핑
+          final accessToken = token.accessToken;
+
+          // Token 객체 생성
+          final tokenObject = Token(
+              provider: provider,
+              idToken: idToken,
+              accessToken: accessToken,
+              providerUID: userId
+          );
+
+          return Success(tokenObject);
+        }
+      }
 
 
     } on Exception catch (error) {

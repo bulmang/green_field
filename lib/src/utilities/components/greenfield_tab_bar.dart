@@ -116,15 +116,15 @@ class _GreenFieldTabBarState extends ConsumerState<GreenFieldTabBar> {
       ],
       currentIndex: widget.navigationShell.currentIndex,
       onTap: (index) async {
+        widget.navigationShell.goBranch(
+          index,
+          initialLocation: index == widget.navigationShell.currentIndex,
+        );
         if (index == 0) {
           final result = await ref.read(noticeViewModelProvider.notifier).getNoticeList();
         } else if (index == 1) {
           final result = await ref.read(recruitViewModelProvider.notifier).getRecruitList();
         }
-        widget.navigationShell.goBranch(
-          index,
-          initialLocation: index == widget.navigationShell.currentIndex,
-        );
       },
     );
   }

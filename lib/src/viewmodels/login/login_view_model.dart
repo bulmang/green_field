@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import '../../datas/repositories/login_repository.dart';
 import '../../model/token.dart';
+import '../../utilities/design_system/app_colors.dart';
 
 part 'login_view_model.g.dart';
 
@@ -65,6 +68,19 @@ class LoginViewModel extends _$LoginViewModel {
         state = AsyncError(e, StackTrace.current);
         return Failure(Exception('애플 로그인 실패: $e'));
     }
+  }
+
+  /// Toast Message 알람
+  void flutterToast(String alarmMessage, {Color? backgroundColor}) {
+    Fluttertoast.showToast(
+      msg: alarmMessage,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 2,
+      backgroundColor: backgroundColor ?? AppColorsTheme.main().gfWarningColor,
+      textColor: AppColorsTheme.main().gfWhiteColor,
+      fontSize: 16.0,
+    );
   }
 }
 
