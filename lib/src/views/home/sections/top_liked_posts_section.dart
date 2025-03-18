@@ -36,10 +36,6 @@ class _TopLikedPostsSection extends ConsumerState<TopLikedPostsSection> {
 
     final top3List = topList.take(3).toList(); // 상위 3개 가져오기
 
-    for(var t in topList) {
-      print(t.title);
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -85,7 +85,6 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
             instanceModel: widget.post,
             type: FeatureType.post,
             onSubmit: (String title, String body, List<ImageType> images) async {
-              print('출력');
               if (images.length > 8) {
                 ref
                     .read(postEditViewModelProvider.notifier)
@@ -124,7 +123,6 @@ class _PostEditViewState extends ConsumerState<PostEditView> {
                         }
 
                       case Failure(exception: final e):
-                        print('getPost:$e');
                         ref
                             .read(postEditViewModelProvider.notifier)
                             .flutterToast('게시글을 가져오기 실패하였습니다.');

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   @override
   Widget build(BuildContext context) {
     final loginState = ref.watch(loginViewModelProvider);
+    final loginNotifier = ref.watch(loginViewModelProvider.notifier);
     final userState = ref.watch(onboardingViewModelProvider);
 
     return Scaffold(
@@ -59,7 +62,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                         switch (result) {
                           case Success(value: final token):
-                            print('hsdfshdkfsdhfksdjf');
                             final getUser = await ref
                                 .read(onboardingViewModelProvider.notifier)
                                 .isUserExistGetUser(token.providerUID);
@@ -72,19 +74,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             }
 
                           case Failure(exception: final e):
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('로그인 실패'),
-                                content: Text('에러 발생: $e'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: Text('확인'),
-                                  ),
-                                ],
-                              ),
-                            );
+                            print('error: $e');
+                            loginNotifier.flutterToast('에러가 발생했어요!');
                         }
                       },
                       loginType: LoginType.kakao,
@@ -93,7 +84,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     SizedBox(height: 12),
                     // 애플 로그인 버튼
 
-                    kIsWeb
+                    kIsWeb || (Platform.isAndroid)
                         ? SizedBox.shrink()
                         : signInButton(
                             onPressed: () async {
@@ -103,23 +94,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   .signInWithApple();
 
                               switch (result) {
-                                case Success():
-                                  context.go('/onboarding'); // 온보딩 화면으로 이동
+                                case Success(value: final token):
+                                  final getUser = await ref
+                                      .read(onboardingViewModelProvider.notifier)
+                                      .isUserExistGetUser(token.providerUID);
+
+                                  switch (getUser) {
+                                    case Success(value: final user):
+                                      context.go('/home');
+                                    case Failure(exception: final e):
+                                      context.go('/onboarding');
+                                  }
 
                                 case Failure(exception: final e):
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text('로그인 실패'),
-                                      content: Text('에러 발생: $e'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.of(context).pop(),
-                                          child: Text('확인'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  loginNotifier.flutterToast('에러가 발생했어요!');
                               }
                             },
                             loginType: LoginType.apple,
@@ -138,19 +126,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               // context.go('/home');
 
                               case Failure(exception: final e):
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('로그인 실패'),
-                                    content: Text('에러 발생'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.of(context).pop(),
-                                        child: Text('확인'),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                loginNotifier.flutterToast('에러가 발생했어요!');
                             }
 
                           },
