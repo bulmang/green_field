@@ -591,10 +591,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: "1c2b787f99bdca1f3718543f81d38aa1b124817dfeb9fb196201bea85b6134bf"
+      sha256: "9ee02950848f61c4129af3d6ec84a1cfc0e47931abc746b03e7a3bc3e8ff6eda"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.26"
+    version: "2.0.22"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -817,26 +817,26 @@ packages:
     dependency: transitive
     description:
       name: kakao_flutter_sdk_auth
-      sha256: "028d8803b7545cc5f41d20cda43b813683700e45c6c13aa4ca56f4b9c673305c"
+      sha256: "686996c63c7e006ccf9a0bdfee5307465d7ae134d2f1ae2b4a06c597604689bc"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.7+3"
+    version: "1.9.6"
   kakao_flutter_sdk_common:
     dependency: transitive
     description:
       name: kakao_flutter_sdk_common
-      sha256: "1c4944cc50c363d4626e9006ab39ee496c8f5ca602b96154272b90d40544aaca"
+      sha256: "698d5f63d15438ad47af3baf0815fd30dfcacfa76640e96e5a18fc8504f25bde"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.7+3"
+    version: "1.9.6"
   kakao_flutter_sdk_user:
     dependency: "direct main"
     description:
       name: kakao_flutter_sdk_user
-      sha256: "5157feeafe58d677d314baa5ccdcb435fd9680c485c3b23e9ad7d97a0c93694f"
+      sha256: f3692feefad530bcfcdd1b8cf685b0c2c3da4a6d28a7df7f57529e57b7040f1b
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.7+3"
+    version: "1.9.6"
   leak_tracker:
     dependency: transitive
     description:
