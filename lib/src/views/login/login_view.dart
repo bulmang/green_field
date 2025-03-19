@@ -40,7 +40,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
 
-                Text('새싹 수강생 커뮤니티, 그린필드',
+                Text('새싹 수강생 커뮤니티, 풀밭',
                     style: AppTextsTheme.main()
                         .gfHeading1
                         .copyWith(color: Theme.of(context).appColors.gfMainColor)),
