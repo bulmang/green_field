@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -291,7 +292,31 @@ class _PostViewState extends ConsumerState<PostView> {
                 ],
               ),
             )
-          : SizedBox.shrink(),
+          : Center(
+        child: Column(
+          children: [
+            Spacer(),
+            Text(
+              '게시글이 하나도 없어요..',
+              overflow: TextOverflow.ellipsis,
+              style: AppTextsTheme.main().gfTitle1.copyWith(
+                color: Theme.of(context).appColors.gfBlackColor,
+              ),
+            ),
+            CupertinoButton(
+              onPressed: () async {
+
+              },
+              child: CachedNetworkImage(
+                imageUrl: 'https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/sad_sesac.gif?alt=media&',
+                width: 240,
+                height: 240,
+              ),
+            ),
+            Spacer(),
+          ],
+        ),
+      ),
     );
   }
 }
