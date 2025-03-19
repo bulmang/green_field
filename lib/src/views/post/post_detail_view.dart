@@ -58,42 +58,81 @@ class _PostDetailViewState extends ConsumerState<PostDetailView> {
             backgGroundColor: Theme.of(context).appColors.gfWhiteColor,
             title: _getLimitedTitle(currentPost.title, 20),
             actions: [
-              (postNotifier.checkAuth(userState.value?.userType, userState.value?.id ?? '', currentPost.creatorId))
-                  ? CupertinoButton(
+              CupertinoButton(
                       child: Icon(CupertinoIcons.ellipsis,color: Theme.of(context).appColors.gfGray400Color),
                       onPressed: () {
-                        _showCupertinoActionSheet(
-                          context,
-                          currentPost, // 현재 공지사항 객체
-                          ref.read(postEditViewModelProvider.notifier),
-                          ref.read(postViewModelProvider.notifier),
-                        );
+                        if (postNotifier.checkAuth(userState.value?.userType, userState.value?.id ?? '', currentPost.creatorId)) {
+                          _showCupertinoActionSheet(
+                            context,
+                            currentPost, // 현재 공지사항 객체
+                            ref.read(postEditViewModelProvider.notifier),
+                            ref.read(postViewModelProvider.notifier),
+                          );
+                        } else {
+                          _showOtherUserCupertinoActionSheet(
+                            context, () {
+                              _showIOSDialog(
+                                context: context,
+                                title: '이 게시글을 신고하시겠어요?',
+                                body: '신고 사유를 정확히 선택해주세요.\n잘못된 신고는 처리가 어려울 수 있어요.\n신고하면 글이 보이지 않아요.',
+                                onConfirm: () async {
+                                  _showReportPicker(context, (String selectedReason) async {
+                                    final result = await ref
+                                        .read(postViewModelProvider.notifier)
+                                        .reportPost(currentPost.id, userState.value?.id ?? '', selectedReason);
+
+                                    switch (result) {
+                                      case Success(value: final v):
+                                        final refreshPostList = await ref.read(postViewModelProvider.notifier).getPostList();
+
+                                        switch(refreshPostList) {
+                                          case Success():
+                                            context.pop();
+                                            postNotifier.showToast('신고가 정상적으로 접수되었습니다.\n운영팀이 확인 후 조치할 예정입니다.', ToastGravity.TOP, Theme.of(context).appColors.gfMainColor, Theme.of(context).appColors.gfWhiteColor);
+                                          case Failure(exception: final e):
+                                            postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                                        }
+
+                                      case Failure(exception: final e):
+                                        postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                                () {
+                                  _showIOSDialog(
+                                    context: context,
+                                    title: '글 작성자를 차단하시겠습니까?',
+                                    body: '이 작성자의 게시물이 목록에 노출되지 않으며, 다시 해제하실 수 없습니다.',
+                                    onConfirm: () async {
+                                      final result = await ref
+                                          .read(postViewModelProvider.notifier)
+                                          .blockUser(currentPost, userState.value?.id ?? '');
+
+                                      switch (result) {
+                                        case Success(value: final v):
+                                          final refreshPostList = await ref.read(postViewModelProvider.notifier).getPostList();
+
+                                          switch(refreshPostList) {
+                                            case Success():
+                                              context.pop();
+                                              postNotifier.showToast('글 작성자를 차단하였습니다.', ToastGravity.TOP, Theme.of(context).appColors.gfMainColor, Theme.of(context).appColors.gfWhiteColor);
+                                            case Failure(exception: final e):
+                                              postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                                          }
+
+                                        case Failure(exception: final e):
+                                          postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
+                                      }
+                                    },
+                                  );
+                            },
+                          );
+                        }
                       },
                   )
-                  : CupertinoButton(
-                    child: Icon(CupertinoIcons.exclamationmark_shield,color: Theme.of(context).appColors.gfGray400Color),
-                    onPressed: () {
-                      _showIOSDialog(
-                          context: context,
-                          title: '이 게시글을 신고하시겠어요?',
-                          body: '신고 사유를 정확히 선택해주세요. 잘못된 신고는 처리가 어려울 수 있어요.',
-                          onConfirm: () async {
-                            _showReportPicker(context, (String selectedReason) async {
-                              final result = await ref
-                                  .read(postViewModelProvider.notifier)
-                                  .reportPost(currentPost.id, userState.value?.id ?? '', selectedReason);
 
-                              switch (result) {
-                                case Success(value: final v):
-                                  postNotifier.showToast('신고가 정상적으로 접수되었습니다.\n운영팀이 확인 후 조치할 예정입니다.', ToastGravity.TOP, Theme.of(context).appColors.gfMainColor, Theme.of(context).appColors.gfWhiteColor);
-                                case Failure(exception: final e):
-                                  postNotifier.showToast('에러가 발생했어요!', ToastGravity.TOP, Theme.of(context).appColors.gfWarningColor, Theme.of(context).appColors.gfWhiteColor);
-                              }
-                            });
-                          },
-                      );
-                    },
-                  )
             ],
           ),
           body: GestureDetector(
@@ -240,7 +279,7 @@ void _showCupertinoActionSheet(
         actions: <Widget>[
           CupertinoActionSheetAction(
             child: Text(
-              '글 수정',
+              '수정하기',
               style: AppTextsTheme.main().gfTitle2.copyWith(
                 color: Theme.of(context).appColors.gfBlueColor,
               ),
@@ -292,6 +331,57 @@ void _showCupertinoActionSheet(
     },
   );
 }
+
+void _showOtherUserCupertinoActionSheet(
+    BuildContext context,
+    void Function() onReportPressed,
+    void Function() onBlockPressed,
+    ) {
+  showCupertinoModalPopup(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoActionSheet(
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: Text(
+              '게시글 신고하기',
+              style: AppTextsTheme.main().gfTitle2.copyWith(
+                color: Theme.of(context).appColors.gfWarningColor,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+              onReportPressed();
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: Text(
+              '사용자 차단하기',
+              style: AppTextsTheme.main().gfTitle2.copyWith(
+                color: Theme.of(context).appColors.gfWarningColor,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+              onBlockPressed();
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text('취소',
+              style: AppTextsTheme.main().gfTitle2.copyWith(
+                color: Theme.of(context).appColors.gfBlueColor,
+              )),
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    },
+  );
+}
+
 
 void _showIOSDialog({
   required BuildContext context,

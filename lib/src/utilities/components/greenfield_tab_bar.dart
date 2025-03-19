@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../viewmodels/notice/notice_view_model.dart';
@@ -116,14 +117,17 @@ class _GreenFieldTabBarState extends ConsumerState<GreenFieldTabBar> {
       ],
       currentIndex: widget.navigationShell.currentIndex,
       onTap: (index) async {
+        HapticFeedback.lightImpact();
         widget.navigationShell.goBranch(
           index,
           initialLocation: index == widget.navigationShell.currentIndex,
         );
         if (index == 0) {
-          final result = await ref.read(noticeViewModelProvider.notifier).getNoticeList();
+          final result = await ref.read(noticeViewModelProvider.notifier).getNoticeListNoLoading();
         } else if (index == 1) {
-          final result = await ref.read(recruitViewModelProvider.notifier).getRecruitList();
+          final result = await ref.read(recruitViewModelProvider.notifier).getRecruitListNoLoading();
+        } else if (index == 2) {
+          final result = await ref.read(postViewModelProvider.notifier).getPostListNoLoading();
         }
       },
     );

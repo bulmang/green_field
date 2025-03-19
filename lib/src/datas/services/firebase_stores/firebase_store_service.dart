@@ -388,6 +388,20 @@ class   FirebaseStoreService {
     }
   }
 
+  /// 특정 Post에 차단 추가
+  Future<Result<void, Exception>> blockUser(Post post, String userId) async {
+    try {
+      await _store.collection('User').doc(userId).update({
+        'blocked_user': firebase_store.FieldValue.arrayUnion([post.creatorId]),
+      });
+
+      return Success(null);
+    } catch (e) {
+      print(e);
+      return Failure(Exception('차단 기능 실패: $e'));
+    }
+  }
+
   /// 특정 Post에 like 추가
   Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async {
     try {
