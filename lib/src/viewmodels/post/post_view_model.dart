@@ -36,32 +36,69 @@ class PostViewModel extends _$PostViewModel {
   /// Post 리스트 가져오기
   Future<Result<List<Post>, Exception>> getPostList() async {
     state = AsyncLoading();
-    final result = await ref
-        .read(postRepositoryProvider) // Update repository
-        .getPostList();
+    final getUser = await ref.read(onboardingViewModelProvider.notifier).getUser();
 
-    switch (result) {
-      case Success(value: final postList):
-        state = AsyncData(postList);
-        return Success(postList);
-      case Failure(exception: final exception):
-        print('exception: $exception');
-        state = AsyncError(exception, StackTrace.current);
-        return Failure(Exception(exception));
+    switch(getUser) {
+      case Success(value: final user):
+        final result = await ref
+            .read(postRepositoryProvider)
+            .getPostList(user);
+
+        switch (result) {
+          case Success(value: final postList):
+            state = AsyncData(postList);
+            return Success(postList);
+          case Failure(exception: final exception):
+            state = AsyncError(exception, StackTrace.current);
+            return Failure(Exception(exception));
+        }
+      case Failure(exception: final e):
+        return Failure(Exception(e));
     }
   }
 
+  /// Post 리스트 가져오기(로딩없음)
+  Future<Result<List<Post>, Exception>> getPostListNoLoading() async {
+    final getUser = await ref.read(onboardingViewModelProvider.notifier).getUser();
+
+    switch(getUser) {
+      case Success(value: final user):
+        final result = await ref
+            .read(postRepositoryProvider)
+            .getPostList(user);
+
+        switch (result) {
+          case Success(value: final postList):
+            state = AsyncData(postList);
+            return Success(postList);
+          case Failure(exception: final exception):
+            state = AsyncError(exception, StackTrace.current);
+            return Failure(Exception(exception));
+        }
+      case Failure(exception: final e):
+        return Failure(Exception(e));
+    }
+  }
+
+
   /// Post 다음 리스트 가져오기
   Future<Result<List<Post>, Exception>> getNextPostList() async {
-    final result = await ref
-        .read(postRepositoryProvider) // Update repository
-        .getNextPostList(state.value);
+    final getUser = await ref.read(onboardingViewModelProvider.notifier).getUser();
 
-    switch (result) {
-      case Success(value: final postList):
-        return Success(postList);
-      case Failure(exception: final exception):
-        return Failure(Exception(exception));
+    switch(getUser) {
+      case Success(value: final user):
+        final result = await ref
+            .read(postRepositoryProvider) // Update repository
+            .getNextPostList(state.value, user);
+
+        switch (result) {
+          case Success(value: final postList):
+            return Success(postList);
+          case Failure(exception: final exception):
+            return Failure(Exception(exception));
+        }
+      case Failure(exception: final e):
+        return Failure(Exception(e));
     }
   }
 
@@ -183,6 +220,34 @@ class PostViewModel extends _$PostViewModel {
     } catch (error) {
       print('exception: $error');
       state = AsyncError(error, StackTrace.current);
+      return Failure(Exception('게시글 신고 실패: $error'));
+    }
+  }
+
+  /// 특정 유저 차단하기
+  Future<Result<void, Exception>> blockUser(Post post, String userId) async {
+    try {
+      final result = await ref
+          .read(postRepositoryProvider) // 신고 API 호출
+          .blockUser(post, userId);
+
+      switch (result) {
+        case Success(value: final v):
+          final getUser = await ref.read(onboardingViewModelProvider.notifier).getUser();
+
+          switch(getUser) {
+            case Success(value: final value):
+              return Success(v);
+            case Failure(exception: final e):
+              return Failure(Exception(e));
+          }
+
+        case Failure(exception: final exception):
+          print('exception: $exception');
+          return Failure(Exception(exception));
+      }
+    } catch (error) {
+      print('exception: $error');
       return Failure(Exception('게시글 신고 실패: $error'));
     }
   }

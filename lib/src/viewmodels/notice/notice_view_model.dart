@@ -55,6 +55,24 @@ class NoticeViewModel extends _$NoticeViewModel {
     }
   }
 
+  /// Notice 리스트 가져오기 (로딩없음)
+  Future<Result<List<Notice>, Exception>> getNoticeListNoLoading() async {
+    final userState = ref.watch(onboardingViewModelProvider);
+
+    final result = await ref
+        .read(noticeRepositoryProvider)
+        .getNoticeList(userState.value);
+
+    switch (result) {
+      case Success(value: final noticeList):
+        state = AsyncData(noticeList);
+        return Success(noticeList);
+      case Failure(exception: final exception):
+        state = AsyncError(exception, StackTrace.current);
+        return Failure(Exception(exception));
+    }
+  }
+
   /// Notice 다음 리스트 가져오기
   Future<Result<List<Notice>, Exception>> getNextNoticeList() async {
     final userState = ref.watch(onboardingViewModelProvider);

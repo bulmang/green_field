@@ -52,6 +52,23 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
+  /// Recruit 리스트 가져오기(로딩없음)
+  Future<Result<List<Recruit>, Exception>> getRecruitListNoLoading() async {
+    final result = await ref
+        .read(recruitRepositoryProvider) // Update repository
+        .getRecruitList();
+
+    switch (result) {
+      case Success(value: final postList):
+        state = AsyncData(postList);
+        return Success(postList);
+      case Failure(exception: final exception):
+        print('exception: $exception');
+        state = AsyncError(exception, StackTrace.current);
+        return Failure(Exception(exception));
+    }
+  }
+
   /// 특정 Recruit 가져오기
   Future<Result<Recruit, Exception>> getRecruit(String recruitId) async {
     final userState = ref.watch(onboardingViewModelProvider);

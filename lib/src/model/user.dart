@@ -9,6 +9,7 @@ class User {
   DateTime? createDate;
   DateTime? lastSignInDate;
   DateTime? lastLoginInDate;
+  List<String> blockedUser;
 
   User({
     required this.id,
@@ -21,6 +22,7 @@ class User {
     this.createDate,
     this.lastSignInDate,
     this.lastLoginInDate,
+    this.blockedUser = const [],
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +37,7 @@ class User {
       'create_date': createDate?.toIso8601String(),
       'last_signin_date': lastSignInDate?.toIso8601String(),
       'last_login_date': lastSignInDate?.toIso8601String(),
+      'blocked_user': blockedUser,
     };
   }
 
@@ -58,6 +61,7 @@ class User {
       createDate: map['create_date'] != null ? DateTime.parse(map['create_date']) : null,
       lastSignInDate: map['last_signin_date'] != null ? DateTime.parse(map['last_signin_date']) : null,
       lastLoginInDate: map['last_login_date'] != null ? DateTime.parse(map['last_login_date']) : null,
+      blockedUser: List<String>.from(map['blocked_user'] ?? []),
     );
   }
 }
