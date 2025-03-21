@@ -78,7 +78,7 @@ class OnboardingRepository {
   }
 
   /// User Auth 호출
-  Future<Result<myUser.User, Exception>> getAuthUser() async {
+  Future<Result<myUser.User?, Exception>> getAuthUser() async {
     try {
       final result = await firebaseAuthService.getCurrentUser();
 

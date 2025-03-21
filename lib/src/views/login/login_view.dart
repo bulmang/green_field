@@ -123,7 +123,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                             switch (result) {
                               case Success():
-                              // context.go('/home');
+                              context.go('/home');
 
                               case Failure(exception: final e):
                                 loginNotifier.flutterToast('에러가 발생했어요!');

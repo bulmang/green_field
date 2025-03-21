@@ -49,7 +49,7 @@ class   FirebaseStoreService {
   }
 
   /// Firestore에서 UserId로 사용자 데이터 가져오기
-  Future<Result<GFUser.User, Exception>> getUserById(String userId) async {
+  Future<Result<GFUser.User?, Exception>> getUserById(String userId) async {
     try {
       final docSnapshot = await _store.collection('User').doc(userId).get();
 
@@ -58,8 +58,7 @@ class   FirebaseStoreService {
 
         return Success(userData);
       } else {
-        return Failure(Exception(
-            'firebase_store_service _getUserById error: 사용자를 찾을 수 없습니다.'));
+        return Success(null);
       }
     } catch (e) {
       return Failure(Exception('사용자 데이터 가져오기 실패: $e'));

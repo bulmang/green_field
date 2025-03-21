@@ -20,23 +20,28 @@ class PostRepository { // Update class name
   PostRepository({required this.firebaseStoreService, required this.firebaseStorageService});
 
   /// Post 리스트 가져오기
-  Future<Result<List<Post>, Exception>> getPostList(User user) async {
+  Future<Result<List<Post>, Exception>> getPostList(User? user) async {
     try {
       final result = await firebaseStoreService.getPostList();
 
       switch(result) {
         case Success(value: final postList):
-          // 1. 신고된  게시물 필터링 (현재 사용자 ID가 reportedUsers에 포함된 경우 제외)
-          final filteredReportPostList = postList.where((post)
-          => !post.reportedUsers.contains(user.id)
-          ).toList();
+          if (user != null) {
+            // 1. 신고된  게시물 필터링 (현재 사용자 ID가 reportedUsers에 포함된 경우 제외)
+            final filteredReportPostList = postList.where((post) =>
+            !post.reportedUsers.contains(user.id)
+            ).toList();
 
-          // 2. 차단 사용자 조건 적용
-          final filteredPostList = filteredReportPostList.where((post) {
-            var containsBlockedUser = user.blockedUser.contains(post.creatorId);
-            return !containsBlockedUser; // 차단 사용자 포함 시 제외
-          }).toList();
-          return Success(filteredPostList);
+            // 2. 차단 사용자 조건 적용
+            final filteredPostList = filteredReportPostList.where((post) {
+              var containsBlockedUser = user.blockedUser.contains(
+                  post.creatorId);
+              return !containsBlockedUser; // 차단 사용자 포함 시 제외
+            }).toList();
+            return Success(filteredPostList);
+          } else {
+            return Success(postList);
+          }
         case Failure(exception: final exception):
           return Failure(exception);
       }
@@ -46,24 +51,28 @@ class PostRepository { // Update class name
   }
 
   /// 다음 Post 리스트 가져오기
-  Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost, User user) async {
+  Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost, User? user) async {
     try {
       final result = await firebaseStoreService.getNextPostList(lastPost);
 
       switch(result) {
         case Success(value: final postList):
-        // 1. 신고된  게시물 필터링 (현재 사용자 ID가 reportedUsers에 포함된 경우 제외)
-          final filteredReportPostList = postList.where((post)
-          => !post.reportedUsers.contains(user.id)
-          ).toList();
+          if (user != null) {
+            // 1. 신고된  게시물 필터링 (현재 사용자 ID가 reportedUsers에 포함된 경우 제외)
+            final filteredReportPostList = postList.where((post) =>
+            !post.reportedUsers.contains(user.id)
+            ).toList();
 
-          // 2. 차단 사용자 조건 적용
-          final filteredPostList = filteredReportPostList.where((post) {
-            var containsBlockedUser = user.blockedUser.contains(post.creatorId);
-            return !containsBlockedUser; // 차단 사용자 포함 시 제외
-          }).toList();
-          return Success(filteredPostList);
-          return Success(postList);
+            // 2. 차단 사용자 조건 적용
+            final filteredPostList = filteredReportPostList.where((post) {
+              var containsBlockedUser = user.blockedUser.contains(
+                  post.creatorId);
+              return !containsBlockedUser; // 차단 사용자 포함 시 제외
+            }).toList();
+            return Success(filteredPostList);
+          } else {
+            return Success(postList);
+          }
         case Failure(exception: final exception):
           return Failure(exception);
       }
