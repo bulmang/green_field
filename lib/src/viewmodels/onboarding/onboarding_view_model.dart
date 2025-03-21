@@ -109,11 +109,11 @@ class OnboardingViewModel extends _$OnboardingViewModel {
   }
 
   /// User DB 호출
-  Future<Result<myUser.User, Exception>> getUser() async {
+  Future<Result<myUser.User?, Exception>> getUser() async {
     final authRepository = ref.read(firebaseAuthServiceProvider);
     final firebaseUser = authRepository.currentUser;
 
-    if (firebaseUser != null && firebaseUser.providerData.isNotEmpty) {
+    if (firebaseUser != null) {
       final result = await ref
           .read(onboardingRepositoryProvider)
           .getAuthUser();
