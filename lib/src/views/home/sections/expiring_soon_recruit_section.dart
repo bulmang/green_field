@@ -24,7 +24,7 @@ class _ExpiringSoonRecruitSectionState extends ConsumerState<ExpiringSoonRecruit
     final userState = ref.watch(onboardingViewModelProvider);
     final recruitState = ref.watch(recruitViewModelProvider);
 
-    return ((recruitState.value != null && recruitState.value!.isNotEmpty ))
+    return ((recruitState.value != null && recruitState.value! == [] ))
         ? Flexible(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15.0),
