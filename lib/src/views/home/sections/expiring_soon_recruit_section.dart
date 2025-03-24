@@ -24,7 +24,7 @@ class _ExpiringSoonRecruitSectionState extends ConsumerState<ExpiringSoonRecruit
     final userState = ref.watch(onboardingViewModelProvider);
     final recruitState = ref.watch(recruitViewModelProvider);
 
-    return ((recruitState.value != null && recruitState.value! == [] ))
+    return ((recruitState.value != null && recruitState.value!.isNotEmpty ))
         ? Flexible(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15.0),
@@ -34,8 +34,7 @@ class _ExpiringSoonRecruitSectionState extends ConsumerState<ExpiringSoonRecruit
                 itemBuilder: (context, index) {
                   final recruit = recruitState.value?[index];
                   return (recruit != null)
-                      ? DateTime.now().isBefore(recruit.remainTime)
-                          ? GreenFieldExpiringSoonList(
+                      ?  GreenFieldExpiringSoonList(
                           title: recruit.title,
                           body: recruit.body,
                           remainTime: '${DateTime.now().difference(recruit!.remainTime).inMinutes.abs()}',
@@ -58,8 +57,7 @@ class _ExpiringSoonRecruitSectionState extends ConsumerState<ExpiringSoonRecruit
                             }
                           },
                         )
-                          : SizedBox.shrink()
-                  : Image.asset(AppIcons.networkSesac, width: 300);
+                    : Image.asset(AppIcons.networkSesac, width: 300);
                 },
               ),
             ),

@@ -139,15 +139,22 @@ class _RecruitDetailViewState extends ConsumerState<RecruitDetailView> {
                           case Success(value: final recruit):
                             if (DateTime.now().isBefore(recruit.remainTime)) {
                               if (recruitNotifier.isEntryChatRoomActive(recruit.currentParticipants.length, recruit.maxParticipants)) {
-                                final entryResult = await ref.read(recruitViewModelProvider.notifier).entryChatRoom(currentRecruit.id, userState.value?.id ?? '');
+                                final entryResult = await ref.read(
+                                    recruitViewModelProvider.notifier)
+                                    .entryChatRoom(currentRecruit.id,
+                                    userState.value?.id ?? '');
 
                                 switch (entryResult) {
                                   case Success():
                                     context.go('/recruit/chat/${recruit.id}');
                                   case Failure(exception: final e):
-                                    recruitEditNotifier.flutterToast('에러가 발생했어요!');
+                                    recruitEditNotifier.flutterToast(
+                                        '에러가 발생했어요!');
                                 }
-                              } else {
+                              } else if (currentRecruit.currentParticipants.contains(userState.value?.id ?? '')) {
+                                context.go('/recruit/chat/${currentRecruit.id}');
+                              }
+                              else {
                                 recruitEditNotifier.flutterToast('채팅방에 인원이 모두 찼어요.');
                               }
                             } else {
