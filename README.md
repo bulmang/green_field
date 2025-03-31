@@ -20,21 +20,21 @@
 ---
 
 
-## 기능 소개
-### 캠퍼스별 공지사항 & 실시간 채팅
+## 🚀 기능 소개
+### 📢 캠퍼스별 공지사항 & 💬 실시간 채팅
 ![Slide 16_9 - 10](https://github.com/user-attachments/assets/2c7d67dd-0655-447d-a4e9-ccabb0c65216)
-### 게시글과 댓글 & 캠퍼스별 정보
+### 📄 게시글과 댓글 & 🏫 캠퍼스별 정보
 ![Slide 16_9 - 9](https://github.com/user-attachments/assets/ca28eddf-ba4b-47cc-be91-5d7c1992f39a)
 
 <br>
 
-## 아키텍처
+## 🏗️ 아키텍처
 각 계층은 독립적으로 동작하며, 상위 계층이 하위 계층에만 의존하도록 설계했습니다. 이를 통해 결합도를 최소화하고 테스트 및 유지보수성을 높였습니다.
-#### 계층 구조
+#### 🥞 계층 구조
 `View → ViewModel → Repository → Service`
 - 의존성 방향: 상위 계층만 하위 계층을 참조합니다.
 - 정보 은닉: 하위 계층은 상위 계층의 존재를 알지 못합니다.
-#### 계층별 역할 표
+#### 📋 계층별 역할 표
 
 | 계층          | 역할                                                                 | 의존성 방향          | 정보 은닉 원칙       | 예시                                                                 |
 |---------------|----------------------------------------------------------------------|----------------------|----------------------|----------------------------------------------------------------------|
@@ -59,19 +59,19 @@ Flutter에서 **Result Pattern**을 사용해 네트워크 통신 과정의 에�
 - `sealed class`로 컴파일 타임 안전성 보장  
 - 모든 경우의 수 처리 강제 (`Success`/`Failure`)
 
-#### 계층별 에러 처리 예시 간편 로그인(네트워크 통신)
+#### 🌐 계층별 에러 처리 예시 간편 로그인(네트워크 통신)
 
 #### 🔄 에러 핸들링 흐름
 ![Error_Handler](https://github.com/user-attachments/assets/97c9a5ec-d05c-4570-bdc8-78013a69fffa)
 
 
-## 라우팅 아키텍처 
+## 🛣️ 라우팅 아키텍처 
 
-### **GoRouter 선택 이유**
+### ❓ GoRouter 선택 이유
 - **선언적 라우팅**: 복잡한 네비게이션 시나리오(로그인 전환, 딥링크)를 간결하게 관리할 수 있습니다.
 - **Riverpod 연동**: 상태 변화에 반응하는 동적 리다이렉트 로직 구현이 용이합니다.
 
-### **주요 기능 구현**
+### ⚙️ 주요 기능 구현
 1. **인증 상태 기반 라우팅**  
    - `GoRouterRefreshStream`으로 Riverpod의 인증 상태(`authStateProvider`)를 실시간 감지합니다.  
    - 인증 상태에 따라 `/login`, `/home` 등으로 자동 리다이렉트됩니다.
@@ -85,7 +85,7 @@ Flutter에서 **Result Pattern**을 사용해 네트워크 통신 과정의 에�
 
 <br>
 
-## 개발 기록
+## 📚 개발 기록
 프로젝트 구현 과정에서 작성한 문서입니다. 각 주제를 클릭하면 해당 포스트로 이동합니다.
 
 - [[Flutter] RiverPod - Loading 상태 처리하기(with Lottie & Skeleton)](https://bulmang-ios.tistory.com/191)
@@ -105,7 +105,7 @@ Flutter에서 **Result Pattern**을 사용해 네트워크 통신 과정의 에�
 
 <br>
 
-## 개발 환경
+#### 💻 개발 환경 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
     <img src="https://img.shields.io/badge/Dart-3.6.1-0175C2?style=for-the-badge&logo=Dart&logoColor=white">
     <img src="https://img.shields.io/badge/Flutter-3.27.2-02569B?style=for-the-badge&logo=Flutter&logoColor=white">
