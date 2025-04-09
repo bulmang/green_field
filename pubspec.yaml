@@ -1,5 +1,5 @@
 name: green_field
-description: "새싹 개인 프로젝트"
+description: "풀밭 - 새싹이들의 모임(청년취언사관학교)"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
