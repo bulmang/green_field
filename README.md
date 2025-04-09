@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-    <a href="https://play.google.com/store/apps/details?id=com.bulmang.green_field">
+    <a href="https://play.google.com/store/apps/details?id=com.bulmang.green_field&pcampaignid=web_share">
         <img src="https://github.com/user-attachments/assets/3c6c240d-b4fb-4721-a2e7-b7c84f24625f" width="200" height="80">
     </a>
     <a href="https://apps.apple.com/kr/app/%ED%92%80%EB%B0%AD-%EC%83%88%EC%8B%B9%EC%9D%B4%EB%93%A4-%EC%84%9C%EC%9A%B8%EC%B2%AD%EB%85%84%EC%B7%A8%EC%97%85%EC%82%AC%EA%B4%80%ED%95%99%EA%B5%90-%EA%B0%95%EC%9D%98%EC%83%9D%EB%93%A4-%EC%9D%98-%EB%AA%A8%EC%9E%84/id6743421356">
@@ -32,18 +32,20 @@
 #### 🥞 계층 구조
 `View → ViewModel → Repository → Service`
 - 의존성 방향: 상위 계층만 하위 계층을 참조합니다.
-- 정보 은닉: 하위 계층은 상위 계층의 존재를 알지 못합니다.
+
 #### 📋 계층별 역할 표
 
-| 계층          | 역할                                                                 | 의존성 방향          | 정보 은닉 원칙       | 예시                                                                 |
-|---------------|----------------------------------------------------------------------|----------------------|----------------------|----------------------------------------------------------------------|
-| **View**      | - UI 렌더링<br>- 사용자 입력 처리<br>- 상태 변화 반영               | ← ViewModel          | 하위 계층 모름       | `HomeView()`, `LoginView()`, `PostView()`                    |
-| **ViewModel** | - 비즈니스 로직 실행<br>- 상태 관리<br>- Repository와 통신          | ← Repository         | Service 계층 모름    | `HomeViewModel`, `LoginViewModel`, `PostViewModel`             |
-| **Repository**| - 데이터 가공<br>- Service ↔ ViewModel 간 중개<br>- 도메인 로직 적용 | ← Service            | 외부 데이터 소스 모름 | `PostRepository`, `LoginRepository`, `NoticeRepository`           |
-| **Service**   | - 외부 시스템 통신<br>- 데이터 CRUD 처리<br>- API/DB 연동           | ← 외부 데이터 소스   | 상위 계층 모름       | `FirebaseAuthService`, `FirebaseStorageService`, `FirebaseStoreService`       |
-| **Model**     | - 데이터 구조 정의<br>- DTO/Entity 관리                             | 모든 계층에서 참조*  | 계층 무관           | `User(id, name, ...)`, `Potcie(title, body, ...)`, `Message(id, text, ...)`    |
+| 계층          | 역할                                                                 | 의존성 방향          | 예시                                                                 |
+|---------------|----------------------------------------------------------------------|----------------------|----------------------------------------------------------------------|
+| **View**      | - UI 렌더링- 사용자 입력 처리- 상태 변화 반영               | ← ViewModel          | `HomeView()`, `LoginView()`, `PostView()`                    |
+| **ViewModel** | - 비즈니스 로직 실행- 상태 관리- Repository와 통신          | ← Repository         | `HomeViewModel`, `LoginViewModel`, `PostViewModel`             |
+| **Repository**| - 데이터 가공- Service ↔ ViewModel 간 중개- 도메인 로직 적용 | ← Service            | `PostRepository`, `LoginRepository`, `NoticeRepository`           |
+| **Service**   | - 외부 시스템 통신- 데이터 CRUD 처리- API/DB 연동           | ← 외부 데이터 소스   | `FirebaseAuthService`, `FirebaseStorageService`, `FirebaseStoreService`       |
+| **Model**     | - 데이터 구조 정의- DTO/Entity 관리                             | 모든 계층에서 참조*  | `User(id, name, ...)`, `Post(title, body, ...)`, `Message(id, text, ...)`    |
 
-\* Model은 순수 데이터 클래스로, 특정 계층에 종속되지 않습니다.
+---
+
+\* Model은 데이터 클래스로, 특정 계층에 종속되지 않습니다.
 
 ![풀밭_아키텍처 (4)](https://github.com/user-attachments/assets/dfe6baf2-c632-4e97-95c1-e11c938b770d)
 
