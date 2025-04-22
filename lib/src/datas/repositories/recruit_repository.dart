@@ -10,7 +10,7 @@ import '../../cores/image_type/image_type.dart';
 import '../../model/recruit.dart';
 import '../../model/report.dart';
 import '../../model/user.dart';
-import '../services/firebase_stores/fireabase_store_recruit_service.dart';
+import '../services/firebase_stores/firebase_store_recruit_service.dart';
 import '../services/firebase_storage_service.dart';
 
 class RecruitRepository {
