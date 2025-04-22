@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:green_field/src/domains/interfaces/recruit_service_interface.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../cores/error_handler/result.dart';
@@ -13,15 +14,15 @@ import '../services/firebase_stores/fireabase_store_recruit_service.dart';
 import '../services/firebase_storage_service.dart';
 
 class RecruitRepository {
-  final FirebaseStoreRecruitService firebaseStoreService;
+  final RecruitServiceInterface storeService;
   final FirebaseStorageService firebaseStorageService;
 
-  RecruitRepository({required this.firebaseStoreService, required this.firebaseStorageService});
+  RecruitRepository({required this.storeService, required this.firebaseStorageService});
 
-  /// Recruit 리스트 가져오기
+  /// 모집 글 목록 조회
   Future<Result<List<Recruit>, Exception>> getRecruitList() async {
     try {
-      final result = await firebaseStoreService.getRecruitList();
+      final result = await storeService.getRecruitList();
 
       switch(result) {
         case Success(value: final recruitList):
@@ -41,16 +42,15 @@ class RecruitRepository {
     }
   }
 
-
-  /// Recruit DB 생성
+  /// 모집 글 생성
   Future<Result<Recruit, Exception>> createRecruitDB(User user, Recruit recruit, List<ImageType>? images) async {
     try {
-      final uploadImageResult = await uploadImage(user, images);
+      final uploadImageResult = await _uploadImage(user, images);
 
       switch(uploadImageResult) {
         case Success(value: final imageUrls):
           recruit.images = imageUrls;
-          final result = await firebaseStoreService.createRecruitDB(recruit, user);
+          final result = await storeService.createRecruitDB(recruit, user);
 
           switch (result) {
             case Success(value: final post):
@@ -62,14 +62,14 @@ class RecruitRepository {
           return Failure(exception);
       }
     } on Exception catch (error) {
-      return Failure(error); // 예외 발생 시 실패 반환
+      return Failure(error);
     }
   }
 
-  /// Recruit DB 생성
+  /// 종료된 모집 글 생성
   Future<Result<Recruit, Exception>> createDeadRecruitDB(Recruit recruit) async {
     try {
-      final result = await firebaseStoreService.createDeadRecruitDB(recruit);
+      final result = await storeService.createDeadRecruitDB(recruit);
 
       switch (result) {
         case Success(value: final post):
@@ -82,10 +82,10 @@ class RecruitRepository {
     }
   }
 
-  /// 특정 Recruit 가져오기
+  /// 특정 모집 글 조회
   Future<Result<Recruit, Exception>> getRecruit(String recruitId, User user) async {
     try {
-      final result = await firebaseStoreService.getRecruit(recruitId, user);
+      final result = await storeService.getRecruit(recruitId, user);
 
       switch(result) {
         case Success(value: final recruitId):
@@ -98,10 +98,10 @@ class RecruitRepository {
     }
   }
 
-  /// 특정 Recruit Chat에 입장한 유저 추가
+  /// 모집 글 채팅방 입장 처리
   Future<Result<Recruit, Exception>> entryChatRoom(String recruitId, String userId) async {
     try {
-      final result = await firebaseStoreService.entryChatRoom(recruitId, userId);
+      final result = await storeService.entryRecruitRoom(recruitId, userId);
 
       switch (result) {
         case Success(value: final v):
@@ -114,10 +114,10 @@ class RecruitRepository {
     }
   }
 
-  /// 특정 Recruit Chat에 퇴장한 유저 삭제
+  /// 모집 글 채팅방 퇴장 처리
   Future<Result<Recruit, Exception>> outChatRoom(String recruitId, String userId) async {
     try {
-      final result = await firebaseStoreService.outChatRoom(recruitId, userId);
+      final result = await storeService.outRecruitRoom(recruitId, userId);
 
       switch (result) {
         case Success(value: final v):
@@ -130,10 +130,10 @@ class RecruitRepository {
     }
   }
 
-  /// 특정 Recruit에 report 추가
+  /// 모집 글 신고
   Future<Result<Recruit, Exception>> reportRecruit(String recruitId, String userId, String reason) async {
     try {
-      final result = await firebaseStoreService.reportRecruit(recruitId, userId, reason);
+      final result = await storeService.reportRecruit(recruitId, userId, reason);
 
       switch (result) {
         case Success(value: final v):
@@ -147,21 +147,22 @@ class RecruitRepository {
     }
   }
 
-  /// Report 생성
+  /// 신고 데이터 생성
   Future<Result<void, Exception>> _createReport(String recruitId, String userId, String reason) async {
     try {
       final Uuid uuid = Uuid();
       String reportID = uuid.v4();
       Report report;
 
-        report = Report(id: reportID,
-            type: reason,
-            reportedTargetID: recruitId,
-            reporterId: userId,
-            createdAt: DateTime.now());
+      report = Report(
+          id: reportID,
+          type: reason,
+          reportedTargetID: recruitId,
+          reporterId: userId,
+          createdAt: DateTime.now(),
+      );
 
-
-      final result = await firebaseStoreService.createReportDB(recruitId, report);
+      final result = await storeService.createReportDB(recruitId, report);
 
       switch (result) {
         case Success(value: final v):
@@ -174,10 +175,10 @@ class RecruitRepository {
     }
   }
 
-  /// Recruit 문서 삭제
+  /// 모집 글 삭제
   Future<Result<void, Exception>> deleteRecruitDB(String recruitId, User user) async {
     try {
-      final result = await firebaseStoreService.deleteRecruitDB(recruitId, user);
+      final result = await storeService.deleteRecruitDB(recruitId, user);
 
       switch (result) {
         case Success():
@@ -191,7 +192,7 @@ class RecruitRepository {
   }
 
   /// Image 업로드 후 ImageURL 가져오기
-  Future<Result<List<String>?, Exception>> uploadImage(User user, List<ImageType>? images) async {
+  Future<Result<List<String>?, Exception>> _uploadImage(User user, List<ImageType>? images) async {
     try {
       List<XFile> xFileImages = [];
       List<String> imageUrls = [];
@@ -224,7 +225,7 @@ class RecruitRepository {
 
 final recruitRepositoryProvider = Provider<RecruitRepository>((ref) {
   return RecruitRepository(
-    firebaseStoreService: FirebaseStoreRecruitService(FirebaseFirestore.instance),
+    storeService: FirebaseStoreRecruitService(FirebaseFirestore.instance),
     firebaseStorageService: FirebaseStorageService(FirebaseStorage.instance),
   );
 });

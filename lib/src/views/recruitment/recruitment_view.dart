@@ -82,7 +82,6 @@ class _RecruitViewState extends ConsumerState<RecruitView> {
     final userState = ref.watch(onboardingViewModelProvider);
     final recruitState = ref.watch(recruitViewModelProvider);
     final recruitEditNotifier = ref.watch(recruitEditViewModelProvider.notifier);
-    print('recruitState: ${recruitState.value}');
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.gfBackGroundColor,
