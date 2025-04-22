@@ -1,31 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
-import 'package:green_field/src/cores/error_handler/result.dart';
-import 'package:green_field/src/utilities/enums/user_type.dart';
 
+import '../../../cores/error_handler/result.dart';
+import '../../../domains/interfaces/onboarding_service_interface.dart';
 import '../../../model/user.dart' as Client;
 
-class   FirebaseStoreService {
-  FirebaseStoreService(this._store);
+class FirebaseStoreOnboardingService implements OnboardingServiceInterface {
+  FirebaseStoreOnboardingService(this._store);
+
   final firebase_store.FirebaseFirestore _store;
 
-  /// user Collection 생성 및 user 데이터 추가
+  @override
   Future<Result<Client.User, Exception>> createUserDB(Client.User user) async {
     try {
-      // User 컬렉션에 사용자 데이터 추가
       await _store.collection('User').doc(user.id).set(user.toMap());
-
       return Success(user);
     } catch (e) {
       return Failure(Exception('사용자 생성 실패: $e'));
     }
   }
 
-  /// Firestore에서 UserId로 사용자 데이터 가져오기
-  Future<Result<Client.User, Exception>> getUserByPrviderUID(String providerUID) async {
+  @override
+  Future<Result<Client.User, Exception>> getUserByProviderUID(String providerUID) async {
     try {
-      print('UserId: $providerUID');
-
-      // simple_login_id가 userId와 일치하는 문서 쿼리
       final querySnapshot = await _store
           .collection('User')
           .where('simple_login_id', isEqualTo: providerUID)
@@ -35,22 +31,20 @@ class   FirebaseStoreService {
         final userData = Client.User.fromMap(querySnapshot.docs.first.data());
         return Success(userData);
       } else {
-        return Failure(Exception(
-            'firebase_store_service _getUserBySimpleLoginId error: 사용자를 찾을 수 없습니다.'));
+        return Failure(Exception('firebase_store_service _getUserBySimpleLoginId error: 사용자를 찾을 수 없습니다.'));
       }
     } catch (e) {
       return Failure(Exception('사용자 데이터 가져오기 실패: $e'));
     }
   }
 
-  /// Firestore에서 UserId로 사용자 데이터 가져오기
+  @override
   Future<Result<Client.User?, Exception>> getUserById(String userId) async {
     try {
       final docSnapshot = await _store.collection('User').doc(userId).get();
 
       if (docSnapshot.exists) {
         final userData = Client.User.fromMap(docSnapshot.data()!);
-
         return Success(userData);
       } else {
         return Success(null);
@@ -60,55 +54,4 @@ class   FirebaseStoreService {
     }
   }
 
-  /// UserDB 삭제 함수
-  Future<Result<void, Exception>> deleteUserDB(String userId) async {
-    try {
-      // Firestore에서 사용자 문서 삭제
-      print('userId: $userId');
-      await _store.collection('User').doc(userId).delete();
-      return Success(null); // 성공적으로 삭제되었음을 나타냄
-    } catch (e) {
-      return Failure(Exception('사용자 데이터 삭제 실패: $e'));
-    }
-  }
-
-  /// 외부 링크 추가
-  Future<Result<String, Exception>> createExternalLink(Client.User user, String linkID, String linkDomainName) async {
-    try {
-      if (user.campus == '익명' || user.userType == getUserTypeName(UserType.student)) {
-        return Failure(Exception('인증 되지 않은 사용자입니다.'));
-      }
-
-      var campusDocRef = _store.collection('Campus').doc(user.campus);
-
-      // 링크를 단일 필드로 저장
-      await campusDocRef.collection('ExternalLink').doc(linkID).set({'link': linkDomainName});
-
-      return Success(linkDomainName);
-    } catch (e) {
-      print(e);
-      return Failure(Exception('외부 링크 생성 실패: $e'));
-    }
-  }
-
-  /// 외부 링크 가져오기
-  Future<Result<String, Exception>> getExternalLink(Client.User user, String linkID) async {
-    try {
-      var campusDocRef = _store.collection('Campus').doc(user.campus);
-
-      // 링크 문서 가져오기
-      final docSnapshot = await campusDocRef.collection('ExternalLink').doc(linkID).get();
-
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data.containsKey('link')) {
-          return Success(data['link']);
-        }
-      }
-      return Failure(Exception('링크를 찾을 수 없습니다.'));
-    } catch (e) {
-      print(e);
-      return Failure(Exception('외부 링크 가져오기 실패: $e'));
-    }
-  }
 }

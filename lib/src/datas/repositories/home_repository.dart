@@ -8,9 +8,8 @@ import '../services/firebase_stores/firebase_store_service.dart';
 
 class HomeRepository {
   final FirebaseAuthService firebaseAuthService;
-  final FirebaseStoreService firebaseStoreService;
 
-  HomeRepository({required this.firebaseAuthService, required this.firebaseStoreService});
+  HomeRepository({required this.firebaseAuthService});
 
 }
 
@@ -18,6 +17,5 @@ class HomeRepository {
 final homeRepositoryProvider = Provider<HomeRepository>((ref) {
   return HomeRepository(
       firebaseAuthService: FirebaseAuthService(firebase_auth.FirebaseAuth.instance),
-      firebaseStoreService: FirebaseStoreService(firebase_store.FirebaseFirestore.instance),
   );
 });

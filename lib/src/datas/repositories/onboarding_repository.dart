@@ -2,18 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/datas/services/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+
+import 'package:green_field/src/domains/interfaces/onboarding_service_interface.dart';
 import '../../cores/error_handler/result.dart';
 import '../../model/token.dart';
-import '../../model/user.dart' as myUser;
+import '../../model/user.dart' as Client;
 import '../services/firebase_stores/firebase_store_service.dart';
 
 class OnboardingRepository {
   final FirebaseAuthService firebaseAuthService;
-  final FirebaseStoreService firebaseStoreService;
+  final OnboardingServiceInterface store;
 
-  OnboardingRepository({required this.firebaseAuthService, required this.firebaseStoreService});
+  OnboardingRepository({required this.firebaseAuthService, required this.store});
 
-  // Auth User 생성
+  /// 사용자 인증 생성 (신규 유저)
   Future<Result<firebase_auth.User, Exception>> createAuthUser(String provider, String idToken, String accessToken, String providerUID) async {
     try {
       final result = await firebaseAuthService.connectFirebaseAuth(provider, idToken, accessToken, providerUID);
@@ -29,7 +31,7 @@ class OnboardingRepository {
     }
   }
 
-  // 기존 유저 정보가 있다면 AuthUser 생성
+  /// 사용자 인증 생성 (기존 유저)
   Future<Result<void, Exception>> isExistUserCreateAuth(Token token) async {
     try {
       final result = await firebaseAuthService.isExistUserConnectFirebaseAuth(token);
@@ -45,10 +47,10 @@ class OnboardingRepository {
     }
   }
 
-  /// User DB 생성
-  Future<Result<myUser.User, Exception>> createUserDB(myUser.User user) async {
+  /// 사용자 데이터 생성
+  Future<Result<Client.User, Exception>> createUserDB(Client.User user) async {
     try {
-      final result = await firebaseStoreService.createUserDB(user);
+      final result = await store.createUserDB(user);
 
       switch (result) {
         case Success(value: final authUser):
@@ -61,10 +63,10 @@ class OnboardingRepository {
     }
   }
 
-  /// User DB 호출
-  Future<Result<myUser.User, Exception>> getUser(providerUID) async {
+  /// 사용자 데이터 호출
+  Future<Result<Client.User, Exception>> getUser(providerUID) async {
     try {
-      final result = await firebaseStoreService.getUserByPrviderUID(providerUID);
+      final result = await store.getUserByProviderUID(providerUID);
 
       switch (result) {
         case Success(value: final authUser):
@@ -77,14 +79,14 @@ class OnboardingRepository {
     }
   }
 
-  /// User Auth 호출
-  Future<Result<myUser.User?, Exception>> getAuthUser() async {
+  /// 사용자 인증 호출
+  Future<Result<Client.User?, Exception>> getAuthUser() async {
     try {
       final result = await firebaseAuthService.getCurrentUser();
 
       switch (result) {
         case Success(value: final authUser):
-          final getUserDB = await firebaseStoreService.getUserById(authUser.uid);
+          final getUserDB = await store.getUserById(authUser.uid);
           switch (getUserDB) {
             case Success(value: final userDB):
               return Success(userDB);
@@ -104,6 +106,6 @@ class OnboardingRepository {
 final onboardingRepositoryProvider = Provider<OnboardingRepository>((ref) {
   return OnboardingRepository(
       firebaseAuthService: FirebaseAuthService(firebase_auth.FirebaseAuth.instance),
-      firebaseStoreService: FirebaseStoreService(firebase_store.FirebaseFirestore.instance),
+      store: FirebaseStoreOnboardingService(firebase_store.FirebaseFirestore.instance),
   );
 });
