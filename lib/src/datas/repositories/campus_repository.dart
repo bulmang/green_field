@@ -12,6 +12,7 @@ class CampusRepository {
 
   CampusRepository({required this.service});
 
+  /// 캠퍼스 조회
   Future<Result<Campus, Exception>> getCampus(String campusName) async {
     final result = await service.getCampus(campusName);
 
@@ -33,6 +34,7 @@ class CampusRepository {
     }
   }
 
+  /// 캠퍼스 생성
   Future<Result<Campus, Exception>> createCampusDB(Campus campus) async {
     final result = await service.createCampusDB(campus);
 
