@@ -2,16 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
 import 'package:green_field/src/model/message.dart';
 
 import '../../../cores/error_handler/result.dart';
+import '../../../domains/interfaces/chat_service_interface.dart';
 import '../../../model/recruit.dart';
-import '../../../model/report.dart';
-import '../../../model/user.dart' as GFUser;
 
-class FirebaseStoreChatService {
+class FirebaseStoreChatService implements ChatServiceInterface {
   FirebaseStoreChatService(this._store);
 
   final firebase_store.FirebaseFirestore _store;
 
-  /// Message List 가져오기
+  @override
   Future<Result<List<Message>, Exception>> getMessageList(String recruitId) async {
     try {
       final querySnapshot = await _store
@@ -35,7 +34,7 @@ class FirebaseStoreChatService {
     }
   }
 
-  /// Stream을 이용하여 Message List 가져오기
+  @override
   Stream<List<Message>> getMessageListStream(String recruitId) {
     return _store
         .collection('Recruit')
@@ -53,8 +52,7 @@ class FirebaseStoreChatService {
     });
   }
 
-
-  /// Message 생성
+  @override
   Future<Result<Message, Exception>> createMessageDB(Recruit recruit, Message message) async {
     try {
       await _store
@@ -67,8 +65,7 @@ class FirebaseStoreChatService {
       return Success(message);
     } catch (e) {
       print('err: $e');
-      return Failure(Exception('댓글 생성 실패: $e'));
+      return Failure(Exception('메시지 생성 실패: $e'));
     }
   }
-
 }

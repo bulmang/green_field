@@ -1,35 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:green_field/src/cores/image_type/image_type.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+    '';
 import 'package:green_field/src/datas/services/firebase_stores/firebase_store_chat_service.dart';
-import 'package:green_field/src/model/comment.dart';
+import 'package:green_field/src/domains/interfaces/chat_service_interface.dart';
 import 'package:green_field/src/model/message.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../cores/error_handler/result.dart';
-import '../../model/post.dart'; // Update model import
 import '../../model/recruit.dart';
-import '../../model/report.dart';
-import '../../model/user.dart';
-import '../services/firebase_storage_service.dart';
-import '../services/firebase_stores/firebase_store_service.dart';
 
-class ChatRepository { // Update class name
-  final FirebaseStoreChatService firebaseStoreService;
+class ChatRepository {
+  final ChatServiceInterface service;
 
-  ChatRepository({required this.firebaseStoreService});
+  ChatRepository({required this.service});
 
-  /// Message List 스트림 가져오기
+  /// 실시간 메시지 스트림 제공
   Stream<List<Message>> getMessageListStream(String recruitId) {
-    return firebaseStoreService.getMessageListStream(recruitId);
+    return service.getMessageListStream(recruitId);
   }
 
-  /// Message 리스트 가져오기
+  /// 특정 채팅방의 메시지 목록 조회
   Future<Result<List<Message>, Exception>> getMessageList(String recruitId) async {
     try {
-      final result = await firebaseStoreService.getMessageList(recruitId);
+      final result = await service.getMessageList(recruitId);
 
       switch(result) {
         case Success(value: final v):
@@ -42,11 +34,10 @@ class ChatRepository { // Update class name
     }
   }
 
-
-  /// Message 생성
+  /// 새로운 메시지 생성
   Future<Result<Message, Exception>> createMessageDB(Recruit recruit, Message message) async {
     try {
-      final result = await firebaseStoreService.createMessageDB(recruit, message);
+      final result = await service.createMessageDB(recruit, message);
 
       switch (result) {
         case Success(value: final v):
@@ -64,6 +55,6 @@ class ChatRepository { // Update class name
 /// ChatRepositoryProvider 생성
 final chatRepositoryProvider = Provider<ChatRepository>((ref) {
   return ChatRepository(
-    firebaseStoreService: FirebaseStoreChatService(FirebaseFirestore.instance),
+    service: FirebaseStoreChatService(FirebaseFirestore.instance),
   );
 });
