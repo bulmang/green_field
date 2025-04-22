@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:green_field/src/cores/image_type/image_type.dart';
-import 'package:green_field/src/datas/services/firebase_stores/firebase_post_service.dart';
+import 'package:green_field/src/datas/services/firebase_stores/firebase_store_post_service.dart';
 import 'package:green_field/src/domains/interfaces/post_service_interface.dart';
 import 'package:green_field/src/model/comment.dart';
 import 'package:image_picker/image_picker.dart';
@@ -331,7 +332,7 @@ class PostRepository {
 /// PostRepositoryProvider 생성
 final postRepositoryProvider = Provider<PostRepository>((ref) {
   return PostRepository(
-    service: FirebasePostService(FirebaseFirestore.instance),
+    service: FirebaseStorePostService(FirebaseFirestore.instance),
     firebaseStorageService: FirebaseStorageService(FirebaseStorage.instance),
   );
 });

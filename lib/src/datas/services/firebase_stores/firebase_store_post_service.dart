@@ -7,8 +7,8 @@ import '../../../model/post.dart';
 import '../../../model/report.dart';
 import '../../../model/user.dart' as Client;
 
-class FirebasePostService implements PostServiceInterface {
-  FirebasePostService(this._store);
+class FirebaseStorePostService implements PostServiceInterface {
+  FirebaseStorePostService(this._store);
 
   final firebase_store.FirebaseFirestore _store;
 
