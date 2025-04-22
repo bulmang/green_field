@@ -24,25 +24,7 @@ class ChatViewModel extends _$ChatViewModel {
     return ref.watch(chatRepositoryProvider).getMessageListStream(recruitId);
   }
 
-  /// 메시지 조회하기
-  Future<Result<List<Message>, Exception>> getMessageList(String recruitId) async {
-    state = AsyncLoading();
-    final result = await ref
-        .read(chatRepositoryProvider) // Update repository
-        .getMessageList(recruitId);
-
-    switch (result) {
-      case Success(value: final messageList):
-        state = AsyncData(messageList);
-        return Success(messageList);
-      case Failure(exception: final exception):
-        print('exception: $exception');
-        state = AsyncError(exception, StackTrace.current);
-        return Failure(Exception(exception));
-    }
-  }
-
-  /// 메시지 생성하기
+  /// 새로운 메시지 생성
   Future<Result<Message, Exception>> createMessage(Recruit recruit, User user, String chatNickName, String messageText) async {
     try {
 
@@ -74,52 +56,4 @@ class ChatViewModel extends _$ChatViewModel {
     }
   }
 
-  /// 댓글 삭제하기
-  // Future<Result<List<Comment>, Exception>> deleteCommentModel(String postId, String commentID) async { // Update method name
-  //   try {
-  //     state = AsyncLoading();
-  //
-  //     final result = await ref
-  //         .read(postRepositoryProvider) // Update repository
-  //         .deleteCommentDB(postId, commentID);
-  //
-  //     switch (result) {
-  //       case Success(value: final commentList):
-  //         state = AsyncData(commentList);
-  //         return Success(commentList);
-  //       case Failure(exception: final exception):
-  //         state = AsyncError(exception, StackTrace.current);
-  //         return Failure(Exception(exception));
-  //     }
-  //   } catch (error) {
-  //     return Failure(Exception('포스트 삭제 실패: $error')); // Update message
-  //   }
-  // }
-
-  /// 댓글 초기화
-  // void resetCommentList() async {
-  //   state = AsyncData([]);
-  // }
-
-  /// 댓글 신고
-  // Future<Result<void, Exception>> reportComment(String postId, String commentId,String userId, String reason) async {
-  //   try {
-  //     state = AsyncLoading();
-  //     final result = await ref
-  //         .read(postRepositoryProvider) // 신고 API 호출
-  //         .reportComment(postId, commentId, userId, reason);
-  //
-  //     switch (result) {
-  //       case Success(value: final comment):
-  //         state = AsyncData([]);
-  //         return Success(comment);
-  //       case Failure(exception: final exception):
-  //         state = AsyncError(exception, StackTrace.current);
-  //         return Failure(Exception(exception));
-  //     }
-  //   } catch (error) {
-  //     state = AsyncError(error, StackTrace.current);
-  //     return Failure(Exception('댓글 신고 실패: $error'));
-  //   }
-  // }
 }

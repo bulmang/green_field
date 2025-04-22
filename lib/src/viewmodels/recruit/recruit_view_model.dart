@@ -34,7 +34,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     maxParticipants: 10, creatorId: '', creatorCampus: '', isEntryAvailable: false, createdAt: DateTime.now(),
   );
 
-  /// Recruit 리스트 가져오기
+  /// 모집 글 목록 조회
   Future<Result<List<Recruit>, Exception>> getRecruitList() async {
     state = AsyncLoading();
     final result = await ref
@@ -52,7 +52,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
-  /// Recruit 리스트 가져오기(로딩없음)
+  /// 모집 글 목록 조회(로딩없음)
   Future<Result<List<Recruit>, Exception>> getRecruitListNoLoading() async {
     final result = await ref
         .read(recruitRepositoryProvider) // Update repository
@@ -69,7 +69,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
-  /// 특정 Recruit 가져오기
+  /// 특정 모집 글 조회
   Future<Result<Recruit, Exception>> getRecruit(String recruitId) async {
     final userState = ref.watch(onboardingViewModelProvider);
     if (userState.value == null) return Failure(Exception('유저가 없습니다.'));
@@ -87,7 +87,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
-  /// 특정 Recruit 업데이트
+  /// 특정 모집 글 변경
   void _updateRecruitInList(String recruitId, Recruit updatedRecruit) {
     if (state.value!.isNotEmpty) {
       final index = state.value!.indexWhere((recruit) => recruit.id == recruitId);
@@ -99,7 +99,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
-  /// 특정 Recruit 제거
+  /// 특정 모집 글 제거
   Future<Result<List<Recruit>, Exception>> deleteRecruitInList(String recruitId) async {
     if (state.value!.isNotEmpty) {
       final currentList = state.value ?? [];
@@ -111,7 +111,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     return Failure(Exception('에러 발생'));
   }
 
-  /// 특정 Recruit Chat에 입장한 유저 추가
+  /// 모집 글 채팅방 입장 처리
   Future<Result<Recruit, Exception>> entryChatRoom(String recruitId, String userId) async {
     try {
       state = AsyncLoading();
@@ -142,7 +142,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
-  /// 특정 Recruit Chat에 퇴장한 유저 삭제
+  /// 모집 글 채팅방 퇴장 처리
   Future<Result<Recruit, Exception>> outChatRoom(String recruitId, String userId) async {
     try {
       state = AsyncLoading();
@@ -173,7 +173,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
-  /// 특정 Recruit 신고하기
+  /// 모집 글 신고
   Future<Result<Recruit, Exception>> reportRecruit(String recruitId, String userId, String reason) async {
     try {
       state = AsyncLoading();
@@ -204,6 +204,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
+  /// 모집 글 채팅방 입장 여부 확인
   bool isEntryChatRoomActive(int currentPeopleCount, int maxPeopleCount) {
     if (currentPeopleCount >= maxPeopleCount) {
       return false;
@@ -224,6 +225,7 @@ class RecruitViewModel extends _$RecruitViewModel {
     }
   }
 
+  /// 모집글 조회
   Recruit getRecruitById(String id) {
     return state.value!.firstWhere((recruit) => recruit.id == id, orElse: () {
       throw Exception('Recruit not found');
