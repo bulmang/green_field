@@ -18,6 +18,7 @@ class SettingViewModel extends _$SettingViewModel {
     return;
   }
 
+  /// 사용자 로그 아웃
   Future<Result<void, Exception>> signOut() async {
     state = AsyncLoading();
     try {
@@ -38,6 +39,7 @@ class SettingViewModel extends _$SettingViewModel {
     }
   }
 
+  /// 사용자 데이터 삭제
   Future<Result<void, Exception>> deleteUser(String userId) async {
     state = AsyncLoading();
     try {
@@ -59,6 +61,7 @@ class SettingViewModel extends _$SettingViewModel {
     }
   }
 
+  /// 사용자 데이터 초기화
   Future<Result<void, Exception>> resetUser() async {
     state = AsyncLoading();
     try {
@@ -79,6 +82,7 @@ class SettingViewModel extends _$SettingViewModel {
     }
   }
 
+  /// 외부 링크 생성 (관리자 전용)
   Future<Result<String, Exception>> createExternalLink(User user, String linkID, String linkDomainName) async {
     state = AsyncLoading();
     try {
@@ -99,6 +103,7 @@ class SettingViewModel extends _$SettingViewModel {
     }
   }
 
+  /// 외부 링크 조회
   Future<Result<String, Exception>> getExternalLink(User user, String linkID) async {
     state = AsyncLoading();
     try {
@@ -118,7 +123,6 @@ class SettingViewModel extends _$SettingViewModel {
       return Failure(Exception('외부 링크 가져오기 중 예외 발생: $e'));
     }
   }
-
 
   void showToast(
       String alarmMessage, {
