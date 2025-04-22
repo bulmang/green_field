@@ -2,27 +2,28 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:green_field/src/cores/image_type/image_type.dart';
+import 'package:green_field/src/datas/services/firebase_stores/firebase_post_service.dart';
+import 'package:green_field/src/domains/interfaces/post_service_interface.dart';
 import 'package:green_field/src/model/comment.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../cores/error_handler/result.dart';
-import '../../model/post.dart'; // Update model import
+import '../../model/post.dart';
 import '../../model/report.dart';
 import '../../model/user.dart';
 import '../services/firebase_storage_service.dart';
-import '../services/firebase_stores/firebase_store_service.dart';
 
-class PostRepository { // Update class name
-  final FirebaseStoreService firebaseStoreService;
+class PostRepository {
+  final PostServiceInterface service;
   final FirebaseStorageService firebaseStorageService;
 
-  PostRepository({required this.firebaseStoreService, required this.firebaseStorageService});
+  PostRepository({required this.service, required this.firebaseStorageService});
 
-  /// Post 리스트 가져오기
+  /// 게시글 목록 조회
   Future<Result<List<Post>, Exception>> getPostList(User? user) async {
     try {
-      final result = await firebaseStoreService.getPostList();
+      final result = await service.getPostList();
 
       switch(result) {
         case Success(value: final postList):
@@ -50,10 +51,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// 다음 Post 리스트 가져오기
+  /// 게시글 추가 목록 조회
   Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost, User? user) async {
     try {
-      final result = await firebaseStoreService.getNextPostList(lastPost);
+      final result = await service.getNextPostList(lastPost);
 
       switch(result) {
         case Success(value: final postList):
@@ -81,7 +82,7 @@ class PostRepository { // Update class name
     }
   }
 
-  /// Post DB 생성
+  /// 게시글 생성
   Future<Result<Post, Exception>> createPostDB(User user, Post post, List<ImageType>? images) async {
     try {
       final uploadImageResult = await uploadImage(user, images);
@@ -89,7 +90,7 @@ class PostRepository { // Update class name
       switch(uploadImageResult) {
         case Success(value: final imageUrls):
           post.images = imageUrls;
-          final result = await firebaseStoreService.createPostDB(post, user);
+          final result = await service.createPostDB(post, user);
 
           switch (result) {
             case Success(value: final post):
@@ -105,10 +106,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// 특정 Post 가져오기
+  /// 특정 게시글 조회
   Future<Result<Post, Exception>> getPost(String postId, User user) async {
     try {
-      final result = await firebaseStoreService.getPost(postId, user);
+      final result = await service.getPost(postId, user);
 
       switch(result) {
         case Success(value: final postId):
@@ -121,10 +122,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// Post 문서 삭제
+  /// 게시글 삭제
   Future<Result<void, Exception>> deletePostDB(String postId, User user) async {
     try {
-      final result = await firebaseStoreService.deletePostDB(postId, user);
+      final result = await service.deletePostDB(postId, user);
 
       switch (result) {
         case Success():
@@ -137,10 +138,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// 특정 Post에 like 추가
+  /// 게시글 좋아요 추가
   Future<Result<Post, Exception>> addLikeToPost(String postId, String userId) async {
     try {
-      final result = await firebaseStoreService.addLikeToPost(postId, userId);
+      final result = await service.addLikeToPost(postId, userId);
 
       switch (result) {
         case Success(value: final v):
@@ -153,10 +154,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// 특정 Post에 report 추가
+  /// 댓글 신고 기능
   Future<Result<Post, Exception>> reportPost(String postId, String userId, String reason) async {
     try {
-      final result = await firebaseStoreService.reportPost(postId, userId, reason);
+      final result = await service.reportPost(postId, userId, reason);
 
       switch (result) {
         case Success(value: final v):
@@ -170,10 +171,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// 특정 Post에 block
+  /// 게시글 유저 차단
   Future<Result<void, Exception>> blockUser(Post post, String userId) async {
     try {
-      final result = await firebaseStoreService.blockUser(post, userId);
+      final result = await service.blockUser(post, userId);
 
       switch (result) {
         case Success(value: final v):
@@ -186,7 +187,7 @@ class PostRepository { // Update class name
     }
   }
 
-  /// Report 생성
+  /// 게시글 신고
   Future<Result<void, Exception>> _createReport(String postId, String? commentId, String userId, String reason) async {
     try {
       final Uuid uuid = Uuid();
@@ -207,7 +208,7 @@ class PostRepository { // Update class name
             createdAt: DateTime.now());
       }
 
-      final result = await firebaseStoreService.createReportDB(commentId, report);
+      final result = await service.createReportDB(commentId, report);
 
       switch (result) {
         case Success(value: final v):
@@ -220,10 +221,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// Comment 리스트 가져오기
+  /// 댓글 목록 조회
   Future<Result<List<Comment>, Exception>> getCommentList(String postId) async {
     try {
-      final result = await firebaseStoreService.getCommentList(postId);
+      final result = await service.getCommentList(postId);
 
       switch(result) {
         case Success(value: final commentList):
@@ -237,10 +238,10 @@ class PostRepository { // Update class name
   }
 
 
-  /// Comment 생성
+  /// 댓글 생성
   Future<Result<Comment, Exception>> createCommentDB(Post post, Comment comment) async {
     try {
-      final result = await firebaseStoreService.createCommentDB(post, comment);
+      final result = await service.createCommentDB(post, comment);
 
       switch (result) {
         case Success(value: final v):
@@ -253,7 +254,7 @@ class PostRepository { // Update class name
     }
   }
 
-  /// Comment 신고
+  /// 댓글 신고 기능
   Future<Result<void, Exception>> reportComment(String postId, String commentId, String userId, String reason) async {
     try {
       final result = await _createReport(postId, commentId, userId, reason);
@@ -263,10 +264,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// Comment 삭제
+  /// 댓글 삭제
   Future<Result<List<Comment>, Exception>> deleteCommentDB(String postId, String commentId) async {
     try {
-      final result = await firebaseStoreService.deleteCommentDB(postId, commentId);
+      final result = await service.deleteCommentDB(postId, commentId);
 
       switch (result) {
         case Success(value: final commentList):
@@ -279,10 +280,10 @@ class PostRepository { // Update class name
     }
   }
 
-  /// 특정 Post에 commentCount 업데이트
+  /// 댓글 수 업데이트
   Future<Result<Post, Exception>> updateCommentCount(String postId) async {
     try {
-      final result = await firebaseStoreService.updateCommentCount(postId);
+      final result = await service.updateCommentCount(postId);
 
       switch (result) {
         case Success(value: final v):
@@ -330,7 +331,7 @@ class PostRepository { // Update class name
 /// PostRepositoryProvider 생성
 final postRepositoryProvider = Provider<PostRepository>((ref) {
   return PostRepository(
-    firebaseStoreService: FirebaseStoreService(FirebaseFirestore.instance),
+    service: FirebasePostService(FirebaseFirestore.instance),
     firebaseStorageService: FirebaseStorageService(FirebaseStorage.instance),
   );
 });

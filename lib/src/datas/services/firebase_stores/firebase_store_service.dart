@@ -163,7 +163,6 @@ class   FirebaseStoreService {
     }
   }
 
-
   /// 다음 Post List 가져오기
   Future<Result<List<Post>, Exception>> getNextPostList(List<Post>? lastPost) async {
     try {
@@ -311,7 +310,7 @@ class   FirebaseStoreService {
     }
   }
 
-  /// Comment List 가져오기
+  /// Post의 Comment List 가져오기
   Future<Result<List<Comment>, Exception>> getCommentList(String postId) async {
     try {
       final querySnapshot = await _store
@@ -335,7 +334,7 @@ class   FirebaseStoreService {
     }
   }
 
-  /// Comment 생성
+  /// Post의 Comment 생성
   Future<Result<Comment, Exception>> createCommentDB(Post post, Comment comment) async {
     try {
       await _store
@@ -358,7 +357,7 @@ class   FirebaseStoreService {
     }
   }
 
-  /// Comment 데이터 삭제
+  /// Post의 Comment 데이터 삭제
   Future<Result<List<Comment>, Exception>> deleteCommentDB(String postId, String commentId) async {
     try {
       await _store.collection('Post').doc(postId).collection('Comment').doc(commentId).delete();
@@ -382,7 +381,6 @@ class   FirebaseStoreService {
       return Failure(Exception('댓글 데이터 삭제 실패: $e'));
     }
   }
-
 
   /// 특정 Post의 commentCount 업데이트하기
   Future<Result<Post, Exception>> updateCommentCount(String postId) async {
