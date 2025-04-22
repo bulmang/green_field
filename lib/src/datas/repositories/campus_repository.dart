@@ -1,16 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firebase_store;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:green_field/src/datas/services/firebase_stores/firebase_store_campus_service.dart';
+import 'package:green_field/src/domains/interfaces/campus_service_interface.dart';
+
 import '../../cores/error_handler/result.dart';
 import '../../model/campus.dart';
-import '../services/firebase_stores/firebase_store_service.dart';
 
 class CampusRepository {
-  final FirebaseStoreService firebaseStoreService;
+  final CampusServiceInterface service;
 
-  CampusRepository({required this.firebaseStoreService});
+  CampusRepository({required this.service});
 
   Future<Result<Campus, Exception>> getCampus(String campusName) async {
-    final result = await firebaseStoreService.getCampus(campusName);
+    final result = await service.getCampus(campusName);
 
     switch (result) {
       case Success(value: final campus):
@@ -31,7 +34,7 @@ class CampusRepository {
   }
 
   Future<Result<Campus, Exception>> createCampusDB(Campus campus) async {
-    final result = await firebaseStoreService.createCampusDB(campus);
+    final result = await service.createCampusDB(campus);
 
     switch (result) {
       case Success(value: final campus):
@@ -44,6 +47,6 @@ class CampusRepository {
 }
 
 final campusRepositoryProvider = Provider<CampusRepository>((ref) {
-  return CampusRepository(firebaseStoreService: FirebaseStoreService(firebase_store.FirebaseFirestore.instance));
+  return CampusRepository(service: FirebaseStoreCampusService(firebase_store.FirebaseFirestore.instance));
 });
 
