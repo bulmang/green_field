@@ -1,53 +1,59 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:green_field/src/model/user.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:green_field/src/cores/error_handler/result.dart';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:green_field/src/utilities/image_optimizer/image_optimizer.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:green_field/src/cores/error_handler/result.dart';
+import 'package:green_field/src/model/user.dart';
+import 'package:green_field/src/model/image_metadata.dart';
 
-import '../../model/notice.dart';
-
+/// Firebase Storage와 연동하여 이미지 파일을 관리하는 서비스 클래스
 class FirebaseStorageService {
   FirebaseStorageService(this._storage);
-
   final FirebaseStorage _storage;
 
-  /// 이미지 리스트를 Firebase Storage에 업로드
-  Future<Result<List<String>?, Exception>> uploadImages(User user, List<XFile>? images, String saveImagePath) async {
-    print('이미지 업로드 서비스 실행');
+  /// 이미지 업로드하고 저장된 경로의 URL 리스트 반환 메서드
+  Future<Result<List<String>?, Exception>> uploadImages(
+      User user, List<XFile>? images, String saveImagePath) async {
     try {
-      List<String>? downloadURLS = [];
-      for (var image in images!) {
-        Uint8List bytes = await image.readAsBytes();
-        // Decode the image to get its dimensions
-        final ui.Codec codec = await ui.instantiateImageCodec(bytes);
-        final ui.FrameInfo frameInfo = await codec.getNextFrame();
-        final int width = frameInfo.image.width;
-        final int height = frameInfo.image.height;
+      if (images == null || images.isEmpty) return Success([]);
 
-        List<int>? compressedBytes = await FlutterImageCompress.compressWithList(
-          bytes,
+      List<String> downloadURLS = [];
+
+      for (var image in images) {
+        Uint8List originalBytes = await image.readAsBytes();
+
+        final Result<ImageMetadata, Exception> optimizationResult =
+            await ImageOptimizer.resizeAndCompress(
+          originalBytes,
+          targetWidth: 1024,
           quality: 80,
         );
 
-        if (compressedBytes != null) {
-          String fileName = '${DateTime.now().millisecondsSinceEpoch}_width=${width}_height=${height}.jpg';
-          Reference storageRef = _storage.ref().child("images/$saveImagePath/${user.campus}/$fileName");
-          UploadTask uploadTask = storageRef.putData(Uint8List.fromList(compressedBytes), SettableMetadata(contentType: 'image/jpeg'));
+        switch (optimizationResult) {
+          case Success(value: final metadata):
+            String fileName =
+                '${DateTime.now().millisecondsSinceEpoch}_width=${metadata.width}xheight=${metadata.height}.jpg';
+            Reference storageRef = _storage
+                .ref()
+                .child("images/$saveImagePath/${user.campus}/$fileName");
 
-          TaskSnapshot snapshot = await uploadTask;
+            UploadTask uploadTask = storageRef.putData(
+              metadata.bytes,
+              SettableMetadata(contentType: 'image/jpeg'),
+            );
 
-          String downloadURL = await snapshot.ref.getDownloadURL();
-          downloadURLS.add(downloadURL);
+            TaskSnapshot snapshot = await uploadTask;
+            String downloadURL = await snapshot.ref.getDownloadURL();
+            downloadURLS.add(downloadURL);
+
+          case Failure():
+            continue;
         }
       }
 
-      return Success(downloadURLS); // 업로드된 이미지 URL 리스트 반환
+      return Success(downloadURLS);
     } catch (e) {
-      print(e);
-      return Failure(Exception('이미지 업로드 실패: $e'));
+      return Failure(Exception('전체 업로드 과정 중 예상치 못한 오류 발생: $e'));
     }
   }
 }
