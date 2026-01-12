@@ -41,7 +41,7 @@ class GreenFieldImageWidgetState extends ConsumerState<GreenFieldImageWidget> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: GreenFieldCachedNetworkImage(imageUrl: value, width: 120, height: 120, scaleEffect: ImageDimensionParser().parseDimensions(value))
+                      child: GreenFieldCachedNetworkImage(imageUrl: value, width: 120, height: 120, activeFitWidth: ImageDimensionParser().isWidthSizeBiggerThanHeight(value))
                     ),
                       CupertinoButton(
                       padding: EdgeInsets.zero,

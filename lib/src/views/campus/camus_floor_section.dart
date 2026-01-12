@@ -67,7 +67,6 @@ class _CampusFloorSectionState extends ConsumerState<CampusFloorSection> {
                                 imageUrl: imageUrl,
                                 width: 120,
                                 height: 120,
-                                scaleEffect: 2,
                             ),
                           ),
                         ),

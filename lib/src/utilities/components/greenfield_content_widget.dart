@@ -93,7 +93,7 @@ class GreenFieldContentWidget extends StatelessWidget {
                           imageUrl: imageAssets.first!,
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.width,
-                          scaleEffect: ImageDimensionParser().parseDimensions(imageAssets.first)),
+                          activeFitWidth: ImageDimensionParser().isWidthSizeBiggerThanHeight(imageAssets.first)),
                     ),
                   ),
                 ),
@@ -127,8 +127,8 @@ class GreenFieldContentWidget extends StatelessWidget {
                                 imageUrl: imageUrl,
                                 width: 120,
                                 height: 120,
-                                scaleEffect: ImageDimensionParser()
-                                    .parseDimensions(imageUrl)),
+                                activeFitWidth: ImageDimensionParser()
+                                    .isWidthSizeBiggerThanHeight(imageUrl)),
                           ),
                         ),
                       );

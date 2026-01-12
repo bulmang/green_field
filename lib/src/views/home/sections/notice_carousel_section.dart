@@ -94,7 +94,7 @@ class NoticeCarouselSectionState extends ConsumerState<NoticeCarouselSection> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child:
-                                  GreenFieldCachedNetworkImage(imageUrl: notice.images!.first, width: 60, height: 60, scaleEffect: ImageDimensionParser().parseDimensions(notice.images!.first))
+                                  GreenFieldCachedNetworkImage(imageUrl: notice.images!.first, width: 60, height: 60, activeFitWidth: ImageDimensionParser().isWidthSizeBiggerThanHeight(notice.images!.first))
                                 ),
                               )
                           ],

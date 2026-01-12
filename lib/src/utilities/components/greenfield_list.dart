@@ -7,6 +7,7 @@ import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 import '../enums/feature_type.dart';
 import '../extensions/image_dimension_parser.dart';
 import 'greenfield_cached_network_image.dart';
+import '../extensions/string_extensions.dart';
 
 class GreenFieldList extends StatelessWidget {
   final FeatureType? featureType;
@@ -20,20 +21,19 @@ class GreenFieldList extends StatelessWidget {
   final VoidCallback onTap;
   final bool? last;
 
-  const GreenFieldList(
-      {
-        super.key,
-        this.featureType,
-        required this.title,
-        required this.content,
-        required this.date,
-        required this.campus,
-        required this.imageUrl,
-        required this.likes,
-        required this.commentCount,
-        required this.onTap,
-        this.last,
-      });
+  const GreenFieldList({
+    super.key,
+    this.featureType,
+    required this.title,
+    required this.content,
+    required this.date,
+    required this.campus,
+    required this.imageUrl,
+    required this.likes,
+    required this.commentCount,
+    required this.onTap,
+    this.last,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +61,19 @@ class GreenFieldList extends StatelessWidget {
                             title,
                             maxLines: 1,
                             style: AppTextsTheme.main().gfHeading3.copyWith(
-                                  color: Theme.of(context).appColors.gfBlackColor,
+                                  color:
+                                      Theme.of(context).appColors.gfBlackColor,
                                 ),
                           ),
                           Text(
                             content,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: AppTextsTheme.main().gfCaption2Light.copyWith(
-                                  color: Theme.of(context).appColors.gfBlackColor,
+                            style: AppTextsTheme.main()
+                                .gfCaption2Light
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).appColors.gfBlackColor,
                                 ),
                           ),
                           SizedBox(height: 6),
@@ -79,56 +83,71 @@ class GreenFieldList extends StatelessWidget {
                               Text(
                                 date,
                                 style: AppTextsTheme.main().gfCaption5.copyWith(
-                                  color: Theme.of(context).appColors.gfGray800Color,
-                                ),
+                                      color: Theme.of(context)
+                                          .appColors
+                                          .gfGray800Color,
+                                    ),
                               ),
                               SizedBox(width: 5),
                               Text(
                                 campus,
                                 style: AppTextsTheme.main().gfCaption5.copyWith(
-                                      color: Theme.of(context).appColors.gfMainColor,
+                                      color: Theme.of(context)
+                                          .appColors
+                                          .gfMainColor,
                                     ),
                               ),
                               SizedBox(width: 5),
                               featureType == FeatureType.post
                                   ? Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        CupertinoIcons.hand_thumbsup,
-                                        color: Theme.of(context).appColors.gfWarningColor,
-                                        size: 14,
-                                      ),
-                                      SizedBox(width: 1.5),
-                                      Text(
-                                        likes.toString(),
-                                        style: AppTextsTheme.main().gfCaption5.copyWith(
-                                          color: Theme.of(context).appColors.gfMainColor,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.hand_thumbsup,
+                                              color: Theme.of(context)
+                                                  .appColors
+                                                  .gfWarningColor,
+                                              size: 14,
+                                            ),
+                                            SizedBox(width: 1.5),
+                                            Text(
+                                              likes.toString(),
+                                              style: AppTextsTheme.main()
+                                                  .gfCaption5
+                                                  .copyWith(
+                                                    color: Theme.of(context)
+                                                        .appColors
+                                                        .gfMainColor,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(width: 5),
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        AppIcons.messageCircle,
-                                        width: 14,
-                                        height: 12,
-                                      ),
-                                      SizedBox(width: 1),
-                                      Text(
-                                        commentCount.toString(),
-                                        style: AppTextsTheme.main().gfCaption5.copyWith(
-                                          color: Theme.of(context).appColors.gfMainColor,
+                                        SizedBox(width: 5),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              AppIcons.messageCircle,
+                                              width: 14,
+                                              height: 12,
+                                            ),
+                                            SizedBox(width: 1),
+                                            Text(
+                                              commentCount.toString(),
+                                              style: AppTextsTheme.main()
+                                                  .gfCaption5
+                                                  .copyWith(
+                                                    color: Theme.of(context)
+                                                        .appColors
+                                                        .gfMainColor,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
+                                      ],
+                                    )
                                   : SizedBox.shrink(),
                             ],
                           ),
@@ -138,9 +157,13 @@ class GreenFieldList extends StatelessWidget {
                   ),
                   if (imageUrl.isNotEmpty)
                     ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: GreenFieldCachedNetworkImage(imageUrl: imageUrl, width: 60, height: 60, scaleEffect: ImageDimensionParser().parseDimensions(imageUrl),)
-                    )
+                        child: GreenFieldCachedNetworkImage(
+                      imageUrl: imageUrl.toThumbnailPath(),
+                      width: 60,
+                      height: 60,
+                      activeFitWidth: ImageDimensionParser()
+                          .isWidthSizeBiggerThanHeight(imageUrl),
+                    ))
                 ],
               ),
             ),
