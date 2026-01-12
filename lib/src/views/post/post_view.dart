@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:green_field/src/cores/error_handler/result.dart';
 import 'package:green_field/src/utilities/design_system/app_colors.dart';
-import 'package:green_field/src/utilities/design_system/app_icons.dart';
 import 'package:green_field/src/utilities/enums/feature_type.dart';
 import 'package:lottie/lottie.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -16,7 +15,6 @@ import '../../utilities/components/greenfield_list.dart';
 import 'package:green_field/src/utilities/extensions/theme_data_extension.dart';
 
 import '../../utilities/design_system/app_texts.dart';
-import '../../utilities/enums/user_type.dart';
 import '../../viewmodels/post/post_detail_view_model.dart';
 import '../../viewmodels/post/post_view_model.dart'; // Update to PostViewModel
 import '../../viewmodels/onboarding/onboarding_view_model.dart';
@@ -55,7 +53,8 @@ class _PostViewState extends ConsumerState<PostView> {
   void initState() {
     super.initState();
     controller.addListener(() {
-      if ((controller.position.maxScrollExtent * 0.8 <= controller.offset) && !loading) {
+      if ((controller.position.maxScrollExtent * 0.8 <= controller.offset) &&
+          !loading) {
         setState(() {
           loading = true;
         });
@@ -99,25 +98,25 @@ class _PostViewState extends ConsumerState<PostView> {
         leadingIcon: SizedBox(),
         title: "게시판",
         actions: [
-            CupertinoButton(
-              child: Icon(
-                CupertinoIcons.square_pencil,
-                size: 24,
-                color: Theme.of(context).appColors.gfGray400Color,
-              ),
-              onPressed: () {
-                if (userState.value == null && !userState.isLoading) {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return GreenFieldLoginAlertDialog(ref: ref);
-                    },
-                  );
-                } else {
-                  context.go('/post/edit');
-                }
-              },
-            )
+          CupertinoButton(
+            child: Icon(
+              CupertinoIcons.square_pencil,
+              size: 24,
+              color: Theme.of(context).appColors.gfGray400Color,
+            ),
+            onPressed: () {
+              if (userState.value == null && !userState.isLoading) {
+                showCupertinoDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return GreenFieldLoginAlertDialog(ref: ref);
+                  },
+                );
+              } else {
+                context.go('/post/edit');
+              }
+            },
+          )
         ],
       ),
       body: (postState.value != null && postState.value!.isNotEmpty)
@@ -146,7 +145,9 @@ class _PostViewState extends ConsumerState<PostView> {
                                 ),
                                 child: Card(
                                   shadowColor: Colors.transparent,
-                                  color: Theme.of(context).appColors.gfBackGroundColor,
+                                  color: Theme.of(context)
+                                      .appColors
+                                      .gfBackGroundColor,
                                   child: ListTile(
                                     trailing: Bone.square(size: 40),
                                     title: Bone.text(words: 2),
@@ -158,26 +159,31 @@ class _PostViewState extends ConsumerState<PostView> {
                                 featureType: FeatureType.post,
                                 title: post.title,
                                 content: post.body,
-                                date: '${post.createdAt.year}-${post.createdAt.month}-${post.createdAt.day}',
+                                date:
+                                    '${post.createdAt.year}-${post.createdAt.month}-${post.createdAt.day}',
                                 campus: post.creatorCampus,
-                                imageUrl:
-                                    post.images != null && post.images!.isNotEmpty
-                                        ? post.images![0]
-                                        : "",
+                                imageUrl: post.images != null &&
+                                        post.images!.isNotEmpty
+                                    ? post.images![0]
+                                    : "",
                                 likes: post.like.length,
                                 commentCount: post.commentCount,
                                 onTap: () async {
-                                  if (userState.value == null && !userState.isLoading) {
+                                  if (userState.value == null &&
+                                      !userState.isLoading) {
                                     showCupertinoDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return GreenFieldLoginAlertDialog(ref: ref);
+                                        return GreenFieldLoginAlertDialog(
+                                            ref: ref);
                                       },
                                     );
                                   } else {
-                                    final postNotifier = ref.watch(postViewModelProvider.notifier);
+                                    final postNotifier = ref
+                                        .watch(postViewModelProvider.notifier);
                                     final result = await ref
-                                        .read(postDetailViewModelProvider.notifier)
+                                        .read(postDetailViewModelProvider
+                                            .notifier)
                                         .getCommentList(post.id);
 
                                     switch (result) {
@@ -188,8 +194,12 @@ class _PostViewState extends ConsumerState<PostView> {
                                         postNotifier.showToast(
                                           '에러가 발생했어요!',
                                           ToastGravity.TOP,
-                                          Theme.of(context).appColors.gfWarningColor,
-                                          Theme.of(context).appColors.gfWhiteColor,
+                                          Theme.of(context)
+                                              .appColors
+                                              .gfWarningColor,
+                                          Theme.of(context)
+                                              .appColors
+                                              .gfWhiteColor,
                                         );
                                     }
                                     context.go('/post/detail/${post.id}');
@@ -217,7 +227,9 @@ class _PostViewState extends ConsumerState<PostView> {
                                       ),
                                     )
                                   : Container(
-                                      color: Theme.of(context).appColors.gfBackGroundColor,
+                                      color: Theme.of(context)
+                                          .appColors
+                                          .gfBackGroundColor,
                                       height: 60,
                                     )
                               : GreenFieldList(
@@ -259,7 +271,8 @@ class _PostViewState extends ConsumerState<PostView> {
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [Color(0xFF308F5B), Color(0xFF666666)],
@@ -276,12 +289,15 @@ class _PostViewState extends ConsumerState<PostView> {
                             ),
                             SizedBox(width: 3), // Space between icon and text
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 3.0, right: 5),
+                              padding:
+                                  const EdgeInsets.only(bottom: 3.0, right: 5),
                               child: Text(
                                 '글 쓰기',
                                 style: AppTextsTheme.main().gfCaption2.copyWith(
-                                  color: Theme.of(context).appColors.gfWhiteColor,
-                                ),
+                                      color: Theme.of(context)
+                                          .appColors
+                                          .gfWhiteColor,
+                                    ),
                               ),
                             ),
                           ],
@@ -293,30 +309,29 @@ class _PostViewState extends ConsumerState<PostView> {
               ),
             )
           : Center(
-        child: Column(
-          children: [
-            Spacer(),
-            Text(
-              '게시글이 하나도 없어요..',
-              overflow: TextOverflow.ellipsis,
-              style: AppTextsTheme.main().gfTitle1.copyWith(
-                color: Theme.of(context).appColors.gfBlackColor,
+              child: Column(
+                children: [
+                  Spacer(),
+                  Text(
+                    '게시글이 하나도 없어요..',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextsTheme.main().gfTitle1.copyWith(
+                          color: Theme.of(context).appColors.gfBlackColor,
+                        ),
+                  ),
+                  CupertinoButton(
+                    onPressed: () async {},
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          'https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/sad_sesac.gif?alt=media&',
+                      width: 240,
+                      height: 240,
+                    ),
+                  ),
+                  Spacer(),
+                ],
               ),
             ),
-            CupertinoButton(
-              onPressed: () async {
-
-              },
-              child: CachedNetworkImage(
-                imageUrl: 'https://firebasestorage.googleapis.com/v0/b/green-field-c055f.appspot.com/o/sad_sesac.gif?alt=media&',
-                width: 240,
-                height: 240,
-              ),
-            ),
-            Spacer(),
-          ],
-        ),
-      ),
     );
   }
 }
