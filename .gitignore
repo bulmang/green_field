@@ -178,3 +178,4 @@ android/app/src/main/AndroidManifest.xml
 
 # FVM Version Cache
 .fvm/
+GUIDELINES.md
